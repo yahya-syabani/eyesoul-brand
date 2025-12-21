@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useState, ReactNode } from 'react';
 
 interface ModalSearchContextProps {
     children: ReactNode;
@@ -25,19 +25,17 @@ export const useModalSearchContext = (): ModalSearchContextValue => {
 export const ModalSearchProvider: React.FC<ModalSearchContextProps> = ({ children }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const openModalSearch = () => {
+    const openModalSearch = useCallback(() => {
         setIsModalOpen(true);
-    };
+    }, []);
 
-    const closeModalSearch = () => {
+    const closeModalSearch = useCallback(() => {
         setIsModalOpen(false);
-    };
+    }, []);
 
-    const contextValue: ModalSearchContextValue = {
-        isModalOpen,
-        openModalSearch,
-        closeModalSearch,
-    };
+    const contextValue: ModalSearchContextValue = useMemo(() => {
+        return { isModalOpen, openModalSearch, closeModalSearch };
+    }, [closeModalSearch, isModalOpen, openModalSearch]);
 
     return (
         <ModalSearchContext.Provider value={contextValue}>

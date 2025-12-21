@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -11,13 +11,34 @@ import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useCart } from '@/context/CartContext'
 import { countdownTime } from '@/store/countdownTime'
 
+const CART_EXPIRY_KEY = 'anvogue_cart_expires_at'
+const CART_EXPIRES_IN_MS = 15 * 60 * 1000
+
+const getOrInitCartExpiryAt = () => {
+    const fallback = Date.now() + CART_EXPIRES_IN_MS
+    if (typeof window === 'undefined') return fallback
+
+    const raw = window.localStorage.getItem(CART_EXPIRY_KEY)
+    const parsed = raw ? Number(raw) : NaN
+    if (!Number.isFinite(parsed) || parsed <= Date.now()) {
+        window.localStorage.setItem(CART_EXPIRY_KEY, String(fallback))
+        return fallback
+    }
+    return parsed
+}
+
 const Cart = () => {
-    const [timeLeft, setTimeLeft] = useState(countdownTime());
+    const expiryAtRef = useRef<number | null>(null)
+    const [timeLeft, setTimeLeft] = useState(() => countdownTime(Date.now() + CART_EXPIRES_IN_MS));
     const router = useRouter()
 
     useEffect(() => {
+        expiryAtRef.current = getOrInitCartExpiryAt()
+        setTimeLeft(countdownTime(expiryAtRef.current))
+
         const timer = setInterval(() => {
-            setTimeLeft(countdownTime());
+            const expiryAt = expiryAtRef.current ?? getOrInitCartExpiryAt()
+            setTimeLeft(countdownTime(expiryAt));
         }, 1000);
 
         return () => clearInterval(timer);
@@ -37,12 +58,13 @@ const Cart = () => {
     };
 
     let moneyForFreeship = 150;
-    let [totalCart, setTotalCart] = useState<number>(0)
+    const totalCart = useMemo(() => {
+        return cartState.cartArray.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    }, [cartState.cartArray])
+
     let [discountCart, setDiscountCart] = useState<number>(0)
     let [shipCart, setShipCart] = useState<number>(30)
     let [applyCode, setApplyCode] = useState<number>(0)
-
-    cartState.cartArray.map(item => totalCart += item.price * item.quantity)
 
     const handleApplyCode = (minValue: number, discount: number) => {
         if (totalCart > minValue) {
@@ -53,21 +75,15 @@ const Cart = () => {
         }
     }
 
-    if (totalCart < applyCode) {
-        applyCode = 0
-        discountCart = 0
-    }
+    const cartIsEmpty = cartState.cartArray.length === 0
+    const appliedCode = applyCode > 0 && totalCart > applyCode ? applyCode : 0
+    const effectiveDiscountCart = appliedCode > 0 ? discountCart : 0
 
-    if (totalCart < moneyForFreeship) {
-        shipCart = 30
-    }
-
-    if (cartState.cartArray.length === 0) {
-        shipCart = 0
-    }
+    const eligibleFreeShipping = !cartIsEmpty && totalCart >= moneyForFreeship
+    const effectiveShipCart = cartIsEmpty ? 0 : shipCart === 0 && !eligibleFreeShipping ? 30 : shipCart
 
     const redirectToCheckout = () => {
-        router.push(`/checkout?discount=${discountCart}&ship=${shipCart}`)
+        router.push(`/checkout?discount=${effectiveDiscountCart}&ship=${effectiveShipCart}`)
     }
 
     return (
@@ -187,7 +203,7 @@ const Cart = () => {
                                 </form>
                             </div>
                             <div className="list-voucher flex items-center gap-5 flex-wrap sm:mt-7 mt-5">
-                                <div className={`item ${applyCode === 200 ? 'bg-green' : ''} border border-line rounded-lg py-2`}>
+                                <div className={`item ${appliedCode === 200 ? 'bg-green' : ''} border border-line rounded-lg py-2`}>
                                     <div className="top flex gap-10 justify-between px-3 pb-2 border-b border-dashed border-line">
                                         <div className="left">
                                             <div className="caption1">Discount</div>
@@ -203,11 +219,11 @@ const Cart = () => {
                                             className="button-main py-1 px-2.5 capitalize text-xs"
                                             onClick={() => handleApplyCode(200, Math.floor((totalCart / 100) * 10))}
                                         >
-                                            {applyCode === 200 ? 'Applied' : 'Apply Code'}
+                                            {appliedCode === 200 ? 'Applied' : 'Apply Code'}
                                         </div>
                                     </div>
                                 </div>
-                                <div className={`item ${applyCode === 300 ? 'bg-green' : ''} border border-line rounded-lg py-2`}>
+                                <div className={`item ${appliedCode === 300 ? 'bg-green' : ''} border border-line rounded-lg py-2`}>
                                     <div className="top flex gap-10 justify-between px-3 pb-2 border-b border-dashed border-line">
                                         <div className="left">
                                             <div className="caption1">Discount</div>
@@ -223,11 +239,11 @@ const Cart = () => {
                                             className="button-main py-1 px-2.5 capitalize text-xs"
                                             onClick={() => handleApplyCode(300, Math.floor((totalCart / 100) * 15))}
                                         >
-                                            {applyCode === 300 ? 'Applied' : 'Apply Code'}
+                                            {appliedCode === 300 ? 'Applied' : 'Apply Code'}
                                         </div>
                                     </div>
                                 </div>
-                                <div className={`item ${applyCode === 400 ? 'bg-green' : ''} border border-line rounded-lg py-2`}>
+                                <div className={`item ${appliedCode === 400 ? 'bg-green' : ''} border border-line rounded-lg py-2`}>
                                     <div className="top flex gap-10 justify-between px-3 pb-2 border-b border-dashed border-line">
                                         <div className="left">
                                             <div className="caption1">Discount</div>
@@ -243,7 +259,7 @@ const Cart = () => {
                                             className="button-main py-1 px-2.5 capitalize text-xs"
                                             onClick={() => handleApplyCode(400, Math.floor((totalCart / 100) * 20))}
                                         >
-                                            {applyCode === 400 ? 'Applied' : 'Apply Code'}
+                                            {appliedCode === 400 ? 'Applied' : 'Apply Code'}
                                         </div>
                                     </div>
                                 </div>
@@ -258,7 +274,7 @@ const Cart = () => {
                                 </div>
                                 <div className="discount-block py-5 flex justify-between border-b border-line">
                                     <div className="text-title">Discounts</div>
-                                    <div className="text-title"> <span>-$</span><span className="discount">{discountCart}</span><span>.00</span></div>
+                                    <div className="text-title"> <span>-$</span><span className="discount">{effectiveDiscountCart}</span><span>.00</span></div>
                                 </div>
                                 <div className="ship-block py-5 flex justify-between border-b border-line">
                                     <div className="text-title">Shipping</div>
@@ -278,7 +294,7 @@ const Cart = () => {
                                                             id="shipping"
                                                             type="radio"
                                                             name="ship"
-                                                            checked={shipCart === 0}
+                                                            checked={effectiveShipCart === 0}
                                                             onChange={() => setShipCart(0)}
                                                         />
                                                     )}
@@ -290,7 +306,7 @@ const Cart = () => {
                                                     type="radio"
                                                     name="ship"
                                                     value={30}
-                                                    checked={shipCart === 30}
+                                                    checked={effectiveShipCart === 30}
                                                     onChange={() => setShipCart(30)}
                                                 />
                                                 <label className="text-on-surface-variant1 pl-1" htmlFor="local">Local:</label>
@@ -301,7 +317,7 @@ const Cart = () => {
                                                     type="radio"
                                                     name="ship"
                                                     value={40}
-                                                    checked={shipCart === 40}
+                                                    checked={effectiveShipCart === 40}
                                                     onChange={() => setShipCart(40)}
                                                 />
                                                 <label className="text-on-surface-variant1 pl-1" htmlFor="flat">Flat Rate:</label>
@@ -317,7 +333,7 @@ const Cart = () => {
                                 <div className="total-cart-block pt-4 pb-4 flex justify-between">
                                     <div className="heading5">Total</div>
                                     <div className="heading5">$
-                                        <span className="total-cart heading5">{totalCart - discountCart + shipCart}</span>
+                                        <span className="total-cart heading5">{totalCart - effectiveDiscountCart + effectiveShipCart}</span>
                                         <span className='heading5'>.00</span></div>
                                 </div>
                                 <div className="block-button flex flex-col items-center gap-y-4 mt-5">

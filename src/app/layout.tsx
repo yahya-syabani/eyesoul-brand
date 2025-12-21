@@ -9,8 +9,6 @@ import ModalCompare from '@/components/Modal/ModalCompare'
 import CountdownTimeType from '@/type/CountdownType'
 import { countdownTime } from '@/store/countdownTime'
 
-const serverTimeLeft: CountdownTimeType = countdownTime();
-
 export const metadata: Metadata = {
   title: 'Anvogue',
   description: 'Multipurpose eCommerce Template',
@@ -21,6 +19,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Keep this deterministic for server render; the client re-hydrates and drives the actual countdown.
+  const serverTimeLeft: CountdownTimeType = { days: 0, hours: 0, minutes: 15, seconds: 0 }
+
   return (
     <GlobalProvider>
       <html lang="en">

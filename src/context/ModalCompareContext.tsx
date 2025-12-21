@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useState, ReactNode } from 'react';
 
 interface ModalCompareContextProps {
     children: ReactNode;
@@ -25,19 +25,17 @@ export const useModalCompareContext = (): ModalCompareContextValue => {
 export const ModalCompareProvider: React.FC<ModalCompareContextProps> = ({ children }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const openModalCompare = () => {
+    const openModalCompare = useCallback(() => {
         setIsModalOpen(true);
-    };
+    }, []);
 
-    const closeModalCompare = () => {
+    const closeModalCompare = useCallback(() => {
         setIsModalOpen(false);
-    };
+    }, []);
 
-    const contextValue: ModalCompareContextValue = {
-        isModalOpen,
-        openModalCompare,
-        closeModalCompare,
-    };
+    const contextValue: ModalCompareContextValue = useMemo(() => {
+        return { isModalOpen, openModalCompare, closeModalCompare };
+    }, [closeModalCompare, isModalOpen, openModalCompare]);
 
     return (
         <ModalCompareContext.Provider value={contextValue}>

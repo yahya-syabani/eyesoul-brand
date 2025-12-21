@@ -9,7 +9,7 @@ import { useCompare } from '@/context/CompareContext'
 
 const ModalCompare = () => {
     const { isModalOpen, closeModalCompare } = useModalCompareContext();
-    const { compareState, removeFromCompare } = useCompare()
+    const { compareState, removeFromCompare, clearCompare } = useCompare()
 
     return (
         <>
@@ -75,7 +75,7 @@ const ModalCompare = () => {
                                 <div
                                     onClick={() => {
                                         closeModalCompare()
-                                        compareState.compareArray.length = 0
+                                        clearCompare()
                                     }}
                                     className="button-main whitespace-nowrap border border-black bg-white text-black"
                                 >

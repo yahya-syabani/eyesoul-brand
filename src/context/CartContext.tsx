@@ -1,8 +1,9 @@
 'use client'
 
 // CartContext.tsx
-import React, { createContext, useContext, useState, useReducer, useEffect } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import { ProductType } from '@/type/ProductType';
+import { safeJsonParse, safeJsonStringify, safeStorageGet, safeStorageSet } from '@/utils/localStorage';
 
 interface CartItem extends ProductType {
     quantity: number
@@ -32,6 +33,24 @@ interface CartContextProps {
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
+
+const CART_STORAGE_KEY = 'anvogue_cart_v1';
+
+const sanitizeCartItems = (value: unknown): CartItem[] => {
+    if (!Array.isArray(value)) return [];
+    return value
+        .filter((item): item is Partial<CartItem> & { id: unknown } => typeof item === 'object' && item !== null && 'id' in item)
+        .map((item) => {
+            const anyItem = item as any;
+            const id = typeof anyItem.id === 'string' ? anyItem.id : '';
+            const quantity = Number.isFinite(anyItem.quantity) ? Math.max(1, Math.floor(anyItem.quantity)) : 1;
+            const selectedSize = typeof anyItem.selectedSize === 'string' ? anyItem.selectedSize : '';
+            const selectedColor = typeof anyItem.selectedColor === 'string' ? anyItem.selectedColor : '';
+            if (!id) return null;
+            return { ...anyItem, id, quantity, selectedSize, selectedColor } as CartItem;
+        })
+        .filter((x): x is CartItem => x !== null);
+};
 
 const cartReducer = (state: CartState, action: CartAction): CartState => {
     switch (action.type) {
@@ -72,21 +91,43 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [cartState, dispatch] = useReducer(cartReducer, { cartArray: [] });
+    const hasHydratedRef = useRef(false);
 
-    const addToCart = (item: ProductType) => {
+    useEffect(() => {
+        const raw = safeStorageGet(CART_STORAGE_KEY);
+        if (raw.ok) {
+            const parsed = safeJsonParse<unknown>(raw.value);
+            if (parsed.ok) {
+                dispatch({ type: 'LOAD_CART', payload: sanitizeCartItems(parsed.value) });
+            }
+        }
+        hasHydratedRef.current = true;
+    }, []);
+
+    useEffect(() => {
+        if (!hasHydratedRef.current) return;
+        const json = safeJsonStringify(cartState.cartArray);
+        if (json.ok) safeStorageSet(CART_STORAGE_KEY, json.value);
+    }, [cartState.cartArray]);
+
+    const addToCart = useCallback((item: ProductType) => {
         dispatch({ type: 'ADD_TO_CART', payload: item });
-    };
+    }, []);
 
-    const removeFromCart = (itemId: string) => {
+    const removeFromCart = useCallback((itemId: string) => {
         dispatch({ type: 'REMOVE_FROM_CART', payload: itemId });
-    };
+    }, []);
 
-    const updateCart = (itemId: string, quantity: number, selectedSize: string, selectedColor: string) => {
+    const updateCart = useCallback((itemId: string, quantity: number, selectedSize: string, selectedColor: string) => {
         dispatch({ type: 'UPDATE_CART', payload: { itemId, quantity, selectedSize, selectedColor } });
-    };
+    }, []);
+
+    const contextValue = useMemo(() => {
+        return { cartState, addToCart, removeFromCart, updateCart };
+    }, [addToCart, cartState, removeFromCart, updateCart]);
 
     return (
-        <CartContext.Provider value={{ cartState, addToCart, removeFromCart, updateCart }}>
+        <CartContext.Provider value={contextValue}>
             {children}
         </CartContext.Provider>
     );

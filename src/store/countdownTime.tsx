@@ -1,5 +1,15 @@
-export const countdownTime = () => {
-    const targetDate: Date = new Date('2024-07-28');
+type CountdownTarget = Date | string | number;
+
+const DEFAULT_COUNTDOWN_TARGET_ISO =
+    process.env.NEXT_PUBLIC_COUNTDOWN_TARGET_DATE ?? '2030-01-01T00:00:00.000Z';
+
+const resolveTargetDate = (target?: CountdownTarget): Date => {
+    if (target === undefined || target === null) return new Date(DEFAULT_COUNTDOWN_TARGET_ISO);
+    return target instanceof Date ? target : new Date(target);
+};
+
+export const countdownTime = (target?: CountdownTarget) => {
+    const targetDate: Date = resolveTargetDate(target);
     const currentDate: Date = new Date();
     const difference: number = targetDate.getTime() - currentDate.getTime();
 

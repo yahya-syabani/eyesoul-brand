@@ -19,7 +19,7 @@ const ModalQuickview = () => {
     const [photoIndex, setPhotoIndex] = useState(0)
     const [openPopupImg, setOpenPopupImg] = useState(false)
     const [openSizeGuide, setOpenSizeGuide] = useState<boolean>(false)
-    const { selectedProduct, closeQuickview } = useModalQuickviewContext()
+    const { selectedProduct, closeQuickview, setQuickviewQuantityPurchase } = useModalQuickviewContext()
     const [activeColor, setActiveColor] = useState<string>('')
     const [activeSize, setActiveSize] = useState<string>('')
     const { addToCart, updateCart, cartState } = useCart()
@@ -48,15 +48,17 @@ const ModalQuickview = () => {
 
     const handleIncreaseQuantity = () => {
         if (selectedProduct) {
-            selectedProduct.quantityPurchase += 1
-            updateCart(selectedProduct.id, selectedProduct.quantityPurchase + 1, activeSize, activeColor);
+            const nextQty = selectedProduct.quantityPurchase + 1
+            setQuickviewQuantityPurchase(nextQty)
+            updateCart(selectedProduct.id, nextQty, activeSize, activeColor);
         }
     };
 
     const handleDecreaseQuantity = () => {
         if (selectedProduct && selectedProduct.quantityPurchase > 1) {
-            selectedProduct.quantityPurchase -= 1
-            updateCart(selectedProduct.id, selectedProduct.quantityPurchase - 1, activeSize, activeColor);
+            const nextQty = selectedProduct.quantityPurchase - 1
+            setQuickviewQuantityPurchase(nextQty)
+            updateCart(selectedProduct.id, nextQty, activeSize, activeColor);
         }
     };
 

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
@@ -11,12 +11,34 @@ import { useCart } from '@/context/CartContext'
 import { countdownTime } from '@/store/countdownTime'
 import CountdownTimeType from '@/type/CountdownType';
 
+const CART_EXPIRY_KEY = 'anvogue_cart_expires_at'
+const CART_EXPIRES_IN_MS = 15 * 60 * 1000
+
+const getOrInitCartExpiryAt = () => {
+    const fallback = Date.now() + CART_EXPIRES_IN_MS
+    if (typeof window === 'undefined') return fallback
+
+    const raw = window.localStorage.getItem(CART_EXPIRY_KEY)
+    const parsed = raw ? Number(raw) : NaN
+    if (!Number.isFinite(parsed) || parsed <= Date.now()) {
+        window.localStorage.setItem(CART_EXPIRY_KEY, String(fallback))
+        return fallback
+    }
+    return parsed
+}
+
 const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) => {
+    const expiryAtRef = useRef<number | null>(null)
+
     const [timeLeft, setTimeLeft] = useState(serverTimeLeft);
 
     useEffect(() => {
+        expiryAtRef.current = getOrInitCartExpiryAt()
+        setTimeLeft(countdownTime(expiryAtRef.current))
+
         const timer = setInterval(() => {
-            setTimeLeft(countdownTime());
+            const expiryAt = expiryAtRef.current ?? getOrInitCartExpiryAt()
+            setTimeLeft(countdownTime(expiryAt));
         }, 1000);
 
         return () => clearInterval(timer);
@@ -40,10 +62,9 @@ const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) =>
     }
 
     let moneyForFreeship = 150;
-    let [totalCart, setTotalCart] = useState<number>(0)
-    let [discountCart, setDiscountCart] = useState<number>(0)
-
-    cartState.cartArray.map(item => totalCart += item.price * item.quantity)
+    const totalCart = useMemo(() => {
+        return cartState.cartArray.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    }, [cartState.cartArray])
 
     return (
         <>

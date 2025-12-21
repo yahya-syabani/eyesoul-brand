@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useState, ReactNode } from 'react';
 
 interface ModalWishlistContextProps {
     children: ReactNode;
@@ -25,19 +25,17 @@ export const useModalWishlistContext = (): ModalWishlistContextValue => {
 export const ModalWishlistProvider: React.FC<ModalWishlistContextProps> = ({ children }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const openModalWishlist = () => {
+    const openModalWishlist = useCallback(() => {
         setIsModalOpen(true);
-    };
+    }, []);
 
-    const closeModalWishlist = () => {
+    const closeModalWishlist = useCallback(() => {
         setIsModalOpen(false);
-    };
+    }, []);
 
-    const contextValue: ModalWishlistContextValue = {
-        isModalOpen,
-        openModalWishlist,
-        closeModalWishlist,
-    };
+    const contextValue: ModalWishlistContextValue = useMemo(() => {
+        return { isModalOpen, openModalWishlist, closeModalWishlist };
+    }, [closeModalWishlist, isModalOpen, openModalWishlist]);
 
     return (
         <ModalWishlistContext.Provider value={contextValue}>

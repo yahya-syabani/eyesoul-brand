@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image';
 import Link from 'next/link'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
@@ -28,175 +28,141 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType }) 
     const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 100 });
     const [currentPage, setCurrentPage] = useState(0);
     const productsPerPage = productPerPage;
-    const offset = currentPage * productsPerPage;
+    // Note: we intentionally avoid syncing `type` state to `dataType` via effects to keep render/effects pure.
 
-    const handleLayoutCol = (col: number) => {
+    const handleLayoutCol = useCallback((col: number) => {
         setLayoutCol(col)
-    }
+    }, [])
 
-    const handleShowOnlySale = () => {
+    const handleShowOnlySale = useCallback(() => {
         setShowOnlySale(toggleSelect => !toggleSelect)
         setCurrentPage(0);
-    }
+    }, [])
 
-    const handleSortChange = (option: string) => {
+    const handleSortChange = useCallback((option: string) => {
         setSortOption(option);
         setCurrentPage(0);
-    };
+    }, []);
 
-    const handleOpenSidebar = () => {
+    const handleOpenSidebar = useCallback(() => {
         setOpenSidebar(toggleOpen => !toggleOpen)
         setCurrentPage(0);
-    }
+    }, [])
 
-    const handleType = (type: string) => {
+    const handleType = useCallback((type: string) => {
         setType((prevType) => (prevType === type ? null : type))
         setCurrentPage(0);
-    }
+    }, [])
 
-    const handleSize = (size: string) => {
+    const handleSize = useCallback((size: string) => {
         setSize((prevSize) => (prevSize === size ? null : size))
         setCurrentPage(0);
-    }
+    }, [])
 
-    const handlePriceChange = (values: number | number[]) => {
+    const handlePriceChange = useCallback((values: number | number[]) => {
         if (Array.isArray(values)) {
             setPriceRange({ min: values[0], max: values[1] });
             setCurrentPage(0);
         }
-    };
+    }, []);
 
-    const handleColor = (color: string) => {
+    const handleColor = useCallback((color: string) => {
         setColor((prevColor) => (prevColor === color ? null : color))
         setCurrentPage(0);
-    }
+    }, [])
 
-    const handleBrand = (brand: string) => {
+    const handleBrand = useCallback((brand: string) => {
         setBrand((prevBrand) => (prevBrand === brand ? null : brand));
         setCurrentPage(0);
-    }
+    }, [])
 
 
-    // Filter product
-    let filteredData = data.filter(product => {
-        let isShowOnlySaleMatched = true;
-        if (showOnlySale) {
-            isShowOnlySaleMatched = product.sale
+    const noDataProduct: ProductType = useMemo(() => ({
+        id: 'no-data',
+        category: 'no-data',
+        type: 'no-data',
+        name: 'no-data',
+        gender: 'no-data',
+        new: false,
+        sale: false,
+        rate: 0,
+        price: 0,
+        originPrice: 0,
+        brand: 'no-data',
+        sold: 0,
+        quantity: 0,
+        quantityPurchase: 0,
+        sizes: [],
+        variation: [],
+        thumbImage: [],
+        images: [],
+        description: 'no-data',
+        action: 'no-data',
+        slug: 'no-data',
+    }), [])
+
+    const effectiveType = type ?? dataType
+
+    const filteredData = useMemo(() => {
+        const base = data.filter((product) => {
+            if (product.category !== 'fashion') return false
+
+            if (showOnlySale && !product.sale) return false
+            if (effectiveType && product.type !== effectiveType) return false
+            if (size && !product.sizes.includes(size)) return false
+            if (color && !product.variation.some((item) => item.color === color)) return false
+            if (brand && product.brand !== brand) return false
+            if (priceRange.min !== 0 || priceRange.max !== 100) {
+                if (product.price < priceRange.min || product.price > priceRange.max) return false
+            }
+
+            return true
+        })
+
+        return base.length > 0 ? base : [noDataProduct]
+    }, [brand, color, data, effectiveType, noDataProduct, priceRange.max, priceRange.min, showOnlySale, size])
+
+    const sortedFilteredData = useMemo(() => {
+        const sortedData = [...filteredData]
+
+        if (sortOption === 'soldQuantityHighToLow') return sortedData.sort((a, b) => b.sold - a.sold)
+        if (sortOption === 'discountHighToLow') {
+            return sortedData.sort(
+                (a, b) =>
+                    Math.floor(100 - (b.price / b.originPrice) * 100) - Math.floor(100 - (a.price / a.originPrice) * 100)
+            )
         }
+        if (sortOption === 'priceHighToLow') return sortedData.sort((a, b) => b.price - a.price)
+        if (sortOption === 'priceLowToHigh') return sortedData.sort((a, b) => a.price - b.price)
 
-        let isDataTypeMatched = true;
-        if (dataType) {
-            isDataTypeMatched = product.type === dataType
-        }
+        return sortedData
+    }, [filteredData, sortOption])
 
-        let isTypeMatched = true;
-        if (type) {
-            dataType = type
-            isTypeMatched = product.type === type;
-        }
-
-        let isSizeMatched = true;
-        if (size) {
-            isSizeMatched = product.sizes.includes(size)
-        }
-
-        let isPriceRangeMatched = true;
-        if (priceRange.min !== 0 || priceRange.max !== 100) {
-            isPriceRangeMatched = product.price >= priceRange.min && product.price <= priceRange.max;
-        }
-
-        let isColorMatched = true;
-        if (color) {
-            isColorMatched = product.variation.some(item => item.color === color)
-        }
-
-        let isBrandMatched = true;
-        if (brand) {
-            isBrandMatched = product.brand === brand;
-        }
-
-        return isShowOnlySaleMatched && isDataTypeMatched && isTypeMatched && isSizeMatched && isColorMatched && isBrandMatched && isPriceRangeMatched && product.category === 'fashion'
-    })
-
-    // Create a copy array filtered to sort
-    let sortedData = [...filteredData];
-
-    if (sortOption === 'soldQuantityHighToLow') {
-        filteredData = sortedData.sort((a, b) => b.sold - a.sold)
-    }
-
-    if (sortOption === 'discountHighToLow') {
-        filteredData = sortedData
-            .sort((a, b) => (
-                (Math.floor(100 - ((b.price / b.originPrice) * 100))) - (Math.floor(100 - ((a.price / a.originPrice) * 100)))
-            ))
-
-    }
-
-    if (sortOption === 'priceHighToLow') {
-        filteredData = sortedData.sort((a, b) => b.price - a.price)
-    }
-
-    if (sortOption === 'priceLowToHigh') {
-        filteredData = sortedData.sort((a, b) => a.price - b.price)
-    }
-
-    const totalProducts = filteredData.length
-    const selectedType = type
+    const totalProducts = sortedFilteredData.length
+    const selectedType = effectiveType
     const selectedSize = size
     const selectedColor = color
     const selectedBrand = brand
 
+    const pageCount = useMemo(() => Math.ceil(sortedFilteredData.length / productsPerPage), [productsPerPage, sortedFilteredData.length])
 
-    if (filteredData.length === 0) {
-        filteredData = [{
-            id: 'no-data',
-            category: 'no-data',
-            type: 'no-data',
-            name: 'no-data',
-            gender: 'no-data',
-            new: false,
-            sale: false,
-            rate: 0,
-            price: 0,
-            originPrice: 0,
-            brand: 'no-data',
-            sold: 0,
-            quantity: 0,
-            quantityPurchase: 0,
-            sizes: [],
-            variation: [],
-            thumbImage: [],
-            images: [],
-            description: 'no-data',
-            action: 'no-data',
-            slug: 'no-data'
-        }];
-    }
+    const safeCurrentPage = useMemo(() => {
+        if (pageCount <= 0) return 0
+        return Math.min(currentPage, pageCount - 1)
+    }, [currentPage, pageCount])
 
+    const offset = safeCurrentPage * productsPerPage
 
-    // Find page number base on filteredData
-    const pageCount = Math.ceil(filteredData.length / productsPerPage);
+    const currentProducts = useMemo(() => {
+        if (sortedFilteredData.length === 0) return []
+        return sortedFilteredData.slice(offset, offset + productsPerPage)
+    }, [offset, productsPerPage, sortedFilteredData])
 
-    // If page number 0, set current page = 0
-    if (pageCount === 0) {
-        setCurrentPage(0);
-    }
-
-    // Get product data for current page
-    let currentProducts: ProductType[];
-
-    if (filteredData.length > 0) {
-        currentProducts = filteredData.slice(offset, offset + productsPerPage);
-    } else {
-        currentProducts = []
-    }
-
-    const handlePageChange = (selected: number) => {
+    const handlePageChange = useCallback((selected: number) => {
         setCurrentPage(selected);
-    };
+    }, []);
 
-    const handleClearAll = () => {
+    const handleClearAll = useCallback(() => {
         setSortOption('');
         setType(null);
         setSize(null);
@@ -204,9 +170,7 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType }) 
         setBrand(null);
         setPriceRange({ min: 0, max: 100 });
         setCurrentPage(0);
-        dataType = null
-        setType(dataType);
-    };
+    }, []);
 
     return (
         <>
@@ -215,18 +179,18 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType }) 
                     <div className="container lg:pt-[134px] pt-24 pb-10 relative">
                         <div className="main-content w-full h-full flex flex-col items-center justify-center relative z-[1]">
                             <div className="text-content">
-                                <div className="heading2 text-center">{dataType === null ? 'Shop' : dataType}</div>
+                                <div className="heading2 text-center">{effectiveType === null ? 'Shop' : effectiveType}</div>
                                 <div className="link flex items-center justify-center gap-1 caption1 mt-3">
                                     <Link href={'/'}>Homepage</Link>
                                     <Icon.CaretRight size={14} className='text-secondary2' />
-                                    <div className='text-secondary2 capitalize'>{dataType === null ? 'Shop' : dataType}</div>
+                                    <div className='text-secondary2 capitalize'>{effectiveType === null ? 'Shop' : effectiveType}</div>
                                 </div>
                             </div>
                             <div className="list-tab flex flex-wrap items-center justify-center gap-y-5 gap-8 lg:mt-[70px] mt-12 overflow-hidden">
                                 {['t-shirt', 'dress', 'top', 'swimwear', 'shirt'].map((item, index) => (
                                     <div
                                         key={index}
-                                        className={`tab-item text-button-uppercase cursor-pointer has-line-before line-2px ${dataType === item ? 'active' : ''}`}
+                                        className={`tab-item text-button-uppercase cursor-pointer has-line-before line-2px ${effectiveType === item ? 'active' : ''}`}
                                         onClick={() => handleType(item)}
                                     >
                                         {item}
@@ -345,7 +309,7 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType }) 
                                     {['t-shirt', 'dress', 'top', 'swimwear', 'shirt', 'underwear', 'sets', 'accessories'].map((item, index) => (
                                         <div
                                             key={index}
-                                            className={`item flex items-center justify-between cursor-pointer ${dataType === item ? 'active' : ''}`}
+                                            className={`item flex items-center justify-between cursor-pointer ${effectiveType === item ? 'active' : ''}`}
                                             onClick={() => handleType(item)}
                                         >
                                             <div className='text-secondary has-line-before hover:text-black capitalize'>{item}</div>

@@ -1,8 +1,9 @@
 'use client'
 
 // WishlistContext.tsx
-import React, { createContext, useContext, useState, useReducer, useEffect } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import { ProductType } from '@/type/ProductType';
+import { safeJsonParse, safeJsonStringify, safeStorageGet, safeStorageSet } from '@/utils/localStorage';
 
 interface WishlistItem extends ProductType {
 }
@@ -23,6 +24,21 @@ interface WishlistContextProps {
 }
 
 const WishlistContext = createContext<WishlistContextProps | undefined>(undefined);
+
+const WISHLIST_STORAGE_KEY = 'anvogue_wishlist_v1';
+
+const sanitizeWishlistItems = (value: unknown): WishlistItem[] => {
+    if (!Array.isArray(value)) return [];
+    return value
+        .filter((item): item is { id: unknown } => typeof item === 'object' && item !== null && 'id' in item)
+        .map((item) => {
+            const anyItem = item as any;
+            const id = typeof anyItem.id === 'string' ? anyItem.id : '';
+            if (!id) return null;
+            return { ...anyItem, id } as WishlistItem;
+        })
+        .filter((x): x is WishlistItem => x !== null);
+};
 
 const WishlistReducer = (state: WishlistState, action: WishlistAction): WishlistState => {
     switch (action.type) {
@@ -49,17 +65,39 @@ const WishlistReducer = (state: WishlistState, action: WishlistAction): Wishlist
 
 export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [wishlistState, dispatch] = useReducer(WishlistReducer, { wishlistArray: [] });
+    const hasHydratedRef = useRef(false);
 
-    const addToWishlist = (item: ProductType) => {
+    useEffect(() => {
+        const raw = safeStorageGet(WISHLIST_STORAGE_KEY);
+        if (raw.ok) {
+            const parsed = safeJsonParse<unknown>(raw.value);
+            if (parsed.ok) {
+                dispatch({ type: 'LOAD_WISHLIST', payload: sanitizeWishlistItems(parsed.value) });
+            }
+        }
+        hasHydratedRef.current = true;
+    }, []);
+
+    useEffect(() => {
+        if (!hasHydratedRef.current) return;
+        const json = safeJsonStringify(wishlistState.wishlistArray);
+        if (json.ok) safeStorageSet(WISHLIST_STORAGE_KEY, json.value);
+    }, [wishlistState.wishlistArray]);
+
+    const addToWishlist = useCallback((item: ProductType) => {
         dispatch({ type: 'ADD_TO_WISHLIST', payload: item });
-    };
+    }, []);
 
-    const removeFromWishlist = (itemId: string) => {
+    const removeFromWishlist = useCallback((itemId: string) => {
         dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: itemId });
-    };
+    }, []);
+
+    const contextValue = useMemo(() => {
+        return { wishlistState, addToWishlist, removeFromWishlist };
+    }, [addToWishlist, removeFromWishlist, wishlistState]);
 
     return (
-        <WishlistContext.Provider value={{ wishlistState, addToWishlist, removeFromWishlist }}>
+        <WishlistContext.Provider value={contextValue}>
             {children}
         </WishlistContext.Provider>
     );

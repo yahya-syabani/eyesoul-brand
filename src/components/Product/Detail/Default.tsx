@@ -44,6 +44,8 @@ const Default: React.FC<Props> = ({ data, productId }) => {
         productMain = data[0]
     }
 
+    const [quantityPurchase, setQuantityPurchase] = useState<number>(productMain.quantityPurchase || 1)
+
     const percentSale = Math.floor(100 - ((productMain?.price / productMain?.originPrice) * 100))
 
     const handleOpenSizeGuide = () => {
@@ -79,23 +81,28 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     }
 
     const handleIncreaseQuantity = () => {
-        productMain.quantityPurchase += 1
-        updateCart(productMain.id, productMain.quantityPurchase + 1, activeSize, activeColor);
+        setQuantityPurchase((prev) => {
+            const next = prev + 1
+            updateCart(productMain.id, next, activeSize, activeColor);
+            return next
+        })
     };
 
     const handleDecreaseQuantity = () => {
-        if (productMain.quantityPurchase > 1) {
-            productMain.quantityPurchase -= 1
-            updateCart(productMain.id, productMain.quantityPurchase - 1, activeSize, activeColor);
-        }
+        setQuantityPurchase((prev) => {
+            if (prev <= 1) return prev
+            const next = prev - 1
+            updateCart(productMain.id, next, activeSize, activeColor);
+            return next
+        })
     };
 
     const handleAddToCart = () => {
         if (!cartState.cartArray.find(item => item.id === productMain.id)) {
             addToCart({ ...productMain });
-            updateCart(productMain.id, productMain.quantityPurchase, activeSize, activeColor)
+            updateCart(productMain.id, quantityPurchase, activeSize, activeColor)
         } else {
-            updateCart(productMain.id, productMain.quantityPurchase, activeSize, activeColor)
+            updateCart(productMain.id, quantityPurchase, activeSize, activeColor)
         }
         openModalCart()
     };
@@ -322,9 +329,9 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                         <Icon.Minus
                                             size={20}
                                             onClick={handleDecreaseQuantity}
-                                            className={`${productMain.quantityPurchase === 1 ? 'disabled' : ''} cursor-pointer`}
+                                            className={`${quantityPurchase === 1 ? 'disabled' : ''} cursor-pointer`}
                                         />
-                                        <div className="body1 font-semibold">{productMain.quantityPurchase}</div>
+                                        <div className="body1 font-semibold">{quantityPurchase}</div>
                                         <Icon.Plus
                                             size={20}
                                             onClick={handleIncreaseQuantity}
