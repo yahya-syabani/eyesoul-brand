@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { Suspense } from 'react'
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -10,7 +10,7 @@ import NewsInsight from '@/components/Home3/NewsInsight';
 import Footer from '@/components/Footer/Footer'
 import { useRouter } from 'next/navigation'
 
-const BlogDetailOne = () => {
+const BlogDetailOneContent = () => {
     const searchParams = useSearchParams()
     const router = useRouter()
 
@@ -182,6 +182,14 @@ const BlogDetailOne = () => {
             </div>
             <Footer />
         </>
+    )
+}
+
+const BlogDetailOne = () => {
+    return (
+        <Suspense fallback={null}>
+            <BlogDetailOneContent />
+        </Suspense>
     )
 }
 

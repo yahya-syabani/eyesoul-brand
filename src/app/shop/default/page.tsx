@@ -1,17 +1,16 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { Suspense } from 'react'
+import { useSearchParams } from 'next/navigation';
 import TopNavOne from '@/components/Header/TopNav/TopNavOne'
 import MenuOne from '@/components/Header/Menu/MenuOne'
 import ShopBreadCrumbImg from '@/components/Shop/ShopBreadCrumbImg';
 import productData from '@/data/Product.json'
 import Footer from '@/components/Footer/Footer'
 
-export default function Default() {
+const ShopDefaultContent = () => {
     const searchParams = useSearchParams()
     const type = searchParams.get('type')
-    const category = searchParams.get('category')
 
     return (
         <>
@@ -22,5 +21,13 @@ export default function Default() {
             <ShopBreadCrumbImg data={productData} productPerPage={12} dataType={type} />
             <Footer />
         </>
+    )
+}
+
+export default function Default() {
+    return (
+        <Suspense fallback={null}>
+            <ShopDefaultContent />
+        </Suspense>
     )
 }

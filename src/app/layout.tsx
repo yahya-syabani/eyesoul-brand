@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Instrument_Sans } from 'next/font/google'
 import '@/styles/styles.scss'
 import GlobalProvider from './GlobalProvider'
 import ModalCart from '@/components/Modal/ModalCart'
@@ -11,8 +10,6 @@ import CountdownTimeType from '@/type/CountdownType'
 import { countdownTime } from '@/store/countdownTime'
 
 const serverTimeLeft: CountdownTimeType = countdownTime();
-
-const instrument = Instrument_Sans({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Anvogue',
@@ -27,7 +24,7 @@ export default function RootLayout({
   return (
     <GlobalProvider>
       <html lang="en">
-        <body className={instrument.className}>
+        <body>
           {children}
           <ModalCart serverTimeLeft={serverTimeLeft} />
           <ModalWishlist />

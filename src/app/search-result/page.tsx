@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import TopNavOne from '@/components/Header/TopNav/TopNavOne'
@@ -12,7 +12,7 @@ import Product from '@/components/Product/Product'
 import HandlePagination from '@/components/Other/HandlePagination'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 
-const SearchResult = () => {
+const SearchResultContent = () => {
     const [searchKeyword, setSearchKeyword] = useState<string>('');
     const [currentPage, setCurrentPage] = useState(0);
     const productsPerPage = 8;
@@ -139,6 +139,14 @@ const SearchResult = () => {
             </div>
             <Footer />
         </>
+    )
+}
+
+const SearchResult = () => {
+    return (
+        <Suspense fallback={null}>
+            <SearchResultContent />
+        </Suspense>
     )
 }
 

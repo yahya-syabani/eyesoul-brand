@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import TopNavOne from '@/components/Header/TopNav/TopNavOne'
@@ -13,7 +13,7 @@ import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useCart } from '@/context/CartContext'
 import { useSearchParams } from 'next/navigation';
 
-const Checkout = () => {
+const CheckoutContent = () => {
     const searchParams = useSearchParams()
     let discount = searchParams.get('discount')
     let ship = searchParams.get('ship')
@@ -281,6 +281,14 @@ const Checkout = () => {
             </div>
             <Footer />
         </>
+    )
+}
+
+const Checkout = () => {
+    return (
+        <Suspense fallback={null}>
+            <CheckoutContent />
+        </Suspense>
     )
 }
 

@@ -322,7 +322,7 @@ const Cart = () => {
                                 </div>
                                 <div className="block-button flex flex-col items-center gap-y-4 mt-5">
                                     <div className="checkout-btn button-main text-center w-full" onClick={redirectToCheckout}>Process To Checkout</div>
-                                    <Link className="text-button hover-underline" href={"/shop/breadcrumb1"}>Continue shopping</Link>
+                                    <Link className="text-button hover-underline" href={"/shop/default"}>Continue shopping</Link>
                                 </div>
                             </div>
                         </div>

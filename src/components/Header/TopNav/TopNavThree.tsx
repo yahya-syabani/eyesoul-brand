@@ -32,8 +32,8 @@ const TopNavThree: React.FC<Props> = ({ props }) => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href={'/pages/store-list'} className='caption2 hover:underline'>
-                                        Store Location
+                                    <Link href={'/pages/contact'} className='caption2 hover:underline'>
+                                        Support
                                     </Link>
                                 </li>
                                 <li>
