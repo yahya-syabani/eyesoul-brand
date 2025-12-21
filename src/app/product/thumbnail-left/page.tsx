@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link'
 import TopNavOne from '@/components/Header/TopNav/TopNavOne'
@@ -10,7 +10,7 @@ import Footer from '@/components/Footer/Footer'
 import { ProductType } from '@/type/ProductType'
 import productData from '@/data/Product.json'
 
-const ProductThumbnailLeft = () => {
+const ProductThumbnailLeftContent = () => {
     const searchParams = useSearchParams()
     let productId = searchParams.get('id')
 
@@ -28,6 +28,14 @@ const ProductThumbnailLeft = () => {
             <Default data={productData} productId={productId} />
             <Footer />
         </>
+    )
+}
+
+const ProductThumbnailLeft = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ProductThumbnailLeftContent />
+        </Suspense>
     )
 }
 

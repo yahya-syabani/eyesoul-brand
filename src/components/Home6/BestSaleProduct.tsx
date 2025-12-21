@@ -26,7 +26,7 @@ const BestSaleProduct: React.FC<Props> = ({ data }) => {
     const [activeSize, setActiveSize] = useState<string>('')
     const { addToCart, updateCart, cartState } = useCart()
     const { openModalCart } = useModalCartContext()
-    const swiperRef: any = useRef();
+    const swiperRef = useRef<any>(null);
 
     const handleOpenSizeGuide = () => {
         setOpenSizeGuide(true);

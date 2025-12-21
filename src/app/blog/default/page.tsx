@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import TopNavOne from '@/components/Header/TopNav/TopNavOne'
@@ -12,7 +12,7 @@ import HandlePagination from '@/components/Other/HandlePagination'
 import { useRouter } from 'next/navigation'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 
-const BlogDefault = () => {
+const BlogDefaultContent = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const productsPerPage = 3;
     const offset = currentPage * productsPerPage;
@@ -213,6 +213,14 @@ const BlogDefault = () => {
             </div>
             <Footer />
         </>
+    )
+}
+
+const BlogDefault = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <BlogDefaultContent />
+        </Suspense>
     )
 }
 

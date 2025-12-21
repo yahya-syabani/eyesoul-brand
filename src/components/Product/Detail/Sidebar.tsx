@@ -8,9 +8,9 @@ import Product from '../Product'
 import Rate from '@/components/Other/Rate'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Thumbs, Scrollbar } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css/bundle';
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import SwiperCore from 'swiper/core';
 import { useCart } from '@/context/CartContext'
 import { useModalCartContext } from '@/context/ModalCartContext'
 import { useWishlist } from '@/context/WishlistContext'
@@ -20,19 +20,17 @@ import { useModalCompareContext } from '@/context/ModalCompareContext'
 import { useRouter } from 'next/navigation';
 import ModalSizeguide from '@/components/Modal/ModalSizeguide'
 
-SwiperCore.use([Navigation, Thumbs]);
-
 interface Props {
     data: Array<ProductType>
     productId: string | number | null
 }
 
 const Sidebar: React.FC<Props> = ({ data, productId }) => {
-    const swiperRef: any = useRef();
+    const swiperRef = useRef<any>(null);
     const [photoIndex, setPhotoIndex] = useState(0)
     const [openPopupImg, setOpenPopupImg] = useState(false)
     const [openSizeGuide, setOpenSizeGuide] = useState<boolean>(false)
-    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
+    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
     const [activeColor, setActiveColor] = useState<string>('')
     const [activeSize, setActiveSize] = useState<string>('')
     const [activeTab, setActiveTab] = useState<string | undefined>('description')
@@ -66,7 +64,7 @@ const Sidebar: React.FC<Props> = ({ data, productId }) => {
         router.push(`/product/sidebar?id=${productId}`);
     };
 
-    const handleSwiper = (swiper: SwiperCore) => {
+    const handleSwiper = (swiper: SwiperType) => {
         // Do something with the thumbsSwiper instance
         setThumbsSwiper(swiper);
     };

@@ -6,20 +6,18 @@ import { ProductType } from '@/type/ProductType'
 import Rate from '../Other/Rate'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Thumbs, FreeMode } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css/bundle';
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import SwiperCore from 'swiper/core';
 import { useCart } from '@/context/CartContext'
 import { useModalCartContext } from '@/context/ModalCartContext'
-
-SwiperCore.use([Navigation, Thumbs]);
 
 interface Props {
     data: Array<ProductType>;
 }
 
 const FeaturedProduct: React.FC<Props> = ({ data }) => {
-    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
+    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
     const [activeColor, setActiveColor] = useState<string>('')
     const [activeSize, setActiveSize] = useState<string>('')
     const { addToCart, updateCart, cartState } = useCart()
@@ -33,7 +31,7 @@ const FeaturedProduct: React.FC<Props> = ({ data }) => {
         setActiveSize(item)
     }
 
-    const handleSwiper = (swiper: SwiperCore) => {
+    const handleSwiper = (swiper: SwiperType) => {
         // Do something with the thumbsSwiper instance
         setThumbsSwiper(swiper);
     };

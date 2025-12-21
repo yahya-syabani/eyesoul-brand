@@ -25,7 +25,7 @@ interface Props {
 }
 
 const CountdownTimer: React.FC<Props> = ({ data, productId }) => {
-    const swiperRef: any = useRef();
+    const swiperRef = useRef<any>(null);
     const [photoIndex, setPhotoIndex] = useState(0)
     const [openPopupImg, setOpenPopupImg] = useState(false)
     const [openSizeGuide, setOpenSizeGuide] = useState<boolean>(false)
