@@ -1,16 +1,17 @@
 import React from 'react'
 import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuOne from '@/components/Header/Menu/MenuOne'
-import SliderOne from '@/components/Slider/SliderOne'
-import WhatNewOne from '@/components/Home1/WhatNewOne'
+import MenuTwo from '@/components/Header/Menu/MenuTwo'
+import SliderSeven from '@/components/Slider/SliderSeven'
+import Deal from '@/components/Home7/Deal'
 import productData from '@/data/Product.json'
-import Collection from '@/components/Home1/Collection'
-import TabFeatures from '@/components/Home1/TabFeatures'
-import Banner from '@/components/Home1/Banner'
-import Benefit from '@/components/Home1/Benefit'
+import TrendingNow from '@/components/Home7/TrendingNow'
+import PopularProduct from '@/components/Home6/PopularProduct'
+import TrendingProduct from '@/components/Home3/TrendingProduct'
+import Banner from '@/components/Home7/Banner'
 import testimonialData from '@/data/Testimonial.json'
-import Testimonial from '@/components/Home1/Testimonial'
-import Instagram from '@/components/Home1/Instagram'
+import Testimonial from '@/components/Home7/Testimonial'
+import Benefit from '@/components/Home1/Benefit'
+import Instagram from '@/components/Home6/Instagram'
 import Brand from '@/components/Home1/Brand'
 import Footer from '@/components/Footer/Footer'
 import ModalNewsletter from '@/components/Modal/ModalNewsletter'
@@ -18,17 +19,18 @@ import ModalNewsletter from '@/components/Modal/ModalNewsletter'
 export default function Home() {
   return (
     <>
-      <TopNavOne props="style-one bg-black" slogan="New customers save 10% with the code GET10" />
+      <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
       <div id="header" className='relative w-full'>
-        <MenuOne props="bg-transparent" />
-        <SliderOne />
+        <MenuTwo />
+        <SliderSeven />
       </div>
-      <WhatNewOne data={productData} start={0} limit={4} />
-      <Collection />
-      <TabFeatures data={productData} start={0} limit={6} />
+      <TrendingNow />
+      <Deal data={productData} start={4} limit={8} />
+      <PopularProduct />
+      <TrendingProduct data={productData} start={12} limit={20} />
       <Banner />
-      <Benefit props="md:py-20 py-10" />
-      <Testimonial data={testimonialData} limit={6} />
+      <Testimonial data={testimonialData} limit={5} />
+      <Benefit props="md:pt-20 pt-10" />
       <Instagram />
       <Brand />
       <Footer />
