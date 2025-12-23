@@ -12,6 +12,7 @@ import { useModalWishlistContext } from '@/context/ModalWishlistContext'
 import { useCompare } from '@/context/CompareContext'
 import { useModalCompareContext } from '@/context/ModalCompareContext'
 import { useModalQuickviewContext } from '@/context/ModalQuickviewContext'
+import { useToast } from '@/context/ToastContext'
 import Rate from '../Other/Rate'
 
 type Props = {
@@ -26,6 +27,7 @@ const ProductMarketplace: React.FC<Props> = ({ data }) => {
   const { addToCompare, removeFromCompare, compareState } = useCompare()
   const { openModalCompare } = useModalCompareContext()
   const { openQuickview } = useModalQuickviewContext()
+  const { warning } = useToast()
   const router = useRouter()
 
   const isWishlisted = wishlistState.wishlistArray.some((item) => item.id === data.id)
@@ -52,7 +54,7 @@ const ProductMarketplace: React.FC<Props> = ({ data }) => {
       if (isCompared) removeFromCompare(data.id)
       else addToCompare(data)
     } else {
-      alert('Compare up to 3 products')
+      warning('Compare up to 3 products')
     }
     openModalCompare()
   }

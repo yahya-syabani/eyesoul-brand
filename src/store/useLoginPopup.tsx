@@ -1,11 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
+import { useToggle } from '@/hooks/useToggle';
 
 const useLoginPopup = () => {
-    const [openLoginPopup, setOpenLoginPopup] = useState(false)
+    const [openLoginPopup, toggleLoginPopup, , closeLoginPopup] = useToggle(false)
 
-    const handleLoginPopup = () => {
-        setOpenLoginPopup((toggleOpen) => !toggleOpen)
-    }
+    const handleLoginPopup = toggleLoginPopup
 
     // Check if the click event occurs outside the popup.
     const handleClickOutsideLoginPopup = useCallback((event: Event) => {
@@ -13,7 +12,7 @@ const useLoginPopup = () => {
         const targetElement = event.target as Element;
 
         if (openLoginPopup && !targetElement.closest('.login-popup')) {
-            setOpenLoginPopup(false)
+            closeLoginPopup()
         }
     }, [openLoginPopup])
 
@@ -25,7 +24,7 @@ const useLoginPopup = () => {
         return () => {
             document.removeEventListener('click', handleClickOutsideLoginPopup);
         };
-    }, [handleClickOutsideLoginPopup, openLoginPopup])
+    }, [handleClickOutsideLoginPopup])
 
     return {
         openLoginPopup,

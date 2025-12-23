@@ -1,5 +1,11 @@
-/* Main color */
+/* Main color - Light Theme (Default) */
 :root {
+  --color-bg: #ffffff;
+  --color-text: #1F1F1F;
+  --color-surface: #F7F7F7;
+  --color-line: #E9E9E9;
+  --color-outline: rgba(0, 0, 0, 0.15);
+  
   --green: #D2EF9A;
   --black: #1F1F1F;
   --secondary: #696C70;
@@ -17,6 +23,46 @@
   --surface2: rgba(255, 255, 255, 0.2);
 }
 
+/* Dark Theme */
+[data-theme="dark"] {
+  --color-bg: #121212;
+  --color-text: #E5E5E5;
+  --color-surface: #1E1E1E;
+  --color-line: #2E2E2E;
+  --color-outline: rgba(255, 255, 255, 0.15);
+  
+  --black: #E5E5E5;
+  --white: #121212;
+  --surface: #1E1E1E;
+  --line: #2E2E2E;
+  --outline: rgba(255, 255, 255, 0.15);
+  --surface1: rgba(0, 0, 0, 0.2);
+  --surface2: rgba(0, 0, 0, 0.3);
+  --secondary: #A0A0A0;
+  --secondary2: #696C70;
+}
+
+/* System preference dark mode */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #121212;
+    --color-text: #E5E5E5;
+    --color-surface: #1E1E1E;
+    --color-line: #2E2E2E;
+    --color-outline: rgba(255, 255, 255, 0.15);
+    
+    --black: #E5E5E5;
+    --white: #121212;
+    --surface: #1E1E1E;
+    --line: #2E2E2E;
+    --outline: rgba(255, 255, 255, 0.15);
+    --surface1: rgba(0, 0, 0, 0.2);
+    --surface2: rgba(0, 0, 0, 0.3);
+    --secondary: #A0A0A0;
+    --secondary2: #696C70;
+  }
+}
+
 
 /* Reset */
 * {
@@ -29,11 +75,12 @@ html,
 body {
   font-size: 16px;
   line-height: 26px;
-  color: var(--black);
+  color: var(--color-text);
+  background-color: var(--color-bg);
   font-weight: 400;
   overflow-x: hidden;
-  user-select: none;
   scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 div,
@@ -66,8 +113,47 @@ textarea {
   transition: border-color ease 0.3s;
 }
 
+/* Screen reader only class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only:focus,
+.focus\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Focus styles for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--black);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--black);
+  outline-offset: 2px;
+}
+
 input:focus,
-textarea:focus {
+textarea:focus,
+input:focus-visible,
+textarea:focus-visible {
   border-color: var(--black);
 }
 

@@ -17,6 +17,7 @@ import { useWishlist } from '@/context/WishlistContext'
 import { useModalWishlistContext } from '@/context/ModalWishlistContext'
 import { useCompare } from '@/context/CompareContext'
 import { useModalCompareContext } from '@/context/ModalCompareContext'
+import { useToast } from '@/context/ToastContext'
 import ModalSizeguide from '@/components/Modal/ModalSizeguide'
 
 interface Props {
@@ -39,6 +40,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     const { openModalWishlist } = useModalWishlistContext()
     const { addToCompare, removeFromCompare, compareState } = useCompare();
     const { openModalCompare } = useModalCompareContext()
+    const { warning } = useToast()
     let productMain = data.find(product => product.id === productId) as ProductType
     if (productMain === undefined) {
         productMain = data[0]
@@ -128,7 +130,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                 addToCompare(productMain);
             }
         } else {
-            alert('Compare up to 3 products')
+            warning('Compare up to 3 products')
         }
 
         openModalCompare();

@@ -4,6 +4,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import { ProductType } from '@/type/ProductType';
 import { safeJsonParse, safeJsonStringify, safeStorageGet, safeStorageSet } from '@/utils/localStorage';
+import { useDebouncedEffect } from '@/hooks/useDebouncedEffect';
 
 interface WishlistItem extends ProductType {
 }
@@ -78,11 +79,16 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         hasHydratedRef.current = true;
     }, []);
 
-    useEffect(() => {
+    useDebouncedEffect(() => {
         if (!hasHydratedRef.current) return;
         const json = safeJsonStringify(wishlistState.wishlistArray);
-        if (json.ok) safeStorageSet(WISHLIST_STORAGE_KEY, json.value);
-    }, [wishlistState.wishlistArray]);
+        if (!json.ok) return;
+        const res = safeStorageSet(WISHLIST_STORAGE_KEY, json.value);
+        if (!res.ok) {
+            // eslint-disable-next-line no-console
+            console.warn('Failed to persist wishlist to localStorage', res.error);
+        }
+    }, [wishlistState.wishlistArray], 300);
 
     const addToWishlist = useCallback((item: ProductType) => {
         dispatch({ type: 'ADD_TO_WISHLIST', payload: item });

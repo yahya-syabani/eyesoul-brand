@@ -12,6 +12,7 @@ import { useModalWishlistContext } from '@/context/ModalWishlistContext'
 import { useCompare } from '@/context/CompareContext'
 import { useModalCompareContext } from '@/context/ModalCompareContext'
 import { useModalQuickviewContext } from '@/context/ModalQuickviewContext'
+import { useToast } from '@/context/ToastContext'
 import ProductTags from './ProductTags'
 import ProductImage from './ProductImage'
 import ProductVariations from './ProductVariations'
@@ -35,6 +36,7 @@ const ProductGrid: React.FC<Props> = ({ data }) => {
   const { addToCompare, removeFromCompare, compareState } = useCompare()
   const { openModalCompare } = useModalCompareContext()
   const { openQuickview } = useModalQuickviewContext()
+  const { warning } = useToast()
   const router = useRouter()
 
   const percentSale = useMemo(() => Math.floor(100 - (data.price / data.originPrice) * 100), [data.originPrice, data.price])
@@ -70,7 +72,7 @@ const ProductGrid: React.FC<Props> = ({ data }) => {
         addToCompare(data)
       }
     } else {
-      alert('Compare up to 3 products')
+      warning('Compare up to 3 products')
     }
     openModalCompare()
   }
@@ -98,6 +100,7 @@ const ProductGrid: React.FC<Props> = ({ data }) => {
                 e.stopPropagation()
                 handleAddToWishlist()
               }}
+              aria-label={isWishlisted ? `Remove ${data.name} from wishlist` : `Add ${data.name} to wishlist`}
             >
               <WishlistIcon active={isWishlisted} />
             </ActionButton>
@@ -110,6 +113,7 @@ const ProductGrid: React.FC<Props> = ({ data }) => {
                 e.stopPropagation()
                 handleAddToCompare()
               }}
+              aria-label={isCompared ? `Remove ${data.name} from compare` : `Add ${data.name} to compare`}
             >
               <CompareIcon />
               <CompareCheckedIcon />
@@ -140,26 +144,30 @@ const ProductGrid: React.FC<Props> = ({ data }) => {
           )}
 
           <div className="list-action grid grid-cols-2 gap-3 px-5 absolute w-full bottom-5 max-lg:hidden">
-            <div
+            <button
               className="quick-view-btn w-full text-button-uppercase py-2 text-center rounded-full duration-300 bg-white hover:bg-black hover:text-white"
               onClick={(e) => {
                 e.stopPropagation()
                 handleQuickviewOpen()
               }}
+              aria-label={`Quick view ${data.name}`}
+              type="button"
             >
               Quick View
-            </div>
+            </button>
 
             {data.action === 'add to cart' ? (
-              <div
+              <button
                 className="add-cart-btn w-full text-button-uppercase py-2 text-center rounded-full duration-500 bg-white hover:bg-black hover:text-white"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleAddToCart()
                 }}
+                aria-label={`Add ${data.name} to cart`}
+                type="button"
               >
                 Add To Cart
-              </div>
+              </button>
             ) : (
               <ProductQuickShop
                 data={data}
@@ -173,24 +181,28 @@ const ProductGrid: React.FC<Props> = ({ data }) => {
           </div>
 
           <div className="list-action-icon flex items-center justify-center gap-2 absolute w-full bottom-3 z-[1] lg:hidden">
-            <div
+            <button
               className="quick-view-btn w-9 h-9 flex items-center justify-center rounded-lg duration-300 bg-white hover:bg-black hover:text-white"
               onClick={(e) => {
                 e.stopPropagation()
                 handleQuickviewOpen()
               }}
+              aria-label={`Quick view ${data.name}`}
+              type="button"
             >
-              <QuickViewIcon size={18} />
-            </div>
-            <div
+              <QuickViewIcon size={18} aria-hidden="true" />
+            </button>
+            <button
               className="add-cart-btn w-9 h-9 flex items-center justify-center rounded-lg duration-300 bg-white hover:bg-black hover:text-white"
               onClick={(e) => {
                 e.stopPropagation()
                 handleAddToCart()
               }}
+              aria-label={`Add ${data.name} to cart`}
+              type="button"
             >
-              <Icon.ShoppingBagOpen className="text-lg" />
-            </div>
+              <Icon.ShoppingBagOpen className="text-lg" aria-hidden="true" />
+            </button>
           </div>
         </div>
 

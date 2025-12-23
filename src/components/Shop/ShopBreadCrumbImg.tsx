@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image';
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { ProductType } from '@/type/ProductType'
 import Product from '../Product/Product';
@@ -17,18 +18,38 @@ interface Props {
 }
 
 const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType }) => {
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    
     const [layoutCol, setLayoutCol] = useState<number | null>(4)
     const [showOnlySale, setShowOnlySale] = useState(false)
     const [sortOption, setSortOption] = useState('');
     const [openSidebar, setOpenSidebar] = useState(false)
-    const [type, setType] = useState<string | null>(dataType)
-    const [size, setSize] = useState<string | null>()
-    const [color, setColor] = useState<string | null>()
-    const [brand, setBrand] = useState<string | null>()
-    const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 100 });
+    const [type, setType] = useState<string | null>(dataType || searchParams.get('type'))
+    const [size, setSize] = useState<string | null>(searchParams.get('size') || null)
+    const [color, setColor] = useState<string | null>(searchParams.get('color') || null)
+    const [brand, setBrand] = useState<string | null>(searchParams.get('brand') || null)
+    const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ 
+        min: Number(searchParams.get('minPrice')) || 0, 
+        max: Number(searchParams.get('maxPrice')) || 100 
+    });
     const [currentPage, setCurrentPage] = useState(0);
     const productsPerPage = productPerPage;
-    // Note: we intentionally avoid syncing `type` state to `dataType` via effects to keep render/effects pure.
+
+    // Update URL when filters change
+    const updateURL = useCallback((updates: Record<string, string | null>) => {
+        const params = new URLSearchParams(searchParams.toString())
+        
+        Object.entries(updates).forEach(([key, value]) => {
+            if (value === null || value === '' || value === '0' || value === '100') {
+                params.delete(key)
+            } else {
+                params.set(key, value)
+            }
+        })
+        
+        router.replace(`/shop/default?${params.toString()}`, { scroll: false })
+    }, [router, searchParams])
 
     const handleLayoutCol = useCallback((col: number) => {
         setLayoutCol(col)
@@ -49,32 +70,44 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType }) 
         setCurrentPage(0);
     }, [])
 
-    const handleType = useCallback((type: string) => {
-        setType((prevType) => (prevType === type ? null : type))
-        setCurrentPage(0);
-    }, [])
+    const handleType = useCallback((newType: string) => {
+        const updatedType = type === newType ? null : newType
+        setType(updatedType)
+        setCurrentPage(0)
+        updateURL({ type: updatedType })
+    }, [type, updateURL])
 
-    const handleSize = useCallback((size: string) => {
-        setSize((prevSize) => (prevSize === size ? null : size))
-        setCurrentPage(0);
-    }, [])
+    const handleSize = useCallback((newSize: string) => {
+        const updatedSize = size === newSize ? null : newSize
+        setSize(updatedSize)
+        setCurrentPage(0)
+        updateURL({ size: updatedSize })
+    }, [size, updateURL])
 
     const handlePriceChange = useCallback((values: number | number[]) => {
         if (Array.isArray(values)) {
-            setPriceRange({ min: values[0], max: values[1] });
-            setCurrentPage(0);
+            setPriceRange({ min: values[0], max: values[1] })
+            setCurrentPage(0)
+            updateURL({ 
+                minPrice: values[0] === 0 ? null : values[0].toString(),
+                maxPrice: values[1] === 100 ? null : values[1].toString()
+            })
         }
-    }, []);
+    }, [updateURL])
 
-    const handleColor = useCallback((color: string) => {
-        setColor((prevColor) => (prevColor === color ? null : color))
-        setCurrentPage(0);
-    }, [])
+    const handleColor = useCallback((newColor: string) => {
+        const updatedColor = color === newColor ? null : newColor
+        setColor(updatedColor)
+        setCurrentPage(0)
+        updateURL({ color: updatedColor })
+    }, [color, updateURL])
 
-    const handleBrand = useCallback((brand: string) => {
-        setBrand((prevBrand) => (prevBrand === brand ? null : brand));
-        setCurrentPage(0);
-    }, [])
+    const handleBrand = useCallback((newBrand: string) => {
+        const updatedBrand = brand === newBrand ? null : newBrand
+        setBrand(updatedBrand)
+        setCurrentPage(0)
+        updateURL({ brand: updatedBrand })
+    }, [brand, updateURL])
 
 
     const noDataProduct: ProductType = useMemo(() => ({
@@ -170,7 +203,8 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType }) 
         setBrand(null);
         setPriceRange({ min: 0, max: 100 });
         setCurrentPage(0);
-    }, []);
+        updateURL({ type: null, size: null, color: null, brand: null, minPrice: null, maxPrice: null })
+    }, [updateURL]);
 
     return (
         <>

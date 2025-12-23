@@ -4,6 +4,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import { ProductType } from '@/type/ProductType';
 import { safeJsonParse, safeJsonStringify, safeStorageGet, safeStorageSet } from '@/utils/localStorage';
+import { useDebouncedEffect } from '@/hooks/useDebouncedEffect';
 
 interface CompareItem extends ProductType {
 }
@@ -85,11 +86,16 @@ export const CompareProvider: React.FC<{ children: React.ReactNode }> = ({ child
         hasHydratedRef.current = true;
     }, []);
 
-    useEffect(() => {
+    useDebouncedEffect(() => {
         if (!hasHydratedRef.current) return;
         const json = safeJsonStringify(compareState.compareArray);
-        if (json.ok) safeStorageSet(COMPARE_STORAGE_KEY, json.value);
-    }, [compareState.compareArray]);
+        if (!json.ok) return;
+        const res = safeStorageSet(COMPARE_STORAGE_KEY, json.value);
+        if (!res.ok) {
+            // eslint-disable-next-line no-console
+            console.warn('Failed to persist compare list to localStorage', res.error);
+        }
+    }, [compareState.compareArray], 300);
 
     const addToCompare = useCallback((item: ProductType) => {
         dispatch({ type: 'ADD_TO_COMPARE', payload: item });

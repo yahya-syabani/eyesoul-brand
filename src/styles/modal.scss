@@ -356,6 +356,8 @@
     .modal-search-main {
         position: absolute;
         width: calc((1290px / 6) * 5);
+        max-width: calc(100vw - 80px);
+        max-height: calc(100vh - 80px);
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -363,7 +365,8 @@
         transition: all ease 0.5s;
         opacity: 0;
         visibility: hidden;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
 
         &.open {
             opacity: 1;
@@ -384,15 +387,13 @@
         }
 
         @media (max-width: 1400px) {
-            max-height: calc(100vh - 400px);
-            height: 100%;
-            width: calc(100vw - 200px);
+            max-height: calc(100vh - 80px);
+            width: calc(100vw - 80px);
         }
 
         @media (max-width: 640px) {
-            max-height: calc(100vh - 200px);
-            height: 100%;
-            width: calc(100vw - 80px);
+            max-height: calc(100vh - 40px);
+            width: calc(100vw - 40px);
             border-radius: 16px;
         }
     }

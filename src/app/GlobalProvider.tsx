@@ -1,4 +1,6 @@
 import React from 'react'
+import { ThemeProvider } from '@/context/ThemeContext'
+import { ToastProvider } from '@/context/ToastContext'
 import { CartProvider } from '@/context/CartContext'
 import { ModalCartProvider } from '@/context/ModalCartContext'
 import { WishlistProvider } from '@/context/WishlistContext'
@@ -9,25 +11,20 @@ import { ModalSearchProvider } from '@/context/ModalSearchContext'
 import { ModalQuickviewProvider } from '@/context/ModalQuickviewContext'
 
 const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    return (
-        <CartProvider>
-            <ModalCartProvider>
-                <WishlistProvider>
-                    <ModalWishlistProvider>
-                        <CompareProvider>
-                            <ModalCompareProvider>
-                                <ModalSearchProvider>
-                                    <ModalQuickviewProvider>
-                                        {children}
-                                    </ModalQuickviewProvider>
-                                </ModalSearchProvider>
-                            </ModalCompareProvider>
-                        </CompareProvider>
-                    </ModalWishlistProvider>
-                </WishlistProvider>
-            </ModalCartProvider>
-        </CartProvider>
-    )
+    const providers = [
+        ThemeProvider,
+        ToastProvider,
+        CartProvider,
+        ModalCartProvider,
+        WishlistProvider,
+        ModalWishlistProvider,
+        CompareProvider,
+        ModalCompareProvider,
+        ModalSearchProvider,
+        ModalQuickviewProvider,
+    ] as const
+
+    return providers.reduceRight<React.ReactNode>((acc, Provider) => <Provider>{acc}</Provider>, children)
 }
 
 export default GlobalProvider

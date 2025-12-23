@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
 import '@/styles/styles.scss'
 import GlobalProvider from './GlobalProvider'
-import ModalCart from '@/components/Modal/ModalCart'
-import ModalWishlist from '@/components/Modal/ModalWishlist'
-import ModalSearch from '@/components/Modal/ModalSearch'
-import ModalQuickview from '@/components/Modal/ModalQuickview'
-import ModalCompare from '@/components/Modal/ModalCompare'
+import SkipLink from '@/components/A11y/SkipLink'
+import ClientShell from './ClientShell'
 import CountdownTimeType from '@/type/CountdownType'
 import { countdownTime } from '@/store/countdownTime'
+import OrganizationJsonLd from '@/components/SEO/OrganizationJsonLd'
+import WebSiteJsonLd from '@/components/SEO/WebSiteJsonLd'
 
 export const metadata: Metadata = {
   title: 'Anvogue',
@@ -26,12 +25,12 @@ export default function RootLayout({
     <GlobalProvider>
       <html lang="en">
         <body>
-          {children}
-          <ModalCart serverTimeLeft={serverTimeLeft} />
-          <ModalWishlist />
-          <ModalSearch />
-          <ModalQuickview />
-          <ModalCompare />
+          <SkipLink />
+          <OrganizationJsonLd />
+          <WebSiteJsonLd />
+          <ClientShell serverTimeLeft={serverTimeLeft}>
+            <main id="main-content">{children}</main>
+          </ClientShell>
         </body>
       </html>
     </GlobalProvider>

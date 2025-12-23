@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Product from '../Product/Product'
 import { ProductType } from '@/type/ProductType'
 import { countdownTime } from '@/store/countdownTime'
+import CountdownTimeType from '@/type/CountdownType'
 
 interface Props {
     data: Array<ProductType>;
@@ -13,11 +14,20 @@ interface Props {
 }
 
 const Deal: React.FC<Props> = ({ data, start, limit }) => {
-    const [timeLeft, setTimeLeft] = useState(countdownTime());
+    // Use deterministic initial value to avoid hydration mismatch
+    // Always use the same value on server and client for initial render
+    const [timeLeft, setTimeLeft] = useState<CountdownTimeType>(() => {
+        return { days: 0, hours: 0, minutes: 15, seconds: 0 }
+    })
+    const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
+        setMounted(true)
+        // Update to actual countdown after mount
+        setTimeLeft(countdownTime())
+        
         const timer = setInterval(() => {
-            setTimeLeft(countdownTime());
+            setTimeLeft(countdownTime())
         }, 1000);
 
         return () => clearInterval(timer);

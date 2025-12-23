@@ -1,7 +1,7 @@
 'use client'
 
 // Quickview.tsx
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { ProductType } from '@/type/ProductType';
 import * as Icon from "@phosphor-icons/react/dist/ssr";
@@ -12,8 +12,10 @@ import { useWishlist } from '@/context/WishlistContext';
 import { useModalWishlistContext } from '@/context/ModalWishlistContext';
 import { useCompare } from '@/context/CompareContext'
 import { useModalCompareContext } from '@/context/ModalCompareContext'
+import { useToast } from '@/context/ToastContext'
 import Rate from '../Other/Rate';
 import ModalSizeguide from './ModalSizeguide';
+import { useModalA11y } from '@/hooks/useModalA11y'
 
 const ModalQuickview = () => {
     const [photoIndex, setPhotoIndex] = useState(0)
@@ -28,7 +30,11 @@ const ModalQuickview = () => {
     const { openModalWishlist } = useModalWishlistContext()
     const { addToCompare, removeFromCompare, compareState } = useCompare();
     const { openModalCompare } = useModalCompareContext()
+    const { warning } = useToast()
     const percentSale = selectedProduct && Math.floor(100 - ((selectedProduct.price / selectedProduct.originPrice) * 100))
+    const dialogRef = useRef<HTMLDivElement | null>(null)
+
+    useModalA11y({ isOpen: selectedProduct !== null, onClose: closeQuickview, containerRef: dialogRef })
 
     const handleOpenSizeGuide = () => {
         setOpenSizeGuide(true);
@@ -99,7 +105,7 @@ const ModalQuickview = () => {
                     addToCompare(selectedProduct);
                 }
             } else {
-                alert('Compare up to 3 products')
+                warning('Compare up to 3 products')
             }
         }
         openModalCompare();
@@ -107,10 +113,15 @@ const ModalQuickview = () => {
 
     return (
         <>
-            <div className={`modal-quickview-block`} onClick={closeQuickview}>
+            <div className={`modal-quickview-block`} onClick={closeQuickview} aria-hidden={selectedProduct === null} role="presentation">
                 <div
                     className={`modal-quickview-main py-6 ${selectedProduct !== null ? 'open' : ''}`}
                     onClick={(e) => { e.stopPropagation() }}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="quickview-modal-title"
+                    tabIndex={-1}
+                    ref={dialogRef}
                 >
                     <div className="flex h-full max-md:flex-col-reverse gap-y-6">
                         <div className="left lg:w-[388px] md:w-[300px] flex-shrink-0 px-6">
@@ -131,13 +142,15 @@ const ModalQuickview = () => {
                         </div>
                         <div className="right w-full px-4">
                             <div className="heading pb-6 px-4 flex items-center justify-between relative">
-                                <div className="heading5">Quick View</div>
-                                <div
+                                <h2 id="quickview-modal-title" className="heading5">Quick View</h2>
+                                <button
                                     className="close-btn absolute right-0 top-0 w-6 h-6 rounded-full bg-surface flex items-center justify-center duration-300 cursor-pointer hover:bg-black hover:text-white"
                                     onClick={closeQuickview}
+                                    aria-label="Close quick view"
+                                    type="button"
                                 >
-                                    <Icon.X size={14} />
-                                </div>
+                                    <Icon.X size={14} aria-hidden="true" />
+                                </button>
                             </div>
                             <div className="product-infor px-4">
                                 <div className="flex justify-between">

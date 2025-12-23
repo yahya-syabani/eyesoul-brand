@@ -2,7 +2,7 @@
 import React from 'react'
 import Image from 'next/image';
 import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuOne from '@/components/Header/Menu/MenuOne'
+import MenuTwo from '@/components/Header/Menu/MenuTwo'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb';
 import Benefit from '@/components/Home1/Benefit'
 import Instagram from '@/components/Home6/Instagram'
@@ -12,9 +12,9 @@ import Footer from '@/components/Footer/Footer'
 const AboutUs = () => {
     return (
         <>
-            <TopNavOne props="style-one bg-black" slogan="New customers save 10% with the code GET10" />
+            <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
             <div id="header" className='relative w-full'>
-                <MenuOne props="bg-transparent" />
+                <MenuTwo />
                 <Breadcrumb heading='About Us' subHeading='About Us' />
             </div>
             <div className='about md:pt-20 pt-10'>

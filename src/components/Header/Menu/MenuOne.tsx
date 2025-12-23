@@ -10,6 +10,7 @@ import { useModalCartContext } from '@/context/ModalCartContext'
 import { useModalWishlistContext } from '@/context/ModalWishlistContext'
 import { useModalSearchContext } from '@/context/ModalSearchContext'
 import { useCart } from '@/context/CartContext'
+import { useTheme } from '@/context/ThemeContext'
 
 interface Props {
   props: string
@@ -23,6 +24,9 @@ const MenuOne: React.FC<Props> = ({ props }) => {
   const { openModalWishlist } = useModalWishlistContext()
   const { openModalSearch } = useModalSearchContext()
   const { cartState } = useCart()
+  const { resolvedTheme } = useTheme()
+  
+  const iconColor = resolvedTheme === 'dark' ? '#E5E5E5' : '#1F1F1F'
 
   const [fixedHeader, setFixedHeader] = useState(false)
   const [lastScrollPosition, setLastScrollPosition] = useState(0)
@@ -86,13 +90,13 @@ const MenuOne: React.FC<Props> = ({ props }) => {
 
             <div className="right flex gap-12">
               <div className="max-md:hidden search-icon flex items-center cursor-pointer relative">
-                <Icon.MagnifyingGlass size={24} color="black" onClick={openModalSearch} />
+                <Icon.MagnifyingGlass size={24} color={iconColor} onClick={openModalSearch} />
                 <div className="line absolute bg-line w-px h-6 -right-6"></div>
               </div>
 
               <div className="list-action flex items-center gap-4">
                 <div className="user-icon flex items-center justify-center cursor-pointer">
-                  <Icon.User size={24} color="black" onClick={handleLoginPopup} />
+                  <Icon.User size={24} color={iconColor} onClick={handleLoginPopup} />
                   <div
                     className={`login-popup absolute top-[74px] w-[320px] p-7 rounded-xl bg-white box-shadow-small ${
                       openLoginPopup ? 'open' : ''
@@ -115,11 +119,11 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                 </div>
 
                 <div className="max-md:hidden wishlist-icon flex items-center cursor-pointer" onClick={openModalWishlist}>
-                  <Icon.Heart size={24} color="black" />
+                  <Icon.Heart size={24} color={iconColor} />
                 </div>
 
                 <div className="cart-icon flex items-center relative cursor-pointer" onClick={openModalCart}>
-                  <Icon.Handbag size={24} color="black" />
+                  <Icon.Handbag size={24} color={iconColor} />
                   <span className="quantity cart-quantity absolute -right-1.5 -top-1.5 text-xs text-white bg-black w-4 h-4 flex items-center justify-center rounded-full">
                     {cartState.cartArray.length}
                   </span>
@@ -187,5 +191,6 @@ const MenuOne: React.FC<Props> = ({ props }) => {
 }
 
 export default MenuOne
+
 
 

@@ -1,20 +1,28 @@
 import React from 'react'
+import type { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 import TopNavOne from '@/components/Header/TopNav/TopNavOne'
 import MenuTwo from '@/components/Header/Menu/MenuTwo'
-import SliderSeven from '@/components/Slider/SliderSeven'
-import Deal from '@/components/Home7/Deal'
 import productData from '@/data/Product.json'
-import TrendingNow from '@/components/Home7/TrendingNow'
-import PopularProduct from '@/components/Home6/PopularProduct'
-import TrendingProduct from '@/components/Home3/TrendingProduct'
-import Banner from '@/components/Home7/Banner'
 import testimonialData from '@/data/Testimonial.json'
-import Testimonial from '@/components/Home7/Testimonial'
-import Benefit from '@/components/Home1/Benefit'
-import Instagram from '@/components/Home6/Instagram'
-import Brand from '@/components/Home1/Brand'
 import Footer from '@/components/Footer/Footer'
-import ModalNewsletter from '@/components/Modal/ModalNewsletter'
+import { generatePageMetadata } from '@/lib/metadata'
+
+export const metadata: Metadata = generatePageMetadata(
+  'Anvogue',
+  'Discover the latest fashion trends and shop premium quality products. Free shipping on orders over $50.'
+)
+
+const SliderSeven = dynamic(() => import('@/components/Slider/SliderSeven'))
+const TrendingNow = dynamic(() => import('@/components/Home7/TrendingNow'))
+const Deal = dynamic(() => import('@/components/Home7/Deal'))
+const PopularProduct = dynamic(() => import('@/components/Home6/PopularProduct'))
+const TrendingProduct = dynamic(() => import('@/components/Home3/TrendingProduct'))
+const Banner = dynamic(() => import('@/components/Home7/Banner'))
+const Testimonial = dynamic(() => import('@/components/Home7/Testimonial'))
+const Benefit = dynamic(() => import('@/components/Home1/Benefit'))
+const Instagram = dynamic(() => import('@/components/Home6/Instagram'))
+const Brand = dynamic(() => import('@/components/Home1/Brand'))
 
 export default function Home() {
   return (
@@ -34,7 +42,6 @@ export default function Home() {
       <Instagram />
       <Brand />
       <Footer />
-      <ModalNewsletter />
     </>
   )
 }

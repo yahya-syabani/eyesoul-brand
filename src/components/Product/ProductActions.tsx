@@ -7,19 +7,21 @@ type ActionButtonProps = {
   onClick: (e: React.MouseEvent) => void
   className?: string
   children: React.ReactNode
+  'aria-label': string
 }
 
-export const ActionButton: React.FC<ActionButtonProps> = ({ active, tooltip, onClick, className, children }) => {
+export const ActionButton: React.FC<ActionButtonProps> = ({ active, tooltip, onClick, className, children, 'aria-label': ariaLabel }) => {
   return (
-    <div
+    <button
+      type="button"
       className={`${className ?? ''} ${active ? 'active' : ''}`.trim()}
       onClick={onClick}
-      role="button"
-      tabIndex={0}
+      aria-label={ariaLabel}
+      aria-pressed={active}
     >
-      {tooltip ? <div className="tag-action bg-black text-white caption2 px-1.5 py-0.5 rounded-sm">{tooltip}</div> : null}
+      {tooltip ? <span className="tag-action bg-black text-white caption2 px-1.5 py-0.5 rounded-sm" aria-hidden="true">{tooltip}</span> : null}
       {children}
-    </div>
+    </button>
   )
 }
 

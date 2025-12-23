@@ -1,31 +1,42 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useModalWishlistContext } from '@/context/ModalWishlistContext'
 import { useWishlist } from '@/context/WishlistContext'
+import { useModalA11y } from '@/hooks/useModalA11y'
 
 const ModalWishlist = () => {
     const { isModalOpen, closeModalWishlist } = useModalWishlistContext();
     const { wishlistState, removeFromWishlist } = useWishlist()
+    const dialogRef = useRef<HTMLDivElement | null>(null)
+
+    useModalA11y({ isOpen: isModalOpen, onClose: closeModalWishlist, containerRef: dialogRef })
 
     return (
         <>
-            <div className={`modal-wishlist-block`} onClick={closeModalWishlist}>
+            <div className={`modal-wishlist-block`} onClick={closeModalWishlist} aria-hidden={!isModalOpen} role="presentation">
                 <div
                     className={`modal-wishlist-main py-6 ${isModalOpen ? 'open' : ''}`}
                     onClick={(e) => { e.stopPropagation() }}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="wishlist-modal-title"
+                    tabIndex={-1}
+                    ref={dialogRef}
                 >
                     <div className="heading px-6 pb-3 flex items-center justify-between relative">
-                        <div className="heading5">Wishlist</div>
-                        <div
+                        <h2 id="wishlist-modal-title" className="heading5">Wishlist</h2>
+                        <button
                             className="close-btn absolute right-6 top-0 w-6 h-6 rounded-full bg-surface flex items-center justify-center duration-300 cursor-pointer hover:bg-black hover:text-white"
                             onClick={closeModalWishlist}
+                            aria-label="Close wishlist"
+                            type="button"
                         >
-                            <Icon.X size={14} />
-                        </div>
+                            <Icon.X size={14} aria-hidden="true" />
+                        </button>
                     </div>
                     <div className="list-product px-6">
                         {wishlistState.wishlistArray.map((product) => (
@@ -48,15 +59,25 @@ const ModalWishlist = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="remove-wishlist-btn caption1 font-semibold text-red underline cursor-pointer" onClick={() => removeFromWishlist(product.id)}>
+                                <button
+                                    type="button"
+                                    className="remove-wishlist-btn caption1 font-semibold text-red underline cursor-pointer"
+                                    onClick={() => removeFromWishlist(product.id)}
+                                >
                                     Remove
-                                </div>
+                                </button>
                             </div>
                         ))}
                     </div>
                     <div className="footer-modal p-6 border-t bg-white border-line absolute bottom-0 left-0 w-full text-center">
                         <Link href={'/wishlist'} onClick={closeModalWishlist} className='button-main w-full text-center uppercase'>View All Wish List</Link>
-                        <div onClick={closeModalWishlist} className="text-button-uppercase mt-4 text-center has-line-before cursor-pointer inline-block">Or continue shopping</div>
+                        <button
+                            type="button"
+                            onClick={closeModalWishlist}
+                            className="text-button-uppercase mt-4 text-center has-line-before cursor-pointer inline-block"
+                        >
+                            Or continue shopping
+                        </button>
                     </div>
                 </div>
             </div>

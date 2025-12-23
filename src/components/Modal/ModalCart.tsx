@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
@@ -8,41 +8,11 @@ import productData from '@/data/Product.json'
 import { ProductType } from '@/type/ProductType';
 import { useModalCartContext } from '@/context/ModalCartContext'
 import { useCart } from '@/context/CartContext'
-import { countdownTime } from '@/store/countdownTime'
+import { useCartExpiry } from '@/hooks/useCartExpiry'
 import CountdownTimeType from '@/type/CountdownType';
 
-const CART_EXPIRY_KEY = 'anvogue_cart_expires_at'
-const CART_EXPIRES_IN_MS = 15 * 60 * 1000
-
-const getOrInitCartExpiryAt = () => {
-    const fallback = Date.now() + CART_EXPIRES_IN_MS
-    if (typeof window === 'undefined') return fallback
-
-    const raw = window.localStorage.getItem(CART_EXPIRY_KEY)
-    const parsed = raw ? Number(raw) : NaN
-    if (!Number.isFinite(parsed) || parsed <= Date.now()) {
-        window.localStorage.setItem(CART_EXPIRY_KEY, String(fallback))
-        return fallback
-    }
-    return parsed
-}
-
 const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) => {
-    const expiryAtRef = useRef<number | null>(null)
-
-    const [timeLeft, setTimeLeft] = useState(serverTimeLeft);
-
-    useEffect(() => {
-        expiryAtRef.current = getOrInitCartExpiryAt()
-        setTimeLeft(countdownTime(expiryAtRef.current))
-
-        const timer = setInterval(() => {
-            const expiryAt = expiryAtRef.current ?? getOrInitCartExpiryAt()
-            setTimeLeft(countdownTime(expiryAt));
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, []);
+    const { timeLeft } = useCartExpiry()
 
     const [activeTab, setActiveTab] = useState<string | undefined>('')
     const { isModalOpen, closeModalCart } = useModalCartContext();
@@ -68,16 +38,25 @@ const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) =>
 
     return (
         <>
-            <div className={`modal-cart-block`} onClick={closeModalCart}>
+            <div
+                className={`modal-cart-block`}
+                onClick={closeModalCart}
+                role="presentation"
+                aria-hidden={!isModalOpen}
+            >
                 <div
                     className={`modal-cart-main flex ${isModalOpen ? 'open' : ''}`}
                     onClick={(e) => { e.stopPropagation() }}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="cart-modal-title"
+                    aria-label="Shopping cart"
                 >
-                    <div className="left w-1/2 border-r border-line py-6 max-md:hidden">
-                        <div className="heading5 px-6 pb-3">You May Also Like</div>
+                    <section className="left w-1/2 border-r border-line py-6 max-md:hidden" aria-label="Recommended products">
+                        <h2 className="heading5 px-6 pb-3">You May Also Like</h2>
                         <div className="list px-6">
                             {productData.slice(0, 4).map((product) => (
-                                <div key={product.id} className='item py-5 flex items-center justify-between gap-3 border-b border-line'>
+                                <article key={product.id} className='item py-5 flex items-center justify-between gap-3 border-b border-line'>
                                     <div className="infor flex items-center gap-5">
                                         <div className="bg-img">
                                             <Image
@@ -96,28 +75,32 @@ const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) =>
                                             </div>
                                         </div>
                                     </div>
-                                    <div
+                                    <button
                                         className="text-xl bg-white w-10 h-10 rounded-xl border border-black flex items-center justify-center duration-300 cursor-pointer hover:bg-black hover:text-white"
                                         onClick={e => {
                                             e.stopPropagation();
                                             handleAddToCart(product)
                                         }}
+                                        aria-label={`Add ${product.name} to cart`}
+                                        type="button"
                                     >
-                                        <Icon.Handbag />
-                                    </div>
-                                </div>
+                                        <Icon.Handbag aria-hidden="true" />
+                                    </button>
+                                </article>
                             ))}
                         </div>
-                    </div>
+                    </section>
                     <div className="right cart-block md:w-1/2 w-full py-6 relative overflow-hidden">
                         <div className="heading px-6 pb-3 flex items-center justify-between relative">
-                            <div className="heading5">Shopping Cart</div>
-                            <div
+                            <h2 id="cart-modal-title" className="heading5">Shopping Cart</h2>
+                            <button
                                 className="close-btn absolute right-6 top-0 w-6 h-6 rounded-full bg-surface flex items-center justify-center duration-300 cursor-pointer hover:bg-black hover:text-white"
                                 onClick={closeModalCart}
+                                aria-label="Close shopping cart"
+                                type="button"
                             >
-                                <Icon.X size={14} />
-                            </div>
+                                <Icon.X size={14} aria-hidden="true" />
+                            </button>
                         </div>
                         <div className="time px-6">
                             <div className=" flex items-center gap-3 px-5 py-3 bg-green rounded-lg">
@@ -138,9 +121,9 @@ const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) =>
                                 ></div>
                             </div>
                         </div>
-                        <div className="list-product px-6">
+                        <div className="list-product px-6" role="list" aria-label="Cart items">
                             {cartState.cartArray.map((product) => (
-                                <div key={product.id} className='item py-5 flex items-center justify-between gap-3 border-b border-line'>
+                                <div key={product.id} className='item py-5 flex items-center justify-between gap-3 border-b border-line' role="listitem">
                                     <div className="infor flex items-center gap-3 w-full">
                                         <div className="bg-img w-[100px] aspect-square flex-shrink-0 rounded-lg overflow-hidden">
                                             <Image
@@ -154,12 +137,14 @@ const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) =>
                                         <div className='w-full'>
                                             <div className="flex items-center justify-between w-full">
                                                 <div className="name text-button">{product.name}</div>
-                                                <div
+                                                <button
                                                     className="remove-cart-btn caption1 font-semibold text-red underline cursor-pointer"
                                                     onClick={() => removeFromCart(product.id)}
+                                                    aria-label={`Remove ${product.name} from cart`}
+                                                    type="button"
                                                 >
                                                     Remove
-                                                </div>
+                                                </button>
                                             </div>
                                             <div className="flex items-center justify-between gap-2 mt-3 w-full">
                                                 <div className="flex items-center text-secondary2 capitalize">
@@ -173,28 +158,40 @@ const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) =>
                             ))}
                         </div>
                         <div className="footer-modal bg-white absolute bottom-0 left-0 w-full">
-                            <div className="flex items-center justify-center lg:gap-14 gap-8 px-6 py-4 border-b border-line">
-                                <div
+                            <div className="flex items-center justify-center lg:gap-14 gap-8 px-6 py-4 border-b border-line" role="tablist" aria-label="Cart options">
+                                <button
                                     className="item flex items-center gap-3 cursor-pointer"
                                     onClick={() => handleActiveTab('note')}
+                                    aria-label="Add order note"
+                                    type="button"
+                                    role="tab"
+                                    aria-selected={activeTab === 'note'}
                                 >
-                                    <Icon.NotePencil className='text-xl' />
+                                    <Icon.NotePencil className='text-xl' aria-hidden="true" />
                                     <div className="caption1">Note</div>
-                                </div>
-                                <div
+                                </button>
+                                <button
                                     className="item flex items-center gap-3 cursor-pointer"
                                     onClick={() => handleActiveTab('shipping')}
+                                    aria-label="Estimate shipping rates"
+                                    type="button"
+                                    role="tab"
+                                    aria-selected={activeTab === 'shipping'}
                                 >
-                                    <Icon.Truck className='text-xl' />
+                                    <Icon.Truck className='text-xl' aria-hidden="true" />
                                     <div className="caption1">Shipping</div>
-                                </div>
-                                <div
+                                </button>
+                                <button
                                     className="item flex items-center gap-3 cursor-pointer"
                                     onClick={() => handleActiveTab('coupon')}
+                                    aria-label="Add coupon code"
+                                    type="button"
+                                    role="tab"
+                                    aria-selected={activeTab === 'coupon'}
                                 >
-                                    <Icon.Tag className='text-xl' />
+                                    <Icon.Tag className='text-xl' aria-hidden="true" />
                                     <div className="caption1">Coupon</div>
-                                </div>
+                                </button>
                             </div>
                             <div className="flex items-center justify-between pt-6 px-6">
                                 <div className="heading5">Subtotal</div>
@@ -217,7 +214,7 @@ const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) =>
                                         Check Out
                                     </Link>
                                 </div>
-                                <div onClick={closeModalCart} className="text-button-uppercase mt-4 text-center has-line-before cursor-pointer inline-block">Or continue shopping</div>
+                                <button onClick={closeModalCart} className="text-button-uppercase mt-4 text-center has-line-before cursor-pointer inline-block bg-transparent border-none" type="button" aria-label="Close cart and continue shopping">Or continue shopping</button>
                             </div>
                             <div className={`tab-item note-block ${activeTab === 'note' ? 'active' : ''}`}>
                                 <div className="px-6 py-4 border-b border-line">
@@ -230,8 +227,8 @@ const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) =>
                                     <textarea name="form-note" id="form-note" rows={4} placeholder='Add special instructions for your order...' className='caption1 py-3 px-4 bg-surface border-line rounded-md w-full'></textarea>
                                 </div>
                                 <div className="block-button text-center pt-4 px-6 pb-6">
-                                    <div className='button-main w-full text-center' onClick={() => setActiveTab('')}>Save</div>
-                                    <div onClick={() => setActiveTab('')} className="text-button-uppercase mt-4 text-center has-line-before cursor-pointer inline-block">Cancel</div>
+                                    <button className='button-main w-full text-center' onClick={() => setActiveTab('')} type="button">Save</button>
+                                    <button onClick={() => setActiveTab('')} className="text-button-uppercase mt-4 text-center has-line-before cursor-pointer inline-block bg-transparent border-none" type="button">Cancel</button>
                                 </div>
                             </div>
                             <div className={`tab-item note-block ${activeTab === 'shipping' ? 'active' : ''}`}>

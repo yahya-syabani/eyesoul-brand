@@ -1,37 +1,33 @@
-'use client'
 import React, { Suspense } from 'react'
-import { useSearchParams } from 'next/navigation';
-import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuOne from '@/components/Header/Menu/MenuOne'
-import BreadcrumbProduct from '@/components/Breadcrumb/BreadcrumbProduct'
-import Default from '@/components/Product/Detail/Default';
-import Footer from '@/components/Footer/Footer'
+import type { Metadata } from 'next'
+import ProductDefaultContent from './ProductDefaultContent'
 import productData from '@/data/Product.json'
+import { generateProductMetadata } from '@/lib/metadata'
+import ProductSkeleton from '@/components/Loading/ProductSkeleton'
 
-const ProductDefaultContent = () => {
-    const searchParams = useSearchParams()
-    let productId = searchParams.get('id')
-
-    if (productId === null) {
-        productId = '1'
-    }
-
-    return (
-        <>
-            <TopNavOne props="style-one bg-black" slogan="New customers save 10% with the code GET10" />
-            <div id="header" className='relative w-full'>
-                <MenuOne props="bg-white" />
-                <BreadcrumbProduct data={productData} productPage='default' productId={productId} />
-            </div>
-            <Default data={productData} productId={productId} />
-            <Footer />
-        </>
-    )
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ id?: string }> }): Promise<Metadata> {
+  const params = await searchParams
+  const id = params?.id || '1'
+  const product = productData.find((p: { id: string }) => p.id === id)
+  return generateProductMetadata(product)
 }
 
 const ProductDefault = () => {
     return (
-        <Suspense fallback={null}>
+        <Suspense fallback={
+            <div className="product-detail md:py-20 py-10">
+                <div className="container">
+                    <div className="grid lg:grid-cols-2 gap-8">
+                        <ProductSkeleton count={1} />
+                        <div className="space-y-4">
+                            <div className="h-8 w-3/4 bg-line rounded animate-pulse"></div>
+                            <div className="h-4 w-full bg-line rounded animate-pulse"></div>
+                            <div className="h-6 w-1/2 bg-line rounded animate-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }>
             <ProductDefaultContent />
         </Suspense>
     )

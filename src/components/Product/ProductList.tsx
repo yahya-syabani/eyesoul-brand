@@ -12,6 +12,7 @@ import { useModalWishlistContext } from '@/context/ModalWishlistContext'
 import { useCompare } from '@/context/CompareContext'
 import { useModalCompareContext } from '@/context/ModalCompareContext'
 import { useModalQuickviewContext } from '@/context/ModalQuickviewContext'
+import { useToast } from '@/context/ToastContext'
 import ProductTags from './ProductTags'
 import ProductQuickShop from './ProductQuickShop'
 import { ActionButton, CompareCheckedIcon, CompareIcon, WishlistIcon } from './ProductActions'
@@ -32,6 +33,7 @@ const ProductList: React.FC<Props> = ({ data }) => {
   const { addToCompare, removeFromCompare, compareState } = useCompare()
   const { openModalCompare } = useModalCompareContext()
   const { openQuickview } = useModalQuickviewContext()
+  const { warning } = useToast()
   const router = useRouter()
 
   const percentSale = useMemo(() => Math.floor(100 - (data.price / data.originPrice) * 100), [data.originPrice, data.price])
@@ -66,7 +68,7 @@ const ProductList: React.FC<Props> = ({ data }) => {
         addToCompare(data)
       }
     } else {
-      alert('Compare up to 3 products')
+      warning('Compare up to 3 products')
     }
     openModalCompare()
   }
@@ -181,6 +183,7 @@ const ProductList: React.FC<Props> = ({ data }) => {
                   e.stopPropagation()
                   handleAddToWishlist()
                 }}
+                aria-label={isWishlisted ? `Remove ${data.name} from wishlist` : `Add ${data.name} to wishlist`}
               >
                 <WishlistIcon active={isWishlisted} />
               </ActionButton>
@@ -193,21 +196,24 @@ const ProductList: React.FC<Props> = ({ data }) => {
                   e.stopPropagation()
                   handleAddToCompare()
                 }}
+                aria-label={isCompared ? `Remove ${data.name} from compare` : `Add ${data.name} to compare`}
               >
                 <CompareIcon variant="arrows" />
                 <CompareCheckedIcon />
               </ActionButton>
 
-              <div
+              <button
                 className="quick-view-btn-list w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleQuickviewOpen()
                 }}
+                aria-label={`Quick view ${data.name}`}
+                type="button"
               >
-                <div className="tag-action bg-black text-white caption2 px-1.5 py-0.5 rounded-sm">Quick View</div>
-                <Icon.Eye size={18} />
-              </div>
+                <span className="tag-action bg-black text-white caption2 px-1.5 py-0.5 rounded-sm" aria-hidden="true">Quick View</span>
+                <Icon.Eye size={18} aria-hidden="true" />
+              </button>
             </div>
           </div>
         </div>

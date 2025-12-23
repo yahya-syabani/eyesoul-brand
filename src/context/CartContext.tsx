@@ -4,6 +4,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import { ProductType } from '@/type/ProductType';
 import { safeJsonParse, safeJsonStringify, safeStorageGet, safeStorageSet } from '@/utils/localStorage';
+import { useDebouncedEffect } from '@/hooks/useDebouncedEffect';
 
 interface CartItem extends ProductType {
     quantity: number
@@ -104,11 +105,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         hasHydratedRef.current = true;
     }, []);
 
-    useEffect(() => {
+    useDebouncedEffect(() => {
         if (!hasHydratedRef.current) return;
         const json = safeJsonStringify(cartState.cartArray);
-        if (json.ok) safeStorageSet(CART_STORAGE_KEY, json.value);
-    }, [cartState.cartArray]);
+        if (!json.ok) return;
+        const res = safeStorageSet(CART_STORAGE_KEY, json.value);
+        if (!res.ok) {
+            // eslint-disable-next-line no-console
+            console.warn('Failed to persist cart to localStorage', res.error);
+        }
+    }, [cartState.cartArray], 300);
 
     const addToCart = useCallback((item: ProductType) => {
         dispatch({ type: 'ADD_TO_CART', payload: item });
