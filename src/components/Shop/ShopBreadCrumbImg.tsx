@@ -15,9 +15,10 @@ interface Props {
     data: Array<ProductType>;
     productPerPage: number
     dataType: string | null
+    isLoading?: boolean
 }
 
-const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType }) => {
+const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType, isLoading = false }) => {
     const router = useRouter()
     const searchParams = useSearchParams()
     
@@ -35,6 +36,14 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType }) 
     });
     const [currentPage, setCurrentPage] = useState(0);
     const productsPerPage = productPerPage;
+
+    if (isLoading) {
+        return (
+            <div className="shop-product breadcrumb1 lg:py-20 md:py-14 py-10">
+                <div className="container text-center text-secondary">Loading products...</div>
+            </div>
+        )
+    }
 
     // Update URL when filters change
     const updateURL = useCallback((updates: Record<string, string | null>) => {

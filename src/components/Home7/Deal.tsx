@@ -1,11 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link';
 import Product from '../Product/Product'
 import { ProductType } from '@/type/ProductType'
 import { countdownTime } from '@/store/countdownTime'
 import CountdownTimeType from '@/type/CountdownType'
+import { selectRange } from '@/lib/data'
 
 interface Props {
     data: Array<ProductType>;
@@ -33,6 +34,8 @@ const Deal: React.FC<Props> = ({ data, start, limit }) => {
         return () => clearInterval(timer);
     }, []);
 
+    const visibleProducts = useMemo(() => selectRange<ProductType>(data, start, limit), [data, limit, start])
+
     return (
         <>
             <div className="tab-features-block md:pt-20 pt-10">
@@ -57,7 +60,7 @@ const Deal: React.FC<Props> = ({ data, start, limit }) => {
                     </div>
 
                     <div className="list-product show-product-sold grid lg:grid-cols-4 grid-cols-2 sm:gap-[30px] gap-[20px] md:mt-10 mt-6">
-                        {data.slice(start, limit).map((prd, index) => (
+                        {visibleProducts.map((prd, index) => (
                             <Product key={index} data={prd} type='grid' />
                         ))}
                     </div>

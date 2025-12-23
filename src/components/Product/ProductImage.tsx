@@ -23,7 +23,8 @@ const ProductImage: React.FC<Props> = ({
     return match || null
   }, [activeColor, data.variation])
 
-  const fallbackSrc = data.thumbImage?.[0] || data.images?.[0] || ''
+  const fallbackSrc = data.thumbImage?.[0] || data.images?.[0] || '/images/product/1000x1000.png'
+  const imageSizes = '(min-width: 1280px) 320px, (min-width: 1024px) 280px, (min-width: 768px) 240px, 80vw'
 
   return (
     <div className={className}>
@@ -33,7 +34,8 @@ const ProductImage: React.FC<Props> = ({
           width={500}
           height={500}
           alt={data.name}
-          priority={true}
+          loading="lazy"
+          sizes={imageSizes}
           className={imageClassName}
         />
       ) : showAllThumbs ? (
@@ -44,7 +46,8 @@ const ProductImage: React.FC<Props> = ({
               src={img || fallbackSrc}
               width={500}
               height={500}
-              priority={true}
+              loading="lazy"
+              sizes={imageSizes}
               alt={data.name}
               className={imageClassName}
             />
@@ -56,7 +59,8 @@ const ProductImage: React.FC<Props> = ({
           width={500}
           height={500}
           alt={data.name}
-          priority={true}
+          loading="lazy"
+          sizes={imageSizes}
           className={imageClassName}
         />
       )}

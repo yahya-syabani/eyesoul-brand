@@ -1,21 +1,16 @@
-// Product Types
-export const PRODUCT_TYPES = [
-  't-shirt',
-  'dress',
-  'top',
-  'swimwear',
-  'shirt',
-  'sweater',
-  'outerwear',
-  'underwear',
-  'sets',
-  'accessories',
+// Eyewear Categories
+export const PRODUCT_CATEGORIES = [
+  'sunglasses',
+  'prescription-glasses',
+  'reading-glasses',
+  'contact-lenses',
+  'frames-only',
 ] as const
 
-export type ProductType = typeof PRODUCT_TYPES[number]
+export type ProductCategory = typeof PRODUCT_CATEGORIES[number]
 
-// Product Sizes
-export const PRODUCT_SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', 'freesize'] as const
+// Frame Size labels for eyewear
+export const PRODUCT_SIZES = ['small', 'medium', 'large', 'extra-wide'] as const
 
 export type ProductSize = typeof PRODUCT_SIZES[number]
 
@@ -32,10 +27,19 @@ export const PRODUCT_COLORS = [
 
 export type ProductColor = typeof PRODUCT_COLORS[number]
 
-// Brands
-export const BRANDS = ['adidas', 'hermes', 'zara', 'nike', 'gucci'] as const
+// Brands (custom eyewear)
+export const BRANDS = ['eyesoul', 'clarity', 'visionary', 'suncrest', 'lumina'] as const
 
 export type Brand = typeof BRANDS[number]
+
+// Eyewear-specific attributes
+export const LENS_TYPES = ['single-vision', 'progressive', 'bifocal', 'trifocal'] as const
+export const FRAME_MATERIALS = ['acetate', 'metal', 'titanium', 'tr90', 'wood'] as const
+export const LENS_COATINGS = ['anti-reflective', 'blue-light', 'uv-protection', 'scratch-resistant'] as const
+
+export type LensType = typeof LENS_TYPES[number]
+export type FrameMaterial = typeof FRAME_MATERIALS[number]
+export type LensCoating = typeof LENS_COATINGS[number]
 
 // Shipping Constants
 export const FREE_SHIPPING_THRESHOLD = 150

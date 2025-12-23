@@ -9,8 +9,8 @@ import Footer from '@/components/Footer/Footer'
 import { generatePageMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = generatePageMetadata(
-  'Anvogue',
-  'Discover the latest fashion trends and shop premium quality products. Free shipping on orders over $50.'
+  'Eyesoul Eyewear',
+  'Discover premium eyewear: sunglasses, prescription-ready frames, and blue-light protection with fast delivery.'
 )
 
 const SliderSeven = dynamic(() => import('@/components/Slider/SliderSeven'))
@@ -27,7 +27,7 @@ const Brand = dynamic(() => import('@/components/Home1/Brand'))
 export default function Home() {
   return (
     <>
-      <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
+      <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on eyewear orders over $50' />
       <div id="header" className='relative w-full'>
         <MenuTwo />
         <SliderSeven />

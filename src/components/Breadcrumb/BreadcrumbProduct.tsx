@@ -13,8 +13,9 @@ interface Props {
 }
 
 const BreadcrumbProduct: React.FC<Props> = ({ data, productPage, productId }) => {
-    const productMain = data.filter(product => product.id === productId)
     const router = useRouter()
+    const numericId = Number(productId)
+    const isNumericId = Number.isFinite(numericId)
 
     const handleDetailProduct = (productId: string | number | null) => {
         // Chuyển hướng đến trang shop với category được chọn
@@ -34,21 +35,21 @@ const BreadcrumbProduct: React.FC<Props> = ({ data, productPage, productId }) =>
                             <div className='caption1 capitalize'>{`Product ${productPage}`}</div>
                         </div>
                         <div className="right flex items-center gap-3">
-                            {productId !== null && Number(productId) >= 2 ? (
+                            {productId !== null && isNumericId && numericId >= 2 ? (
                                 <>
-                                    <div onClick={() => handleDetailProduct(Number(productId) - 1)} className='flex items-center cursor-pointer text-secondary hover:text-black border-r border-line pr-3'>
+                                    <div onClick={() => handleDetailProduct(numericId - 1)} className='flex items-center cursor-pointer text-secondary hover:text-black border-r border-line pr-3'>
                                         <Icon.CaretCircleLeft className='text-2xl text-black' />
                                         <span className='caption1 pl-1'>Previous Product</span>
                                     </div>
-                                    <div onClick={() => handleDetailProduct(Number(productId) + 1)} className='flex items-center cursor-pointer text-secondary hover:text-black'>
+                                    <div onClick={() => handleDetailProduct(numericId + 1)} className='flex items-center cursor-pointer text-secondary hover:text-black'>
                                         <span className='caption1 pr-1'>Next Product</span>
                                         <Icon.CaretCircleRight className='text-2xl text-black' />
                                     </div>
                                 </>
                             ) : (
                                 <>
-                                    {productId !== null && Number(productId) === 1 && (
-                                        <div onClick={() => handleDetailProduct(Number(productId) + 1)} className='flex items-center cursor-pointer text-secondary hover:text-black'>
+                                    {productId !== null && isNumericId && numericId === 1 && (
+                                        <div onClick={() => handleDetailProduct(numericId + 1)} className='flex items-center cursor-pointer text-secondary hover:text-black'>
                                             <span className='caption1 pr-1'>Next Product</span>
                                             <Icon.CaretCircleRight className='text-2xl text-black' />
                                         </div>

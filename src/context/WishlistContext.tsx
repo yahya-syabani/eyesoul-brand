@@ -3,8 +3,8 @@
 // WishlistContext.tsx
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import { ProductType } from '@/type/ProductType';
-import { safeJsonParse, safeJsonStringify, safeStorageGet, safeStorageSet } from '@/utils/localStorage';
 import { useDebouncedEffect } from '@/hooks/useDebouncedEffect';
+import { readPersistedArray, writePersistedArray } from '@/utils/persistedState';
 
 interface WishlistItem extends ProductType {
 }
@@ -28,15 +28,17 @@ const WishlistContext = createContext<WishlistContextProps | undefined>(undefine
 
 const WISHLIST_STORAGE_KEY = 'anvogue_wishlist_v1';
 
+type PartialWishlistItem = Partial<WishlistItem> & { id?: unknown }
+
 const sanitizeWishlistItems = (value: unknown): WishlistItem[] => {
     if (!Array.isArray(value)) return [];
     return value
-        .filter((item): item is { id: unknown } => typeof item === 'object' && item !== null && 'id' in item)
         .map((item) => {
-            const anyItem = item as any;
-            const id = typeof anyItem.id === 'string' ? anyItem.id : '';
+            if (typeof item !== 'object' || item === null) return null;
+            const candidate = item as PartialWishlistItem;
+            const id = typeof candidate.id === 'string' ? candidate.id : '';
             if (!id) return null;
-            return { ...anyItem, id } as WishlistItem;
+            return { ...candidate, id } as WishlistItem;
         })
         .filter((x): x is WishlistItem => x !== null);
 };
@@ -69,25 +71,14 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const hasHydratedRef = useRef(false);
 
     useEffect(() => {
-        const raw = safeStorageGet(WISHLIST_STORAGE_KEY);
-        if (raw.ok) {
-            const parsed = safeJsonParse<unknown>(raw.value);
-            if (parsed.ok) {
-                dispatch({ type: 'LOAD_WISHLIST', payload: sanitizeWishlistItems(parsed.value) });
-            }
-        }
+        const items = readPersistedArray<WishlistItem>(WISHLIST_STORAGE_KEY, sanitizeWishlistItems);
+        dispatch({ type: 'LOAD_WISHLIST', payload: items });
         hasHydratedRef.current = true;
     }, []);
 
     useDebouncedEffect(() => {
         if (!hasHydratedRef.current) return;
-        const json = safeJsonStringify(wishlistState.wishlistArray);
-        if (!json.ok) return;
-        const res = safeStorageSet(WISHLIST_STORAGE_KEY, json.value);
-        if (!res.ok) {
-            // eslint-disable-next-line no-console
-            console.warn('Failed to persist wishlist to localStorage', res.error);
-        }
+        writePersistedArray(WISHLIST_STORAGE_KEY, wishlistState.wishlistArray);
     }, [wishlistState.wishlistArray], 300);
 
     const addToWishlist = useCallback((item: ProductType) => {

@@ -3,8 +3,8 @@
 // CartContext.tsx
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import { ProductType } from '@/type/ProductType';
-import { safeJsonParse, safeJsonStringify, safeStorageGet, safeStorageSet } from '@/utils/localStorage';
 import { useDebouncedEffect } from '@/hooks/useDebouncedEffect';
+import { readPersistedArray, writePersistedArray } from '@/utils/persistedState';
 
 interface CartItem extends ProductType {
     quantity: number
@@ -37,18 +37,20 @@ const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 const CART_STORAGE_KEY = 'anvogue_cart_v1';
 
+type PartialCartItem = Partial<CartItem> & { id?: unknown; quantity?: unknown; selectedSize?: unknown; selectedColor?: unknown }
+
 const sanitizeCartItems = (value: unknown): CartItem[] => {
     if (!Array.isArray(value)) return [];
     return value
-        .filter((item): item is Partial<CartItem> & { id: unknown } => typeof item === 'object' && item !== null && 'id' in item)
         .map((item) => {
-            const anyItem = item as any;
-            const id = typeof anyItem.id === 'string' ? anyItem.id : '';
-            const quantity = Number.isFinite(anyItem.quantity) ? Math.max(1, Math.floor(anyItem.quantity)) : 1;
-            const selectedSize = typeof anyItem.selectedSize === 'string' ? anyItem.selectedSize : '';
-            const selectedColor = typeof anyItem.selectedColor === 'string' ? anyItem.selectedColor : '';
+            if (typeof item !== 'object' || item === null) return null;
+            const candidate = item as PartialCartItem;
+            const id = typeof candidate.id === 'string' ? candidate.id : '';
             if (!id) return null;
-            return { ...anyItem, id, quantity, selectedSize, selectedColor } as CartItem;
+            const quantity = Number.isFinite(candidate.quantity) ? Math.max(1, Math.floor(Number(candidate.quantity))) : 1;
+            const selectedSize = typeof candidate.selectedSize === 'string' ? candidate.selectedSize : '';
+            const selectedColor = typeof candidate.selectedColor === 'string' ? candidate.selectedColor : '';
+            return { ...candidate, id, quantity, selectedSize, selectedColor } as CartItem;
         })
         .filter((x): x is CartItem => x !== null);
 };
@@ -95,25 +97,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const hasHydratedRef = useRef(false);
 
     useEffect(() => {
-        const raw = safeStorageGet(CART_STORAGE_KEY);
-        if (raw.ok) {
-            const parsed = safeJsonParse<unknown>(raw.value);
-            if (parsed.ok) {
-                dispatch({ type: 'LOAD_CART', payload: sanitizeCartItems(parsed.value) });
-            }
-        }
+        const items = readPersistedArray<CartItem>(CART_STORAGE_KEY, sanitizeCartItems);
+        dispatch({ type: 'LOAD_CART', payload: items });
         hasHydratedRef.current = true;
     }, []);
 
     useDebouncedEffect(() => {
         if (!hasHydratedRef.current) return;
-        const json = safeJsonStringify(cartState.cartArray);
-        if (!json.ok) return;
-        const res = safeStorageSet(CART_STORAGE_KEY, json.value);
-        if (!res.ok) {
-            // eslint-disable-next-line no-console
-            console.warn('Failed to persist cart to localStorage', res.error);
-        }
+        writePersistedArray(CART_STORAGE_KEY, cartState.cartArray);
     }, [cartState.cartArray], 300);
 
     const addToCart = useCallback((item: ProductType) => {

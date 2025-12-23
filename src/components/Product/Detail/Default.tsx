@@ -41,6 +41,14 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     const { addToCompare, removeFromCompare, compareState } = useCompare();
     const { openModalCompare } = useModalCompareContext()
     const { warning } = useToast()
+    if (!data || data.length === 0) {
+        return (
+            <div className="product-detail md:py-20 py-10">
+                <div className="container text-center text-secondary">Product not found.</div>
+            </div>
+        )
+    }
+
     let productMain = data.find(product => product.id === productId) as ProductType
     if (productMain === undefined) {
         productMain = data[0]
@@ -166,7 +174,9 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                             src={item}
                                             width={1000}
                                             height={1000}
-                                            alt='prd-img'
+                                            alt={`${productMain.name} image ${index + 1}`}
+                                            sizes="(min-width: 1280px) 640px, (min-width: 1024px) 560px, 90vw"
+                                            loading="lazy"
                                             className='w-full aspect-[3/4] object-cover'
                                         />
                                     </SwiperSlide>
@@ -191,7 +201,9 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                             src={item}
                                             width={1000}
                                             height={1000}
-                                            alt='prd-img'
+                                            alt={`${productMain.name} thumbnail ${index + 1}`}
+                                            sizes="(min-width: 1280px) 140px, (min-width: 1024px) 120px, 25vw"
+                                            loading="lazy"
                                             className='w-full aspect-[3/4] object-cover rounded-xl'
                                         />
                                     </SwiperSlide>
@@ -228,7 +240,9 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                                 src={item}
                                                 width={1000}
                                                 height={1000}
-                                                alt='prd-img'
+                                                alt={`${productMain.name} enlarged ${index + 1}`}
+                                                sizes="(min-width: 1280px) 960px, (min-width: 1024px) 720px, 95vw"
+                                                loading="lazy"
                                                 className='w-full aspect-[3/4] object-cover rounded-xl'
                                                 onClick={(e) => {
                                                     e.stopPropagation(); // prevent
@@ -274,6 +288,28 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                     </div>
                                 )}
                                 <div className='desc text-secondary mt-3'>{productMain.description}</div>
+                                <div className="mt-3 space-y-1 text-secondary">
+                                    {productMain.lensType && (
+                                        <div className="text-title">Lens type: <span className='text-secondary'>{productMain.lensType}</span></div>
+                                    )}
+                                    {productMain.frameMaterial && (
+                                        <div className="text-title">Frame material: <span className='text-secondary'>{productMain.frameMaterial}</span></div>
+                                    )}
+                                    {productMain.frameSize && (
+                                        <div className="text-title">
+                                            Frame size: <span className='text-secondary'>
+                                                {productMain.frameSize.bridgeWidth ? `Bridge ${productMain.frameSize.bridgeWidth}mm` : ''}
+                                                {productMain.frameSize.templeLength ? ` • Temple ${productMain.frameSize.templeLength}mm` : ''}
+                                                {productMain.frameSize.lensWidth ? ` • Lens ${productMain.frameSize.lensWidth}mm` : ''}
+                                            </span>
+                                        </div>
+                                    )}
+                                    {productMain.lensCoating && productMain.lensCoating.length > 0 && (
+                                        <div className="text-title">
+                                            Lens coatings: <span className='text-secondary'>{productMain.lensCoating.join(', ')}</span>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                             <div className="list-action mt-6">
                                 <div className="choose-color">

@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum EyewearCategory {
+  sunglasses
+  prescription_glasses
+  reading_glasses
+  contact_lenses
+  frames_only
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+model Product {
+  id           String              @id @default(cuid())
+  name         String
+  slug         String              @unique
+  category     EyewearCategory
+  type         String?
+  description  String
+  price        Decimal             @db.Decimal(10, 2)
+  originPrice  Decimal             @db.Decimal(10, 2)
+  brand        String?
+  images       String[]
+  thumbImages  String[]
+  rate         Int                 @default(0)
+  sold         Int                 @default(0)
+  quantity     Int                 @default(0)
+  isNew        Boolean             @default(false)
+  isSale       Boolean             @default(false)
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  variations   ProductVariation[]
+  attributes   ProductAttribute?
+  sizes        ProductSize[]
+  orderItems   OrderItem[]
+}
+
+model ProductVariation {
+  id          String   @id @default(cuid())
+  productId   String
+  color       String
+  colorCode   String?
+  colorImage  String?
+  image       String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductAttribute {
+  id            String         @id @default(cuid())
+  productId     String         @unique
+  lensType      String?
+  frameMaterial String?
+  frameSize     Json?
+  lensCoating   String[]
+  product       Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductSize {
+  id        String   @id @default(cuid())
+  productId String
+  size      String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String?
+  status          OrderStatus @default(PENDING)
+  totalAmount     Decimal     @db.Decimal(10, 2)
+  shippingAddress Json
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id            String   @id @default(cuid())
+  orderId       String
+  productId     String
+  quantity      Int
+  price         Decimal   @db.Decimal(10, 2)
+  selectedSize  String?
+  selectedColor String?
+  order         Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product       Product   @relation(fields: [productId], references: [id], onDelete: Restrict)
+}
+

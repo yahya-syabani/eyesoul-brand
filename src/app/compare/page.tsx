@@ -51,7 +51,9 @@ const Compare = () => {
                                                     src={item.images[0]}
                                                     width={1000}
                                                     height={1500}
-                                                    alt={item.images[0]}
+                                                    alt={item.name}
+                                                    loading="lazy"
+                                                    sizes="(min-width: 1280px) 260px, (min-width: 1024px) 220px, 50vw"
                                                     className='w-full h-full object-cover'
                                                 />
                                             </div>

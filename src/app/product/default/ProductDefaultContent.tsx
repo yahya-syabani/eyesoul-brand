@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation';
 import TopNavOne from '@/components/Header/TopNav/TopNavOne'
 import MenuTwo from '@/components/Header/Menu/MenuTwo'
@@ -10,7 +10,6 @@ import Footer from '@/components/Footer/Footer'
 import ProductJsonLd from '@/components/SEO/ProductJsonLd'
 import BreadcrumbJsonLd from '@/components/SEO/BreadcrumbJsonLd'
 import FeatureErrorBoundary from '@/components/Error/FeatureErrorBoundary'
-import productData from '@/data/Product.json'
 import { ProductType } from '@/type/ProductType'
 
 const ProductDefaultContent = () => {
@@ -21,7 +20,30 @@ const ProductDefaultContent = () => {
         productId = '1'
     }
 
-    const product = productData.find((p: ProductType) => p.id === productId) as ProductType | undefined
+    const [product, setProduct] = useState<ProductType | undefined>(undefined)
+    const [productList, setProductList] = useState<ProductType[]>([])
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const res = await fetch(`/api/products/${productId}`, { cache: 'no-store' })
+                if (res.ok) {
+                    const json = await res.json()
+                    setProduct(json)
+                    setProductList([json])
+                } else {
+                    setProduct(undefined)
+                    setProductList([])
+                }
+            } catch (error) {
+                console.error(error)
+                setProduct(undefined)
+                setProductList([])
+            }
+        }
+        fetchProduct()
+    }, [productId])
+
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://anvogue.com'
 
     return (
@@ -29,7 +51,7 @@ const ProductDefaultContent = () => {
             <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
             <div id="header" className='relative w-full'>
                 <MenuTwo />
-                <BreadcrumbProduct data={productData} productPage='default' productId={productId} />
+                <BreadcrumbProduct data={productList} productPage='default' productId={productId} />
             </div>
             <BreadcrumbJsonLd
                 items={[
@@ -39,7 +61,7 @@ const ProductDefaultContent = () => {
             />
             {product && <ProductJsonLd product={product} />}
             <FeatureErrorBoundary featureName="Product Details">
-                <Default data={productData} productId={productId} />
+                <Default data={productList} productId={productId} />
             </FeatureErrorBoundary>
             <Footer />
         </>

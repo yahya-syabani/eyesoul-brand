@@ -3,8 +3,8 @@
 // CompareContext.tsx
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import { ProductType } from '@/type/ProductType';
-import { safeJsonParse, safeJsonStringify, safeStorageGet, safeStorageSet } from '@/utils/localStorage';
 import { useDebouncedEffect } from '@/hooks/useDebouncedEffect';
+import { readPersistedArray, writePersistedArray } from '@/utils/persistedState';
 
 interface CompareItem extends ProductType {
 }
@@ -30,15 +30,17 @@ const CompareContext = createContext<CompareContextProps | undefined>(undefined)
 
 const COMPARE_STORAGE_KEY = 'anvogue_compare_v1';
 
+type PartialCompareItem = Partial<CompareItem> & { id?: unknown }
+
 const sanitizeCompareItems = (value: unknown): CompareItem[] => {
     if (!Array.isArray(value)) return [];
     return value
-        .filter((item): item is { id: unknown } => typeof item === 'object' && item !== null && 'id' in item)
         .map((item) => {
-            const anyItem = item as any;
-            const id = typeof anyItem.id === 'string' ? anyItem.id : '';
+            if (typeof item !== 'object' || item === null) return null;
+            const candidate = item as PartialCompareItem;
+            const id = typeof candidate.id === 'string' ? candidate.id : '';
             if (!id) return null;
-            return { ...anyItem, id } as CompareItem;
+            return { ...candidate, id } as CompareItem;
         })
         .filter((x): x is CompareItem => x !== null);
 };
@@ -76,25 +78,14 @@ export const CompareProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const hasHydratedRef = useRef(false);
 
     useEffect(() => {
-        const raw = safeStorageGet(COMPARE_STORAGE_KEY);
-        if (raw.ok) {
-            const parsed = safeJsonParse<unknown>(raw.value);
-            if (parsed.ok) {
-                dispatch({ type: 'LOAD_COMPARE', payload: sanitizeCompareItems(parsed.value) });
-            }
-        }
+        const items = readPersistedArray<CompareItem>(COMPARE_STORAGE_KEY, sanitizeCompareItems);
+        dispatch({ type: 'LOAD_COMPARE', payload: items });
         hasHydratedRef.current = true;
     }, []);
 
     useDebouncedEffect(() => {
         if (!hasHydratedRef.current) return;
-        const json = safeJsonStringify(compareState.compareArray);
-        if (!json.ok) return;
-        const res = safeStorageSet(COMPARE_STORAGE_KEY, json.value);
-        if (!res.ok) {
-            // eslint-disable-next-line no-console
-            console.warn('Failed to persist compare list to localStorage', res.error);
-        }
+        writePersistedArray(COMPARE_STORAGE_KEY, compareState.compareArray);
     }, [compareState.compareArray], 300);
 
     const addToCompare = useCallback((item: ProductType) => {

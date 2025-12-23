@@ -1,19 +1,41 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation';
 import TopNavOne from '@/components/Header/TopNav/TopNavOne'
 import MenuTwo from '@/components/Header/Menu/MenuTwo'
 import ShopBreadCrumbImg from '@/components/Shop/ShopBreadCrumbImg';
 import FeatureErrorBoundary from '@/components/Error/FeatureErrorBoundary'
-import productData from '@/data/Product.json'
 import Footer from '@/components/Footer/Footer'
 import BreadcrumbJsonLd from '@/components/SEO/BreadcrumbJsonLd'
+import { ProductType } from '@/type/ProductType'
 
 const ShopDefaultContent = () => {
     const searchParams = useSearchParams()
     const type = searchParams.get('type')
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://anvogue.com'
+    const [products, setProducts] = useState<ProductType[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const params = new URLSearchParams()
+                if (type) params.set('category', type)
+                params.set('limit', '60')
+                const res = await fetch(`/api/products?${params.toString()}`, { cache: 'no-store' })
+                if (!res.ok) throw new Error('Failed to load products')
+                const json = await res.json()
+                setProducts(json.data || [])
+            } catch (error) {
+                console.error(error)
+                setProducts([])
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchProducts()
+    }, [type])
 
     return (
         <>
@@ -28,7 +50,7 @@ const ShopDefaultContent = () => {
                 ]}
             />
             <FeatureErrorBoundary featureName="Shop Products">
-                <ShopBreadCrumbImg data={productData} productPerPage={12} dataType={type} />
+                <ShopBreadCrumbImg data={products} productPerPage={12} dataType={type} isLoading={loading} />
             </FeatureErrorBoundary>
             <Footer />
         </>
