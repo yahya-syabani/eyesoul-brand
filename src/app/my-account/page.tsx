@@ -2,8 +2,6 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuTwo from '@/components/Header/Menu/MenuTwo'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import Footer from '@/components/Footer/Footer'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
@@ -12,9 +10,7 @@ const MyAccount = () => {
 
     return (
         <>
-            <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
             <div id="header" className='relative w-full'>
-                <MenuTwo />
                 <Breadcrumb heading='My Account' subHeading='My Account' />
             </div>
             <div className="cart-block md:py-20 py-10">

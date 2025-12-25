@@ -23,16 +23,15 @@ const TabFeatures: React.FC<Props> = ({ data, start, limit }) => {
 
     const getFilterData = () => {
         if (activeTab === 'on sale') {
-            return data.filter((product) => product.sale && (product.category === 'fashion'))
+            return data.filter((product) => product.sale)
         }
 
         if (activeTab === 'new arrivals') {
-            return data.filter((product) => product.new && (product.category === 'fashion'))
+            return data.filter((product) => product.new)
         }
 
         if (activeTab === 'best sellers') {
             return data
-                .filter((product) => product.category === 'fashion')
                 .slice()
                 .sort((a, b) => b.sold - a.sold)
         }

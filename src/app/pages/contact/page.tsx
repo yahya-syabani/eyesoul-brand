@@ -4,8 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuTwo from '@/components/Header/Menu/MenuTwo'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb';
 import Footer from '@/components/Footer/Footer'
 import FormField from '@/components/Form/FormField'
@@ -33,9 +31,7 @@ const ContactUs = () => {
 
     return (
         <>
-            <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
             <div id="header" className='relative w-full'>
-                <MenuTwo />
                 <Breadcrumb heading='Contact us' subHeading='Contact us' />
             </div>
             <div className='contact-us md:py-20 py-10'>

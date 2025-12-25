@@ -1,7 +1,13 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import prisma from '@/lib/prisma'
+import { Prisma, EyewearCategory } from '@prisma/client'
 import { PRODUCT_CATEGORIES, PRODUCT_COLORS, PRODUCT_SIZES } from '@/lib/constants'
+import { transformProductForFrontend } from '@/utils/transformProduct'
+import { ProductWithRelations } from '@/lib/prisma-types'
+import { handleApiError } from '@/lib/api-error-handler'
+import { requireAdminAuth } from '@/lib/api-auth'
+import { rateLimitApi, createRateLimitResponse } from '@/lib/rate-limit'
 
 const variationSchema = z.object({
   color: z.enum(PRODUCT_COLORS).or(z.string()),
@@ -40,12 +46,6 @@ const productSchema = z.object({
   sizes: z.array(z.enum(PRODUCT_SIZES).or(z.string())).optional(),
 })
 
-const serializeProduct = (product: any) => ({
-  ...product,
-  price: Number(product.price),
-  originPrice: Number(product.originPrice),
-})
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const page = Number(searchParams.get('page') || 1)
@@ -57,14 +57,14 @@ export async function GET(request: Request) {
   const minPrice = searchParams.get('minPrice')
   const maxPrice = searchParams.get('maxPrice')
 
-  const where = {
-    ...(category ? { category } : {}),
+  const where: Prisma.ProductWhereInput = {
+    ...(category ? { category: category as EyewearCategory } : {}),
     ...(brand ? { brand } : {}),
     ...(search
       ? {
           OR: [
-            { name: { contains: search, mode: 'insensitive' } },
-            { description: { contains: search, mode: 'insensitive' } },
+            { name: { contains: search, mode: Prisma.QueryMode.insensitive } },
+            { description: { contains: search, mode: Prisma.QueryMode.insensitive } },
           ],
         }
       : {}),
@@ -78,29 +78,45 @@ export async function GET(request: Request) {
       : {}),
   }
 
-  const [items, total] = await Promise.all([
-    prisma.product.findMany({
-      where,
-      include: { variations: true, attributes: true, sizes: true },
-      skip,
-      take: limit,
-      orderBy: { createdAt: 'desc' },
-    }),
-    prisma.product.count({ where }),
-  ])
+  try {
+    const [items, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        include: { variations: true, attributes: true, sizes: true },
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.product.count({ where }),
+    ])
 
-  return NextResponse.json({
-    data: items.map(serializeProduct),
-    pagination: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    },
-  })
+    return NextResponse.json({
+      data: items.map(transformProductForFrontend),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    })
+  } catch (error) {
+    return handleApiError(error)
+  }
 }
 
 export async function POST(request: Request) {
+  // Rate limiting
+  const rateLimit = rateLimitApi(request)
+  if (!rateLimit.allowed) {
+    return createRateLimitResponse(rateLimit.resetAt)
+  }
+
+  // Authentication check
+  const authResult = await requireAdminAuth(request)
+  if ('error' in authResult) {
+    return authResult.error
+  }
+
   try {
     const payload = productSchema.parse(await request.json())
 
@@ -108,7 +124,7 @@ export async function POST(request: Request) {
       data: {
         name: payload.name,
         slug: payload.slug,
-        category: payload.category as string,
+        category: payload.category as EyewearCategory,
         type: payload.type,
         description: payload.description,
         price: payload.price,
@@ -148,12 +164,9 @@ export async function POST(request: Request) {
       include: { variations: true, attributes: true, sizes: true },
     })
 
-    return NextResponse.json(serializeProduct(created), { status: 201 })
-  } catch (error: any) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json({ message: 'Invalid input', issues: error.issues }, { status: 400 })
-    }
-    return NextResponse.json({ message: 'Failed to create product' }, { status: 500 })
+    return NextResponse.json(transformProductForFrontend(created), { status: 201 })
+  } catch (error) {
+    return handleApiError(error)
   }
 }
 

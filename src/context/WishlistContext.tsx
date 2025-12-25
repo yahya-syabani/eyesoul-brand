@@ -26,7 +26,7 @@ interface WishlistContextProps {
 
 const WishlistContext = createContext<WishlistContextProps | undefined>(undefined);
 
-const WISHLIST_STORAGE_KEY = 'anvogue_wishlist_v1';
+const WISHLIST_STORAGE_KEY = 'eyesoul_wishlist_v1';
 
 type PartialWishlistItem = Partial<WishlistItem> & { id?: unknown }
 

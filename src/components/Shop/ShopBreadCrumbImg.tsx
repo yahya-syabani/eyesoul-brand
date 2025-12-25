@@ -37,14 +37,6 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType, is
     const [currentPage, setCurrentPage] = useState(0);
     const productsPerPage = productPerPage;
 
-    if (isLoading) {
-        return (
-            <div className="shop-product breadcrumb1 lg:py-20 md:py-14 py-10">
-                <div className="container text-center text-secondary">Loading products...</div>
-            </div>
-        )
-    }
-
     // Update URL when filters change
     const updateURL = useCallback((updates: Record<string, string | null>) => {
         const params = new URLSearchParams(searchParams.toString())
@@ -147,8 +139,7 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType, is
 
     const filteredData = useMemo(() => {
         const base = data.filter((product) => {
-            if (product.category !== 'fashion') return false
-
+            // Remove hardcoded 'eyewear' category filter - data is already filtered by category from API
             if (showOnlySale && !product.sale) return false
             if (effectiveType && product.type !== effectiveType) return false
             if (size && !product.sizes.includes(size)) return false
@@ -214,6 +205,23 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType, is
         setCurrentPage(0);
         updateURL({ type: null, size: null, color: null, brand: null, minPrice: null, maxPrice: null })
     }, [updateURL]);
+
+    // Extract unique brands from data dynamically
+    const availableBrands = useMemo(() => {
+        const brands = data
+            .map(product => product.brand)
+            .filter((brand): brand is string => Boolean(brand))
+        return Array.from(new Set(brands)).sort()
+    }, [data])
+
+    // Handle loading state after all hooks have been called
+    if (isLoading) {
+        return (
+            <div className="shop-product breadcrumb1 lg:py-20 md:py-14 py-10">
+                <div className="container text-center text-secondary">Loading products...</div>
+            </div>
+        )
+    }
 
     return (
         <>
@@ -357,7 +365,7 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType, is
                                         >
                                             <div className='text-secondary has-line-before hover:text-black capitalize'>{item}</div>
                                             <div className='text-secondary2'>
-                                                ({data.filter(dataItem => dataItem.type === item && dataItem.category === 'fashion').length})
+                                                ({data.filter(dataItem => dataItem.type === item).length})
                                             </div>
                                         </div>
                                     ))}
@@ -469,25 +477,29 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType, is
                             <div className="filter-brand">
                                 <div className="heading6">Brands</div>
                                 <div className="list-brand mt-4">
-                                    {['adidas', 'hermes', 'zara', 'nike', 'gucci'].map((item, index) => (
-                                        <div key={index} className="brand-item flex items-center justify-between">
-                                            <div className="left flex items-center cursor-pointer">
-                                                <div className="block-input">
-                                                    <input
-                                                        type="checkbox"
-                                                        name={item}
-                                                        id={item}
-                                                        checked={brand === item}
-                                                        onChange={() => handleBrand(item)} />
-                                                    <Icon.CheckSquare size={20} weight='fill' className='icon-checkbox' />
+                                    {availableBrands.length > 0 ? (
+                                        availableBrands.map((item, index) => (
+                                            <div key={index} className="brand-item flex items-center justify-between">
+                                                <div className="left flex items-center cursor-pointer">
+                                                    <div className="block-input">
+                                                        <input
+                                                            type="checkbox"
+                                                            name={item}
+                                                            id={item}
+                                                            checked={brand === item}
+                                                            onChange={() => handleBrand(item)} />
+                                                        <Icon.CheckSquare size={20} weight='fill' className='icon-checkbox' />
+                                                    </div>
+                                                    <label htmlFor={item} className="brand-name capitalize pl-2 cursor-pointer">{item}</label>
                                                 </div>
-                                                <label htmlFor={item} className="brand-name capitalize pl-2 cursor-pointer">{item}</label>
+                                                <div className='text-secondary2'>
+                                                    ({data.filter(dataItem => dataItem.brand === item).length})
+                                                </div>
                                             </div>
-                                            <div className='text-secondary2'>
-                                                ({data.filter(dataItem => dataItem.brand === item && dataItem.category === 'fashion').length})
-                                            </div>
-                                        </div>
-                                    ))}
+                                        ))
+                                    ) : (
+                                        <div className="text-secondary2 caption1">No brands available</div>
+                                    )}
                                 </div>
                             </div>
                         </div>

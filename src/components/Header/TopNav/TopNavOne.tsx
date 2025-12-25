@@ -18,7 +18,7 @@ const TopNavOne: React.FC<Props> = ({ props, slogan }) => {
         <>
             <div className={`top-nav md:h-[44px] h-[30px] ${props}`}>
                 <div className="container mx-auto h-full">
-                    <div className="top-nav-main flex justify-between max-md:justify-center h-full">
+                    <div className="top-nav-main flex justify-between max-md:justify-center h-full relative">
                         <div className="left-content flex items-center gap-5 max-md:hidden">
                             <div
                                 className="choose-type choose-language flex items-center gap-1.5"
@@ -42,7 +42,7 @@ const TopNavOne: React.FC<Props> = ({ props, slogan }) => {
                                 Store Location
                             </Link>
                         </div>
-                        <div className="text-center text-button-uppercase text-white flex items-center">
+                        <div className="absolute left-1/2 transform -translate-x-1/2 text-center text-button-uppercase text-white flex items-center max-md:hidden">
                             {slogan}
                         </div>
                         <div className="right-content flex items-center gap-5 max-md:hidden">

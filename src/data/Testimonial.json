@@ -1,13 +1,13 @@
 [
     {
         "id": "1",
-        "category": "fashion",
+        "category": "eyewear",
         "title": "Variety of Styles!",
         "name": "Fukuda E.",
         "avatar": "/images/avatar/1.png",
         "date": "November 10, 2023",
         "address": "Tokyo, Japan",
-        "description": "Anvouge's exceptional customer service and attention to detail make shopping with them a pleasure. They understand my fashion needs and help me find the perfect pieces every time.",
+        "description": "Anvouge's exceptional customer service and attention to detail make shopping with them a pleasure. They understand my eyewear needs and help me find the perfect pieces every time.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -16,7 +16,7 @@
     },
     {
         "id": "2",
-        "category": "fashion",
+        "category": "eyewear",
         "title": "Quality of Clothing!",
         "name": "Georgina S.",
         "avatar": "/images/avatar/2.png",
@@ -31,7 +31,7 @@
     },
     {
         "id": "3",
-        "category": "fashion",
+        "category": "eyewear",
         "title": "Customer Service!",
         "name": "Elizabeth A.",
         "avatar": "/images/avatar/3.png",
@@ -46,7 +46,7 @@
     },
     {
         "id": "4",
-        "category": "fashion",
+        "category": "eyewear",
         "title": "Quality of Clothing!",
         "name": "Christin H.",
         "avatar": "/images/avatar/4.png",
@@ -61,7 +61,7 @@
     },
     {
         "id": "5",
-        "category": "fashion",
+        "category": "eyewear",
         "title": "Customer Service!",
         "name": "Emily G.",
         "avatar": "/images/avatar/5.png",
@@ -76,13 +76,13 @@
     },
     {
         "id": "6",
-        "category": "fashion",
+        "category": "eyewear",
         "title": "Variety of Styles!",
         "name": "Carolina C.",
         "avatar": "/images/avatar/6.png",
         "date": "November 19, 2023",
         "address": "London, UK",
-        "description": "Anvouge's fashion collection is a game-changer! Their unique and trendy pieces have completely transformed my style. It's comfortable, stylish, and always on-trend.",
+        "description": "Anvouge's eyewear collection is a game-changer! Their unique and trendy pieces have completely transformed my style. It's comfortable, stylish, and always on-trend.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -127,7 +127,7 @@
         "avatar": "/images/avatar/6.png",
         "date": "November 19, 2023",
         "address": "London, UK",
-        "description": "I can't get enough of Anvogue high-quality clothing. It's comfortable, stylish, and always on-trend.",
+        "description": "I can't get enough of Eyesoul Eyewear high-quality clothing. It's comfortable, stylish, and always on-trend.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"

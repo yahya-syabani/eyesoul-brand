@@ -5,6 +5,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useR
 import { ProductType } from '@/type/ProductType';
 import { useDebouncedEffect } from '@/hooks/useDebouncedEffect';
 import { readPersistedArray, writePersistedArray } from '@/utils/persistedState';
+import { CART_STORAGE_KEY } from '@/lib/api-constants';
 
 interface CartItem extends ProductType {
     quantity: number
@@ -34,8 +35,6 @@ interface CartContextProps {
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
-
-const CART_STORAGE_KEY = 'anvogue_cart_v1';
 
 type PartialCartItem = Partial<CartItem> & { id?: unknown; quantity?: unknown; selectedSize?: unknown; selectedColor?: unknown }
 

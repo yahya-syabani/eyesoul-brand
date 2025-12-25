@@ -2,8 +2,6 @@
 import React from 'react'
 import Link from 'next/link'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuTwo from '@/components/Header/Menu/MenuTwo'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import Footer from '@/components/Footer/Footer'
 
@@ -82,9 +80,7 @@ const storeLocations: StoreLocation[] = [
 const StoreLocationPage = () => {
     return (
         <>
-            <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
             <div id="header" className='relative w-full'>
-                <MenuTwo />
                 <Breadcrumb heading='Store Location' subHeading='Store Location' />
             </div>
             <div className='store-location md:py-20 py-10'>
@@ -183,4 +179,5 @@ const StoreLocationPage = () => {
 }
 
 export default StoreLocationPage
+
 

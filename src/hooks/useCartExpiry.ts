@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useCountdown } from './useCountdown'
 import CountdownTimeType from '@/type/CountdownType'
 
-const CART_EXPIRY_KEY = 'anvogue_cart_expires_at'
+const CART_EXPIRY_KEY = 'eyesoul_cart_expires_at'
 const CART_EXPIRES_IN_MS = 15 * 60 * 1000
 
 // Use a deterministic default value to prevent hydration mismatch

@@ -1,9 +1,23 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { PrismaClient } = require('@prisma/client')
+const bcrypt = require('bcryptjs')
 
 const prisma = new PrismaClient()
 
 async function main() {
+  // Create admin user
+  const hashedPassword = await bcrypt.hash('admin123', 10)
+  await prisma.user.upsert({
+    where: { email: 'admin@eyesoul.com' },
+    update: {},
+    create: {
+      email: 'admin@eyesoul.com',
+      password: hashedPassword,
+      role: 'ADMIN',
+    },
+  })
+  console.log('Admin user created: admin@eyesoul.com / admin123')
+
   const sampleProducts = [
     {
       name: 'AeroLite Sunglasses',
@@ -34,7 +48,7 @@ async function main() {
     {
       name: 'Clarity Blue Light Glasses',
       slug: 'clarity-blue-light',
-      category: 'frames-only',
+      category: 'frames_only',
       description: 'Blue-light blocking frames designed for all-day comfort.',
       price: 90,
       originPrice: 120,
@@ -56,6 +70,85 @@ async function main() {
         lensCoating: ['blue-light', 'scratch-resistant'],
       },
       sizes: [{ size: 'small' }],
+    },
+    {
+      name: 'Vision Pro Prescription Glasses',
+      slug: 'vision-pro-prescription',
+      category: 'prescription_glasses',
+      description: 'Premium prescription glasses with anti-reflective coating.',
+      price: 180,
+      originPrice: 220,
+      brand: 'eyesoul',
+      images: ['/images/product/1000x1000.png'],
+      thumbImages: ['/images/product/1000x1000.png'],
+      rate: 5,
+      sold: 25,
+      quantity: 60,
+      isNew: true,
+      isSale: true,
+      variations: [
+        { color: 'black', colorCode: '#1F1F1F', colorImage: '/images/product/color/48x48.png', image: '/images/product/1000x1000.png' },
+        { color: 'brown', colorCode: '#8B4513', colorImage: '/images/product/color/48x48.png', image: '/images/product/1000x1000.png' },
+      ],
+      attributes: {
+        lensType: 'progressive',
+        frameMaterial: 'titanium',
+        frameSize: { bridgeWidth: 19, templeLength: 140, lensWidth: 56 },
+        lensCoating: ['anti-reflective', 'scratch-resistant', 'uv-protection'],
+      },
+      sizes: [{ size: 'medium' }, { size: 'large' }],
+    },
+    {
+      name: 'Reader Plus Reading Glasses',
+      slug: 'reader-plus',
+      category: 'reading_glasses',
+      description: 'Comfortable reading glasses with blue light filtering.',
+      price: 45,
+      originPrice: 60,
+      brand: 'eyesoul',
+      images: ['/images/product/1000x1000.png'],
+      thumbImages: ['/images/product/1000x1000.png'],
+      rate: 4,
+      sold: 30,
+      quantity: 100,
+      isNew: false,
+      isSale: true,
+      variations: [
+        { color: 'purple', colorCode: '#8684D4', colorImage: '/images/product/color/48x48.png', image: '/images/product/1000x1000.png' },
+      ],
+      attributes: {
+        lensType: 'single-vision',
+        frameMaterial: 'acetate',
+        frameSize: { bridgeWidth: 18, templeLength: 135, lensWidth: 50 },
+        lensCoating: ['blue-light', 'anti-reflective'],
+      },
+      sizes: [{ size: 'medium' }],
+    },
+    {
+      name: 'Daily Comfort Contact Lenses',
+      slug: 'daily-comfort-contacts',
+      category: 'contact_lenses',
+      description: 'Daily disposable contact lenses for all-day comfort.',
+      price: 35,
+      originPrice: 45,
+      brand: 'eyesoul',
+      images: ['/images/product/1000x1000.png'],
+      thumbImages: ['/images/product/1000x1000.png'],
+      rate: 5,
+      sold: 50,
+      quantity: 200,
+      isNew: true,
+      isSale: false,
+      variations: [
+        { color: 'clear', colorCode: '#FFFFFF', colorImage: '/images/product/color/48x48.png', image: '/images/product/1000x1000.png' },
+      ],
+      attributes: {
+        lensType: 'single-vision',
+        frameMaterial: null,
+        frameSize: null,
+        lensCoating: ['uv-protection'],
+      },
+      sizes: [{ size: '30-pack' }],
     },
   ]
 
@@ -91,6 +184,7 @@ async function main() {
       },
     })
   }
+  console.log(`Seeded ${sampleProducts.length} products successfully`)
 }
 
 main()

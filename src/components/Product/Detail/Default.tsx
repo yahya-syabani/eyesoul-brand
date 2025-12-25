@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ProductType } from '@/type/ProductType'
@@ -34,6 +34,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     const [activeColor, setActiveColor] = useState<string>('')
     const [activeSize, setActiveSize] = useState<string>('')
     const [activeTab, setActiveTab] = useState<string | undefined>('description')
+    const [quantityPurchase, setQuantityPurchase] = useState<number>(1)
     const { addToCart, updateCart, cartState } = useCart()
     const { openModalCart } = useModalCartContext()
     const { addToWishlist, removeFromWishlist, wishlistState } = useWishlist()
@@ -41,7 +42,13 @@ const Default: React.FC<Props> = ({ data, productId }) => {
     const { addToCompare, removeFromCompare, compareState } = useCompare();
     const { openModalCompare } = useModalCompareContext()
     const { warning } = useToast()
-    if (!data || data.length === 0) {
+    
+    // Calculate productMain before early return
+    const productMain = data && data.length > 0 
+        ? (data.find(product => product.id === productId) as ProductType || data[0])
+        : null
+
+    if (!data || data.length === 0 || !productMain) {
         return (
             <div className="product-detail md:py-20 py-10">
                 <div className="container text-center text-secondary">Product not found.</div>
@@ -49,12 +56,12 @@ const Default: React.FC<Props> = ({ data, productId }) => {
         )
     }
 
-    let productMain = data.find(product => product.id === productId) as ProductType
-    if (productMain === undefined) {
-        productMain = data[0]
-    }
-
-    const [quantityPurchase, setQuantityPurchase] = useState<number>(productMain.quantityPurchase || 1)
+    // Update quantityPurchase when productMain changes
+    useEffect(() => {
+        if (productMain?.quantityPurchase) {
+            setQuantityPurchase(productMain.quantityPurchase)
+        }
+    }, [productMain?.quantityPurchase])
 
     const percentSale = Math.floor(100 - ((productMain?.price / productMain?.originPrice) * 100))
 
@@ -912,8 +919,8 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                 </div>
                                 <div className="right lg:w-3/4 w-full lg:pl-[15px]">
                                     <Rate currentRate={5} size={16} />
-                                    <div className="heading5 mt-3">Unbeatable Style and Quality: A Fashion Brand That Delivers</div>
-                                    <div className="body1 mt-3">I can{String.raw`'t`} get enough of the fashion pieces from this brand. They have a great selection for every occasion and the prices are reasonable. The shipping is fast and the items always arrive in perfect condition.</div>
+                                    <div className="heading5 mt-3">Unbeatable Style and Quality: A Brand That Delivers</div>
+                                    <div className="body1 mt-3">I can{String.raw`'t`} get enough of the pieces from this brand. They have a great selection for every occasion and the prices are reasonable. The shipping is fast and the items always arrive in perfect condition.</div>
                                     <div className="action mt-3">
                                         <div className="flex items-center gap-4">
                                             <div className="like-btn flex items-center gap-1 cursor-pointer">
@@ -961,8 +968,8 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                 </div>
                                 <div className="right lg:w-3/4 w-full lg:pl-[15px]">
                                     <Rate currentRate={5} size={16} />
-                                    <div className="heading5 mt-3">Exceptional Fashion: The Perfect Blend of Style and Durability</div>
-                                    <div className="body1 mt-3">The fashion brand{String.raw`'s`} online shopping experience is seamless. The website is user-friendly, the product images are clear, and the checkout process is quick.</div>
+                                    <div className="heading5 mt-3">Exceptional Quality: The Perfect Blend of Style and Durability</div>
+                                    <div className="body1 mt-3">The brand{String.raw`'s`} online shopping experience is seamless. The website is user-friendly, the product images are clear, and the checkout process is quick.</div>
                                     <div className="action mt-3">
                                         <div className="flex items-center gap-4">
                                             <div className="like-btn flex items-center gap-1 cursor-pointer">
@@ -1010,8 +1017,8 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                 </div>
                                 <div className="right lg:w-3/4 w-full lg:pl-[15px]">
                                     <Rate currentRate={5} size={16} />
-                                    <div className="heading5 mt-3">Elevate Your Wardrobe: Stunning Dresses That Make a Statement</div>
-                                    <div className="body1 mt-3">I love how sustainable and ethically conscious this fashion brand is. They prioritize eco-friendly materials and fair trade practices, which makes me feel good about supporting them.</div>
+                                    <div className="heading5 mt-3">Elevate Your Style: Stunning Products That Make a Statement</div>
+                                    <div className="body1 mt-3">I love how sustainable and ethically conscious this brand is. They prioritize eco-friendly materials and fair trade practices, which makes me feel good about supporting them.</div>
                                     <div className="action mt-3">
                                         <div className="flex items-center gap-4">
                                             <div className="like-btn flex items-center gap-1 cursor-pointer">

@@ -51,31 +51,66 @@
 
 
 
-/* menu header */
-.header-menu {
-    position: relative;
-    z-index: 101;
-    transition: all ease 0.5s;
+/* merged header (top nav + menu) */
+.header-merged {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 102;
+    /* Hardware acceleration optimizations */
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    /* Smooth transitions */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0px 10px 25px 0px rgba(43, 52, 74, 0.12);
 
-    &.fixed {
-        background-color: var(--white);
-        box-shadow: 0px 10px 25px 0px rgba(43, 52, 74, 0.12);
-        top: 0;
-        animation: animateHeader ease 0.5s;
-
-        &.style-watch {
-            background-color: var(--green);
-        }
-    }
-}
-
-@keyframes animateHeader {
-    0% {
+    &.hidden {
         transform: translate3d(0, -100%, 0);
     }
 
-    100% {
-        transform: none;
+    &.visible {
+        transform: translate3d(0, 0, 0);
+    }
+
+    .header-menu {
+        background-color: var(--white);
+        box-shadow: none;
+    }
+}
+
+/* menu header (standalone - for backward compatibility) */
+.header-menu {
+    position: fixed;
+    top: 30px; /* Mobile: below top banner (30px) */
+    left: 0;
+    right: 0;
+    z-index: 101;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, top 0.3s ease;
+    background-color: var(--white);
+    box-shadow: 0px 10px 25px 0px rgba(43, 52, 74, 0.12);
+
+    /* Desktop: position below top banner (44px) */
+    @media (min-width: 768px) {
+        top: 44px;
+    }
+
+    &.hidden {
+        transform: translateY(calc(-100% - 30px)); /* Mobile: hide above top banner */
+        
+        @media (min-width: 768px) {
+            transform: translateY(calc(-100% - 44px)); /* Desktop: hide above top banner */
+        }
+    }
+
+    &.visible {
+        transform: translateY(0);
+    }
+
+    &.style-watch {
+        background-color: var(--green);
     }
 }
 

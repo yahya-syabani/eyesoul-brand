@@ -11,7 +11,7 @@ interface ThemeContextProps {
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined)
 
-const THEME_STORAGE_KEY = 'anvogue_theme'
+const THEME_STORAGE_KEY = 'eyesoul_theme'
 const THEME_ATTRIBUTE = 'data-theme'
 
 const getStoredTheme = (): Theme | null => {

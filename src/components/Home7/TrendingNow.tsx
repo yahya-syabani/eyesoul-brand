@@ -15,6 +15,15 @@ const TrendingNow = () => {
         router.push(`/shop/default?type=${type}`);
     };
 
+    // Eyewear-focused categories for trending navigation
+    const trendingItems = [
+        { type: 'sunglasses', label: 'Sunglasses', count: 12, image: '/images/avatar/1.png' },
+        { type: 'prescription-glasses', label: 'Prescription', count: 8, image: '/images/avatar/2.png' },
+        { type: 'reading-glasses', label: 'Reading', count: 6, image: '/images/avatar/4.png' },
+        { type: 'contact-lenses', label: 'Contact Lenses', count: 5, image: '/images/avatar/5.png' },
+        { type: 'frames-only', label: 'Frames Only', count: 7, image: '/images/avatar/6.png' },
+    ]
+
     return (
         <>
             <div className="trending-block style-six md:pt-20 pt-10">
@@ -48,132 +57,26 @@ const TrendingNow = () => {
                             }}
                             className='h-full'
                         >
-                            <SwiperSlide>
-                                <div className="trending-item block relative cursor-pointer" onClick={() => handleTypeClick('t-shirt')}>
-                                    <div className="bg-img rounded-full overflow-hidden">
-                                        <Image
-                                            src={'/images/avatar/1.png'}
-                                            width={1000}
-                                            height={1000}
-                                            alt='outerwear'
-                                            priority={true}
-                                            className='w-full'
-                                        />
+                            {trendingItems.map((item, index) => (
+                                <SwiperSlide key={index}>
+                                    <div className="trending-item block relative cursor-pointer" onClick={() => handleTypeClick(item.type)}>
+                                        <div className="bg-img rounded-full overflow-hidden">
+                                            <Image
+                                                src={item.image}
+                                                width={1000}
+                                                height={1000}
+                                                alt={item.label}
+                                                priority={true}
+                                                className='w-full'
+                                            />
+                                        </div>
+                                        <div className="trending-name text-center mt-5 duration-500">
+                                            <span className='heading5'>{item.label}</span>
+                                            <span className='text-secondary'> ({item.count})</span>
+                                        </div>
                                     </div>
-                                    <div className="trending-name text-center mt-5 duration-500">
-                                        <span className='heading5'>T-shirt</span>
-                                        <span className='text-secondary'> (12)</span>
-                                    </div>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div className="trending-item block relative cursor-pointer" onClick={() => handleTypeClick('sweater')}>
-                                    <div className="bg-img rounded-full overflow-hidden">
-                                        <Image
-                                            src={'/images/avatar/2.png'}
-                                            width={1000}
-                                            height={1000}
-                                            alt='swimwear'
-                                            priority={true}
-                                            className='w-full'
-                                        />
-                                    </div>
-                                    <div className="trending-name text-center mt-5 duration-500">
-                                        <span className='heading5'>Sweaters</span>
-                                        <span className='text-secondary'> (2)</span>
-                                    </div>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div className="trending-item block relative cursor-pointer" onClick={() => handleTypeClick('top')}>
-                                    <div className="bg-img rounded-full overflow-hidden">
-                                        <Image
-                                            src={'/images/avatar/4.png'}
-                                            width={1000}
-                                            height={1000}
-                                            alt='clothes'
-                                            priority={true}
-                                            className='w-full'
-                                        />
-                                    </div>
-                                    <div className="trending-name text-center mt-5 duration-500">
-                                        <span className='heading5'>Top</span>
-                                        <span className='text-secondary'> (4)</span>
-                                    </div>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div className="trending-item block relative cursor-pointer" onClick={() => handleTypeClick('dress')}>
-                                    <div className="bg-img rounded-full overflow-hidden">
-                                        <Image
-                                            src={'/images/avatar/5.png'}
-                                            width={1000}
-                                            height={1000}
-                                            alt='sets'
-                                            priority={true}
-                                            className='w-full'
-                                        />
-                                    </div>
-                                    <div className="trending-name text-center mt-5 duration-500">
-                                        <span className='heading5'>Dresses</span>
-                                        <span className='text-secondary'> (3)</span>
-                                    </div>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div className="trending-item block relative cursor-pointer" onClick={() => handleTypeClick('swimwear')}>
-                                    <div className="bg-img rounded-full overflow-hidden">
-                                        <Image
-                                            src={'/images/avatar/6.png'}
-                                            width={1000}
-                                            height={1000}
-                                            alt='accessories'
-                                            priority={true}
-                                            className='w-full'
-                                        />
-                                    </div>
-                                    <div className="trending-name text-center mt-5 duration-500">
-                                        <span className='heading5'>swimwear</span>
-                                        <span className='text-secondary'> (12)</span>
-                                    </div>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div className="trending-item block relative cursor-pointer" onClick={() => handleTypeClick('outerwear')}>
-                                    <div className="bg-img rounded-full overflow-hidden">
-                                        <Image
-                                            src={'/images/avatar/7.png'}
-                                            width={1000}
-                                            height={1000}
-                                            alt='lingerie'
-                                            priority={true}
-                                            className='w-full'
-                                        />
-                                    </div>
-                                    <div className="trending-name text-center mt-5 duration-500">
-                                        <span className='heading5'>Outerwear</span>
-                                        <span className='text-secondary'> (2)</span>
-                                    </div>
-                                </div>
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <div className="trending-item block relative cursor-pointer" onClick={() => handleTypeClick('shirt')}>
-                                    <div className="bg-img rounded-full overflow-hidden">
-                                        <Image
-                                            src={'/images/avatar/8.png'}
-                                            width={1000}
-                                            height={1000}
-                                            alt='lingerie'
-                                            priority={true}
-                                            className='w-full'
-                                        />
-                                    </div>
-                                    <div className="trending-name text-center mt-5 duration-500">
-                                        <span className='heading5'>Shirt</span>
-                                        <span className='text-secondary'> (12)</span>
-                                    </div>
-                                </div>
-                            </SwiperSlide>
+                                </SwiperSlide>
+                            ))}
                         </Swiper>
                     </div>
                 </div>

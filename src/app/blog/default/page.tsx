@@ -6,7 +6,7 @@ import Spinner from '@/components/Loading/Spinner'
 
 export const metadata: Metadata = generatePageMetadata(
   'Blog',
-  'Read the latest fashion trends, styling tips, and brand updates from our blog.'
+  'Read the latest eyewear trends, styling tips, and brand updates from our blog.'
 )
 
 const BlogDefault = () => {

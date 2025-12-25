@@ -93,3 +93,49 @@ export const forgotPasswordSchema = z.object({
 
 export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>
 
+// User validation
+export const userSchema = z.object({
+  email: z.string().min(1, 'Email is required').email('Please enter a valid email address'),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number'),
+  role: z.enum(['ADMIN', 'CUSTOMER']).default('CUSTOMER'),
+})
+
+export const updateUserSchema = z.object({
+  email: z.string().email('Please enter a valid email address').optional(),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number')
+    .optional(),
+  role: z.enum(['ADMIN', 'CUSTOMER']).optional(),
+})
+
+export type UserFormData = z.infer<typeof userSchema>
+export type UpdateUserFormData = z.infer<typeof updateUserSchema>
+
+// Order validation
+export const orderItemSchema = z.object({
+  productId: z.string().min(1, 'Product ID is required'),
+  quantity: z.number().int().positive('Quantity must be a positive integer'),
+  price: z.number().positive('Price must be positive'),
+  selectedSize: z.string().optional(),
+  selectedColor: z.string().optional(),
+})
+
+export const orderSchema = z.object({
+  status: z.enum(['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED']).optional(),
+  shippingAddress: z.record(z.string(), z.unknown()).optional(),
+  items: z.array(orderItemSchema).min(1, 'At least one item is required').optional(),
+  userId: z.string().optional(),
+})
+
+export type OrderFormData = z.infer<typeof orderSchema>
+export type OrderItemFormData = z.infer<typeof orderItemSchema>
+

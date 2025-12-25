@@ -28,7 +28,7 @@ interface CompareContextProps {
 
 const CompareContext = createContext<CompareContextProps | undefined>(undefined);
 
-const COMPARE_STORAGE_KEY = 'anvogue_compare_v1';
+const COMPARE_STORAGE_KEY = 'eyesoul_compare_v1';
 
 type PartialCompareItem = Partial<CompareItem> & { id?: unknown }
 

@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation';
-import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuTwo from '@/components/Header/Menu/MenuTwo'
 import ShopBreadCrumbImg from '@/components/Shop/ShopBreadCrumbImg';
 import FeatureErrorBoundary from '@/components/Error/FeatureErrorBoundary'
 import Footer from '@/components/Footer/Footer'
@@ -13,7 +11,7 @@ import { ProductType } from '@/type/ProductType'
 const ShopDefaultContent = () => {
     const searchParams = useSearchParams()
     const type = searchParams.get('type')
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://anvogue.com'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://eyesoul-eyewear.com'
     const [products, setProducts] = useState<ProductType[]>([])
     const [loading, setLoading] = useState<boolean>(true)
 
@@ -39,9 +37,7 @@ const ShopDefaultContent = () => {
 
     return (
         <>
-            <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
             <div id="header" className='relative w-full'>
-                <MenuTwo />
             </div>
             <BreadcrumbJsonLd
                 items={[

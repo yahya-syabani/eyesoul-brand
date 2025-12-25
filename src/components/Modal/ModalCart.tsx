@@ -1,10 +1,9 @@
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import productData from '@/data/Product.json'
 import { ProductType } from '@/type/ProductType';
 import { useModalCartContext } from '@/context/ModalCartContext'
 import { useCart } from '@/context/CartContext'
@@ -15,8 +14,26 @@ const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) =>
     const { timeLeft } = useCartExpiry()
 
     const [activeTab, setActiveTab] = useState<string | undefined>('')
+    const [productData, setProductData] = useState<ProductType[]>([]);
     const { isModalOpen, closeModalCart } = useModalCartContext();
     const { cartState, addToCart, removeFromCart, updateCart } = useCart()
+
+    useEffect(() => {
+        if (isModalOpen) {
+            const fetchProducts = async () => {
+                try {
+                    const res = await fetch('/api/products?limit=4', { cache: 'no-store' })
+                    if (res.ok) {
+                        const json = await res.json()
+                        setProductData(json.data || [])
+                    }
+                } catch (error) {
+                    console.error('Error fetching products:', error)
+                }
+            }
+            fetchProducts()
+        }
+    }, [isModalOpen])
 
     const handleAddToCart = (productItem: ProductType) => {
         if (!cartState.cartArray.find(item => item.id === productItem.id)) {

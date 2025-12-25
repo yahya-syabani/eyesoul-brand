@@ -1,12 +1,11 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
-import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuTwo from '@/components/Header/Menu/MenuTwo'
-import productData from '@/data/Product.json'
-import testimonialData from '@/data/Testimonial.json'
 import Footer from '@/components/Footer/Footer'
 import { generatePageMetadata } from '@/lib/metadata'
+import { ProductType } from '@/type/ProductType'
+import prisma from '@/lib/prisma'
+import { transformProductForFrontend } from '@/utils/transformProduct'
 
 export const metadata: Metadata = generatePageMetadata(
   'Eyesoul Eyewear',
@@ -24,12 +23,53 @@ const Benefit = dynamic(() => import('@/components/Home1/Benefit'))
 const Instagram = dynamic(() => import('@/components/Home6/Instagram'))
 const Brand = dynamic(() => import('@/components/Home1/Brand'))
 
-export default function Home() {
+async function fetchProducts(): Promise<ProductType[]> {
+  try {
+    // Directly use Prisma in server component for better performance
+    const products = await prisma.product.findMany({
+      take: 50,
+      include: { variations: true, attributes: true, sizes: true },
+      orderBy: { createdAt: 'desc' },
+    })
+    return products.map(transformProductForFrontend)
+  } catch (error) {
+    console.error('Error fetching products:', error)
+    return []
+  }
+}
+
+async function fetchTestimonials() {
+  try {
+    const testimonials = await prisma.testimonial.findMany({
+      take: 20,
+      orderBy: { createdAt: 'desc' },
+    })
+    // Transform to match TestimonialType format
+    return testimonials.map((t) => ({
+      id: t.id,
+      category: t.category,
+      title: t.title,
+      name: t.name,
+      avatar: t.avatar || '/images/avatar/1.png',
+      date: t.date,
+      address: t.address || '',
+      description: t.description,
+      images: t.images,
+      star: t.star,
+    }))
+  } catch (error) {
+    console.error('Error fetching testimonials:', error)
+    return []
+  }
+}
+
+export default async function Home() {
+  const productData = await fetchProducts()
+  const testimonialData = await fetchTestimonials()
+
   return (
     <>
-      <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on eyewear orders over $50' />
       <div id="header" className='relative w-full'>
-        <MenuTwo />
         <SliderSeven />
       </div>
       <TrendingNow />

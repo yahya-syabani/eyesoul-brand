@@ -4,6 +4,7 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 import ToastContainer from '@/components/Toast/ToastContainer'
 import type CountdownTimeType from '@/type/CountdownType'
+import Header from '@/components/Header/Header'
 
 const ModalCart = dynamic(() => import('@/components/Modal/ModalCart'), { ssr: false })
 const ModalWishlist = dynamic(() => import('@/components/Modal/ModalWishlist'), { ssr: false })
@@ -20,6 +21,7 @@ type Props = {
 export default function ClientShell({ children, serverTimeLeft }: Props) {
   return (
     <>
+      <Header topNavProps="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
       {children}
       <ToastContainer />
       <ModalCart serverTimeLeft={serverTimeLeft} />

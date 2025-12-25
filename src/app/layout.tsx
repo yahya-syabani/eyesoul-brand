@@ -9,7 +9,7 @@ import OrganizationJsonLd from '@/components/SEO/OrganizationJsonLd'
 import WebSiteJsonLd from '@/components/SEO/WebSiteJsonLd'
 
 export const metadata: Metadata = {
-  title: 'Anvogue',
+  title: 'Eyesoul Eyewear',
   description: 'Multipurpose eCommerce Template',
 }
 

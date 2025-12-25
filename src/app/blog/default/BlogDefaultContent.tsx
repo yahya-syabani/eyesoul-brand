@@ -1,26 +1,63 @@
 'use client'
 
-import React, { useState, Suspense } from 'react'
+import React, { useState, Suspense, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuTwo from '@/components/Header/Menu/MenuTwo'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb';
-import blogData from '@/data/Blog.json'
 import BlogItem from '@/components/Blog/BlogItem';
 import Footer from '@/components/Footer/Footer'
 import HandlePagination from '@/components/Other/HandlePagination'
 import { useRouter } from 'next/navigation'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 
+interface Blog {
+    id: string
+    category: string
+    tag: string | null
+    title: string
+    date: string
+    author: string
+    avatar: string | null
+    thumbImg: string | null
+    coverImg: string | null
+    subImg: string[]
+    shortDesc: string
+    description: string
+    slug: string
+}
+
 const BlogDefaultContent = () => {
     const [currentPage, setCurrentPage] = useState(0);
+    const [blogData, setBlogData] = useState<Blog[]>([]);
+    const [loading, setLoading] = useState(true);
     const productsPerPage = 3;
     const offset = currentPage * productsPerPage;
     const router = useRouter()
     const searchParams = useSearchParams()
     let dataCategory = searchParams.get('category')
     const [category, setCategory] = useState<string | null>(dataCategory);
+
+    useEffect(() => {
+        loadBlogs()
+    }, [category])
+
+    const loadBlogs = async () => {
+        setLoading(true)
+        try {
+            const params = new URLSearchParams()
+            params.append('limit', '100')
+            if (category) params.append('category', category)
+            const res = await fetch(`/api/blogs?${params.toString()}`, { cache: 'no-store' })
+            if (res.ok) {
+                const json = await res.json()
+                setBlogData(json.data || [])
+            }
+        } catch (error) {
+            console.error('Error loading blogs:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const handleCategory = (category: string) => {
         setCategory(prevCategory => prevCategory === category ? null : category)
@@ -39,7 +76,7 @@ const BlogDefaultContent = () => {
         return isCategoryMatched
     })
 
-    if (filteredData.length === 0) {
+    if (filteredData.length === 0 && !loading) {
         filteredData = [{
             id: "no-data",
             category: "no-data",
@@ -74,20 +111,22 @@ const BlogDefaultContent = () => {
 
     return (
         <>
-            <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
             <div id="header" className='relative w-full'>
-                <MenuTwo />
                 <Breadcrumb heading='Blog Default' subHeading='Blog Default' />
             </div>
             <div className='blog default md:py-20 py-10'>
                 <div className="container">
                     <div className="flex justify-between max-md:flex-col gap-y-12">
                         <div className="left xl:w-3/4 md:w-2/3 pr-2">
-                            <div className="list-blog flex flex-col md:gap-10 gap-8">
-                                {currentProducts.map(item => (
-                                    <BlogItem key={item.id} data={item} type='style-default' />
-                                ))}
-                            </div>
+                            {loading ? (
+                                <div className="text-secondary text-center py-10">Loading blogs...</div>
+                            ) : (
+                                <div className="list-blog flex flex-col md:gap-10 gap-8">
+                                    {currentProducts.map(item => (
+                                        <BlogItem key={item.id} data={item} type='style-default' />
+                                    ))}
+                                </div>
+                            )}
                             {pageCount > 1 && (
                                 <div className="list-pagination w-full flex items-center justify-center md:mt-10 mt-6">
                                     <HandlePagination pageCount={pageCount} onPageChange={handlePageChange} />
@@ -104,17 +143,17 @@ const BlogDefaultContent = () => {
                             <div className="recent md:mt-10 mt-6 pb-8 border-b border-line">
                                 <div className="heading6">Recent Posts</div>
                                 <div className="list-recent pt-1">
-                                    {blogData.slice(12, 15).map(item => (
+                                    {blogData.slice(0, 3).map(item => (
                                         <div className="item flex gap-4 mt-5 cursor-pointer" key={item.id} onClick={() => handleBlogClick(item.id)}>
                                             <Image
-                                                src={item.thumbImg}
+                                                src={item.thumbImg || '/images/blog/1.png'}
                                                 width={500}
                                                 height={400}
-                                                alt={item.thumbImg}
+                                                alt={item.thumbImg || 'blog'}
                                                 className='w-20 h-20 object-cover rounded-lg flex-shrink-0'
                                             />
                                             <div>
-                                                <div className="blog-tag whitespace-nowrap bg-green py-0.5 px-2 rounded-full text-button-uppercase text-xs inline-block">{item.tag}</div>
+                                                <div className="blog-tag whitespace-nowrap bg-green py-0.5 px-2 rounded-full text-button-uppercase text-xs inline-block">{item.tag || 'Blog'}</div>
                                                 <div className="text-title mt-1">{item.title}</div>
                                             </div>
                                         </div>
@@ -125,12 +164,12 @@ const BlogDefaultContent = () => {
                                 <div className="heading6">Categories</div>
                                 <div className="list-cate pt-1">
                                     <div
-                                        className={`cate-item flex items-center justify-between cursor-pointer mt-3 ${category === 'fashion' ? 'active' : ''}`}
-                                        onClick={() => handleCategory('fashion')}
+                                        className={`cate-item flex items-center justify-between cursor-pointer mt-3 ${category === 'eyewear' ? 'active' : ''}`}
+                                        onClick={() => handleCategory('eyewear')}
                                     >
-                                        <div className='capitalize has-line-before hover:text-black text-secondary'>Fashion</div>
+                                        <div className='capitalize has-line-before hover:text-black text-secondary'>Eyewear</div>
                                         <div className="text-secondary2">
-                                            ({blogData.filter(dataItem => dataItem.category === 'fashion').length})
+                                            ({blogData.filter(dataItem => dataItem.category === 'eyewear').length})
                                         </div>
                                     </div>
                                     <div
@@ -175,10 +214,10 @@ const BlogDefaultContent = () => {
                                 <div className="heading6">Tags Cloud</div>
                                 <div className="list-tags flex items-center flex-wrap gap-3 mt-4">
                                     <div
-                                        className={`tags bg-white border border-line py-1.5 px-4 rounded-full text-button-uppercase text-secondary cursor-pointer duration-300 hover:bg-black hover:text-white ${category === 'fashion' ? 'active' : ''}`}
-                                        onClick={() => handleCategory('fashion')}
+                                        className={`tags bg-white border border-line py-1.5 px-4 rounded-full text-button-uppercase text-secondary cursor-pointer duration-300 hover:bg-black hover:text-white ${category === 'eyewear' ? 'active' : ''}`}
+                                        onClick={() => handleCategory('eyewear')}
                                     >
-                                        fashion
+                                        eyewear
                                     </div>
                                     <div
                                         className={`tags bg-white border border-line py-1.5 px-4 rounded-full text-button-uppercase text-secondary cursor-pointer duration-300 hover:bg-black hover:text-white ${category === 'cosmetic' ? 'active' : ''}`}

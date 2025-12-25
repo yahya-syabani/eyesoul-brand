@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation';
-import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuTwo from '@/components/Header/Menu/MenuTwo'
 import BreadcrumbProduct from '@/components/Breadcrumb/BreadcrumbProduct'
 import Default from '@/components/Product/Detail/Default';
 import Footer from '@/components/Footer/Footer'
@@ -44,13 +42,11 @@ const ProductDefaultContent = () => {
         fetchProduct()
     }, [productId])
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://anvogue.com'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://eyesoul-eyewear.com'
 
     return (
         <>
-            <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
             <div id="header" className='relative w-full'>
-                <MenuTwo />
                 <BreadcrumbProduct data={productList} productPage='default' productId={productId} />
             </div>
             <BreadcrumbJsonLd

@@ -18,7 +18,7 @@ const WhatNewOne: React.FC<Props> = ({ data, start, limit }) => {
         setActiveTab(type);
     };
 
-    const filteredProducts = data.filter((product) => product.type === activeTab && (product.category === 'fashion'));
+    const filteredProducts = data.filter((product) => product.type === activeTab);
 
     return (
         <>

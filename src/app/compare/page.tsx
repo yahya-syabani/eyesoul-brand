@@ -2,12 +2,9 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuTwo from '@/components/Header/Menu/MenuTwo'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import Footer from '@/components/Footer/Footer'
 import { ProductType } from '@/type/ProductType'
-import productData from '@/data/Product.json'
 import Product from '@/components/Product/Product'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useCompare } from '@/context/CompareContext'
@@ -32,9 +29,7 @@ const Compare = () => {
 
     return (
         <>
-            <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
             <div id="header" className='relative w-full'>
-                <MenuTwo />
                 <Breadcrumb heading='Compare Products' subHeading='Compare Products' />
             </div>
             <div className="compare-block md:py-20 py-10">

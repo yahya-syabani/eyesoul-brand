@@ -1,7 +1,7 @@
 [
   {
     "id": "1",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "top",
     "name": "mesh shirt",
     "gender": "women",
@@ -50,7 +50,7 @@
   },
   {
     "id": "2",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "t-shirt",
     "name": "Raglan Sleeve T-shirt",
     "gender": "women",
@@ -101,7 +101,7 @@
   },
   {
     "id": "3",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "dress",
     "name": "Off-the-Shoulder Blouse",
     "gender": "women",
@@ -153,7 +153,7 @@
   },
   {
     "id": "4",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "t-shirt",
     "name": "Kimono sleeve top",
     "gender": "women",
@@ -207,7 +207,7 @@
   },
   {
     "id": "5",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "dress",
     "name": "mesh shirt",
     "gender": "women",
@@ -261,7 +261,7 @@
   },
   {
     "id": "6",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "sets",
     "name": "Raglan Sleeve T-shirt",
     "gender": "women",
@@ -318,7 +318,7 @@
   },
   {
     "id": "7",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "shirt",
     "name": "Off-the-Shoulder Blouse",
     "gender": "women",
@@ -376,7 +376,7 @@
   },
   {
     "id": "8",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "sets",
     "name": "Kimono sleeve top",
     "gender": "women",
@@ -437,7 +437,7 @@
   },
   {
     "id": "9",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "t-shirt",
     "name": "mesh shirt",
     "gender": "women",
@@ -492,7 +492,7 @@
   },
   {
     "id": "10",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "t-shirt",
     "name": "Raglan Sleeve T-shirt",
     "gender": "women",
@@ -555,7 +555,7 @@
   },
   {
     "id": "11",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "t-shirt",
     "name": "Off-the-Shoulder Blouse",
     "gender": "women",
@@ -607,7 +607,7 @@
   },
   {
     "id": "12",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "sets",
     "name": "Kimono sleeve top",
     "gender": "women",
@@ -668,7 +668,7 @@
   },
   {
     "id": "13",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "t-shirt",
     "name": "mesh shirt",
     "gender": "women",
@@ -728,7 +728,7 @@
   },
   {
     "id": "14",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "sets",
     "name": "Raglan Sleeve T-shirt",
     "gender": "women",
@@ -791,7 +791,7 @@
   },
   {
     "id": "15",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "top",
     "name": "Off-the-Shoulder Blouse",
     "gender": "women",
@@ -849,7 +849,7 @@
   },
   {
     "id": "16",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "top",
     "name": "Kimono sleeve top",
     "gender": "women",
@@ -910,7 +910,7 @@
   },
   {
     "id": "22",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "t-shirt",
     "name": "T-shirt Pockets",
     "gender": "men",
@@ -971,7 +971,7 @@
   },
   {
     "id": "23",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "t-shirt",
     "name": "T-shirt Pockets",
     "gender": "men",
@@ -1033,7 +1033,7 @@
   },
   {
     "id": "17",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "t-shirt",
     "name": "mesh shirt",
     "gender": "women",
@@ -1094,7 +1094,7 @@
   },
   {
     "id": "18",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "shirt",
     "name": "Raglan Sleeve T-shirt",
     "gender": "women",
@@ -1157,7 +1157,7 @@
   },
   {
     "id": "19",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "dress",
     "name": "Off-the-Shoulder Blouse",
     "gender": "women",
@@ -1215,7 +1215,7 @@
   },
   {
     "id": "20",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "top",
     "name": "Kimono sleeve top",
     "gender": "women",
@@ -1276,7 +1276,7 @@
   },
   {
     "id": "21",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "t-shirt",
     "name": "T-shirt Pockets",
     "gender": "men",
@@ -1338,7 +1338,7 @@
   },
   {
     "id": "24",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "t-shirt",
     "name": "T-shirt Pockets",
     "gender": "men",
@@ -1400,7 +1400,7 @@
   },
   {
     "id": "241",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "t-shirt",
     "name": "T-shirt Pockets",
     "gender": "men",
@@ -1448,7 +1448,7 @@
   },
   {
     "id": "25",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "shirt",
     "name": "Shirt Pockets",
     "gender": "men",
@@ -1510,7 +1510,7 @@
   },
   {
     "id": "26",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "shirt",
     "name": "T-shirt Pockets",
     "gender": "men",
@@ -1572,7 +1572,7 @@
   },
   {
     "id": "27",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "shirt",
     "name": "T-shirt Pockets",
     "gender": "men",
@@ -1634,7 +1634,7 @@
   },
   {
     "id": "28",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "underwear",
     "name": "Kimono sleeve top",
     "gender": "women",
@@ -1695,7 +1695,7 @@
   },
   {
     "id": "29",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "swimwear",
     "name": "mesh shirt",
     "gender": "women",
@@ -1756,7 +1756,7 @@
   },
   {
     "id": "30",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "swimwear",
     "name": "Raglan Sleeve T-shirt",
     "gender": "women",
@@ -1819,7 +1819,7 @@
   },
   {
     "id": "31",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "underwear",
     "name": "Off-the-Shoulder Blouse",
     "gender": "women",
@@ -1877,7 +1877,7 @@
   },
   {
     "id": "32",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "swimwear",
     "name": "Kimono sleeve top",
     "gender": "women",
@@ -1938,7 +1938,7 @@
   },
   {
     "id": "33",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "underwear",
     "name": "T-shirt Pockets",
     "gender": "women",
@@ -2000,7 +2000,7 @@
   },
   {
     "id": "34",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "underwear",
     "name": "T-shirt Pockets",
     "gender": "women",
@@ -2055,7 +2055,7 @@
   },
   {
     "id": "35",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "swimwear",
     "name": "T-shirt Pockets",
     "gender": "women",
@@ -2111,7 +2111,7 @@
   },
   {
     "id": "36",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "swimwear",
     "name": "T-shirt Pockets",
     "gender": "women",
@@ -2161,7 +2161,7 @@
   },
   {
     "id": "37",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "swimwear",
     "name": "Shirt Pockets",
     "gender": "women",
@@ -2217,7 +2217,7 @@
   },
   {
     "id": "38",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "swimwear",
     "name": "T-shirt Pockets",
     "gender": "women",
@@ -2267,7 +2267,7 @@
   },
   {
     "id": "39",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "swimwear",
     "name": "T-shirt Pockets",
     "gender": "women",
@@ -2323,7 +2323,7 @@
   },
   {
     "id": "391",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "accessories",
     "name": "gucci sunglasses",
     "gender": "women",
@@ -2358,7 +2358,7 @@
   },
   {
     "id": "392",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "accessories",
     "name": "women handbag",
     "gender": "women",
@@ -2393,7 +2393,7 @@
   },
   {
     "id": "393",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "accessories",
     "name": "camouflage hat",
     "gender": "women",
@@ -2428,7 +2428,7 @@
   },
   {
     "id": "394",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "accessories",
     "name": "leather belts",
     "gender": "women",
@@ -2463,7 +2463,7 @@
   },
   {
     "id": "395",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "accessories",
     "name": "one-piece pants",
     "gender": "women",
@@ -2498,7 +2498,7 @@
   },
   {
     "id": "396",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "accessories",
     "name": "T-shirt",
     "gender": "women",
@@ -6885,7 +6885,7 @@
   },
   {
     "id": "139",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "sweater",
     "name": "silver sweater",
     "gender": "men",
@@ -6928,11 +6928,11 @@
     ],
     "description": "Keep your home organized, yet elegant with storage cabinets by Onita Patio Furniture. Traditionally designed, they are perfect to be used in the any place where you need to store.",
     "action": "quick shop",
-    "slug": "fashion"
+    "slug": "eyewear"
   },
   {
     "id": "140",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "sweater",
     "name": "silver sweater",
     "gender": "men",
@@ -6975,11 +6975,11 @@
     ],
     "description": "Keep your home organized, yet elegant with storage cabinets by Onita Patio Furniture. Traditionally designed, they are perfect to be used in the any place where you need to store.",
     "action": "add to cart",
-    "slug": "fashion"
+    "slug": "eyewear"
   },
   {
     "id": "141",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "outerwear",
     "name": "women office outerwear",
     "gender": "women",
@@ -7022,11 +7022,11 @@
     ],
     "description": "Keep your home organized, yet elegant with storage cabinets by Onita Patio Furniture. Traditionally designed, they are perfect to be used in the any place where you need to store.",
     "action": "quick shop",
-    "slug": "fashion"
+    "slug": "eyewear"
   },
   {
     "id": "142",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "outerwear",
     "name": "men outerwear",
     "gender": "men",
@@ -7069,11 +7069,11 @@
     ],
     "description": "Keep your home organized, yet elegant with storage cabinets by Onita Patio Furniture. Traditionally designed, they are perfect to be used in the any place where you need to store.",
     "action": "add to cart",
-    "slug": "fashion"
+    "slug": "eyewear"
   },
   {
     "id": "143",
-    "category": "fashion",
+    "category": "eyewear",
     "type": "dress",
     "name": "Off-the-Shoulder Blouse",
     "gender": "women",

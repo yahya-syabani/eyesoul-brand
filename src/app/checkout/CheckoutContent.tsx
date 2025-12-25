@@ -6,8 +6,6 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuTwo from '@/components/Header/Menu/MenuTwo'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import Footer from '@/components/Footer/Footer'
 import FormField from '@/components/Form/FormField'
@@ -50,9 +48,7 @@ const CheckoutContent = () => {
 
     return (
         <>
-            <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
             <div id="header" className='relative w-full'>
-                <MenuTwo />
                 <Breadcrumb heading='Shopping cart' subHeading='Shopping cart' />
             </div>
             <div className="cart-block md:py-20 py-10">

@@ -8,7 +8,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   const params = await searchParams
   const type = params?.type
   const title = type ? `${type.charAt(0).toUpperCase() + type.slice(1)} | Shop` : 'Shop'
-  return generatePageMetadata(title, `Browse our collection of ${type || 'fashion'} products. Find the perfect style for you.`)
+  return generatePageMetadata(title, `Browse our collection of ${type || 'eyewear'} products. Find the perfect style for you.`)
 }
 
 export default function Default() {

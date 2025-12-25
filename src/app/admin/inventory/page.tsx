@@ -1,9 +1,10 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { ProductType } from '@/type/ProductType'
 
 const AdminInventoryPage = () => {
-  const [products, setProducts] = useState<any[]>([])
+  const [products, setProducts] = useState<ProductType[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

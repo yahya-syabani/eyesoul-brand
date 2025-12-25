@@ -1,21 +1,39 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import productData from '@/data/Product.json'
 import Product from '../Product/Product';
 import { useModalSearchContext } from '@/context/ModalSearchContext'
 import { useModalA11y } from '@/hooks/useModalA11y'
+import { ProductType } from '@/type/ProductType'
 
 const ModalSearch = () => {
     const { isModalOpen, closeModalSearch } = useModalSearchContext();
     const [searchKeyword, setSearchKeyword] = useState('');
+    const [productData, setProductData] = useState<ProductType[]>([]);
     const router = useRouter()
     const dialogRef = useRef<HTMLDivElement | null>(null)
     const inputRef = useRef<HTMLInputElement | null>(null)
+
+    useEffect(() => {
+        if (isModalOpen) {
+            const fetchProducts = async () => {
+                try {
+                    const res = await fetch('/api/products?limit=4', { cache: 'no-store' })
+                    if (res.ok) {
+                        const json = await res.json()
+                        setProductData(json.data || [])
+                    }
+                } catch (error) {
+                    console.error('Error fetching products:', error)
+                }
+            }
+            fetchProducts()
+        }
+    }, [isModalOpen])
 
     useModalA11y({ isOpen: isModalOpen, onClose: closeModalSearch, containerRef: dialogRef, initialFocusRef: inputRef })
 

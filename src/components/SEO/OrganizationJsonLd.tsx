@@ -8,8 +8,8 @@ type Props = {
 }
 
 export default function OrganizationJsonLd({
-  name = 'Anvogue',
-  siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://anvogue.com',
+  name = 'Eyesoul Eyewear',
+  siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://eyesoul-eyewear.com',
   logoUrl,
   sameAs = [],
 }: Props) {

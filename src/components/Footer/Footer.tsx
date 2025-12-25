@@ -1,9 +1,23 @@
-import React from 'react'
+'use client'
+
+import React, { useState, useRef } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 const Footer = () => {
+    const [isOpenLanguage, setIsOpenLanguage] = useState(false)
+    const [language, setLanguage] = useState('English')
+    const languageRef = useRef<HTMLDivElement>(null)
+
+    useClickOutside(languageRef, () => {
+        setIsOpenLanguage(false)
+    })
+
+    const handleLanguageSelect = (item: string) => {
+        setLanguage(item)
+        setIsOpenLanguage(false)
+    }
     return (
         <>
             <footer id="footer" className='footer'>
@@ -11,37 +25,22 @@ const Footer = () => {
                     <div className="container">
                         <div className="content-footer py-[60px] flex justify-between flex-wrap gap-y-8">
                             <div className="company-infor basis-1/4 max-lg:basis-full pr-7">
-                                <Link href={'/'} className="logo" aria-label="Anvogue home">
-                                    <div className="heading4">Anvogue</div>
+                                <Link href={'/'} className="logo" aria-label="Eyesoul Eyewear home">
+                                    <div className="heading4">Eyesoul Eyewear</div>
                                 </Link>
-                                <address className='flex gap-3 mt-3 not-italic'>
-                                    <div className="flex flex-col ">
-                                        <span className="text-button">Mail:</span>
-                                        <span className="text-button mt-3">Phone:</span>
-                                        <span className="text-button mt-3">Address:</span>
-                                    </div>
-                                    <div className="flex flex-col ">
-                                        <a href="mailto:hi.avitex@gmail.com" className=''>hi.avitex@gmail.com</a>
-                                        <a href="tel:1-333-345-6868" className='mt-3'>1-333-345-6868</a>
-                                        <span className='mt-3 pt-px'>549 Oak St.Crystal Lake, IL 60014</span>
-                                    </div>
-                                </address>
                             </div>
                             <div className="right-content flex flex-wrap gap-y-8 basis-3/4 max-lg:basis-full">
-                                <nav className="list-nav flex justify-between basis-2/3 max-md:basis-full gap-4" aria-label="Footer navigation">
+                                <nav className="list-nav flex justify-between basis-full gap-4" aria-label="Footer navigation">
                                     <div className="item flex flex-col basis-1/3 ">
                                         <h3 className="text-button-uppercase pb-3">Infomation</h3>
                                         <Link className='caption1 has-line-before duration-300 w-fit' href={'/pages/contact'}>Contact us</Link>
                                         <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/my-account'}>My Account</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/faqs'}>Shipping & Returns</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/faqs'}>FAQs</Link>
                                     </div>
                                     <div className="item flex flex-col basis-1/3 ">
                                         <h3 className="text-button-uppercase pb-3">Quick Shop</h3>
                                         <Link className='caption1 has-line-before duration-300 w-fit' href={'/shop/default'}>Shop All</Link>
                                         <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/shop/default'}>New Arrivals</Link>
                                         <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/shop/default'}>Best Sellers</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/shop/default'}>Accessories</Link>
                                         <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/blog/default'}>Blog</Link>
                                     </div>
                                     <div className="item flex flex-col basis-1/3 ">
@@ -52,116 +51,48 @@ const Footer = () => {
                                         <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/faqs'}>Return & Refund</Link>
                                     </div>
                                 </nav>
-                                <section className="newsletter basis-1/3 pl-7 max-md:basis-full max-md:pl-0">
-                                    <h3 className="text-button-uppercase">Newletter</h3>
-                                    <p className="caption1 mt-3">Sign up for our newsletter and get 10% off your first purchase</p>
-                                    <div className="input-block w-full h-[52px] mt-4">
-                                        <form className='w-full h-full relative' action="post">
-                                            <label htmlFor="newsletter-email" className="sr-only">Email address</label>
-                                            <input id="newsletter-email" type="email" placeholder='Enter your e-mail' className='caption1 w-full h-full pl-4 pr-14 rounded-xl border border-line' required aria-label="Newsletter email" />
-                                            <button className='w-[44px] h-[44px] bg-black flex items-center justify-center rounded-xl absolute top-1 right-1' aria-label="Subscribe to newsletter" type="submit">
-                                                <Icon.ArrowRight size={24} color='#fff' aria-hidden="true" />
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div className="list-social flex items-center gap-6 mt-4" role="list" aria-label="Social media links">
-                                        <Link href={'https://www.facebook.com/'} target='_blank' rel="noopener noreferrer" aria-label="Visit our Facebook page" role="listitem">
-                                            <div className="icon-facebook text-2xl text-black" aria-hidden="true"></div>
-                                        </Link>
-                                        <Link href={'https://www.instagram.com/'} target='_blank' rel="noopener noreferrer" aria-label="Visit our Instagram page" role="listitem">
-                                            <div className="icon-instagram text-2xl text-black" aria-hidden="true"></div>
-                                        </Link>
-                                        <Link href={'https://www.twitter.com/'} target='_blank' rel="noopener noreferrer" aria-label="Visit our Twitter page" role="listitem">
-                                            <div className="icon-twitter text-2xl text-black" aria-hidden="true"></div>
-                                        </Link>
-                                        <Link href={'https://www.youtube.com/'} target='_blank' rel="noopener noreferrer" aria-label="Visit our YouTube channel" role="listitem">
-                                            <div className="icon-youtube text-2xl text-black" aria-hidden="true"></div>
-                                        </Link>
-                                        <Link href={'https://www.pinterest.com/'} target='_blank' rel="noopener noreferrer" aria-label="Visit our Pinterest page" role="listitem">
-                                            <div className="icon-pinterest text-2xl text-black" aria-hidden="true"></div>
-                                        </Link>
-                                    </div>
-                                </section>
                             </div>
                         </div>
                         <div className="footer-bottom py-3 flex items-center justify-between gap-5 max-lg:justify-center max-lg:flex-col border-t border-line">
                             <div className="left flex items-center gap-8">
-                                <div className="copyright caption1 text-secondary">©{new Date().getFullYear()} Anvogue. All Rights Reserved.</div>
+                                <div className="copyright caption1 text-secondary">©{new Date().getFullYear()} Eyesoul Eyewear. All Rights Reserved.</div>
                                 <div className="select-block flex items-center gap-5 max-md:hidden">
-                                    <div className="choose-language flex items-center gap-1.5">
-                                        <select name="language" id="chooseLanguageFooter" className='caption2 bg-transparent'>
-                                            <option value="English">English</option>
-                                            <option value="Espana">Espana</option>
-                                            <option value="France">France</option>
-                                        </select>
-                                        <Icon.CaretDown size={12} color='#1F1F1F' />
-                                    </div>
-                                    <div className="choose-currency flex items-center gap-1.5">
-                                        <select name="currency" id="chooseCurrencyFooter" className='caption2 bg-transparent'>
-                                            <option value="USD">USD</option>
-                                            <option value="EUR">EUR</option>
-                                            <option value="GBP">GBP</option>
-                                        </select>
+                                    <div
+                                        ref={languageRef}
+                                        className="choose-type choose-language flex items-center gap-1.5"
+                                        onClick={() => {
+                                            setIsOpenLanguage(!isOpenLanguage)
+                                        }}
+                                    >
+                                        <div className="select relative">
+                                            <p className="selected caption2 text-secondary">{language}</p>
+                                            <ul className={`list-option bg-white ${isOpenLanguage ? 'open' : ''}`}>
+                                                {
+                                                    ['English', 'Indonesia'].map((item, index) => (
+                                                        <li 
+                                                            key={index} 
+                                                            className="caption2" 
+                                                            onClick={() => handleLanguageSelect(item)}
+                                                        >
+                                                            {item}
+                                                        </li>
+                                                    ))
+                                                }
+                                            </ul>
+                                        </div>
                                         <Icon.CaretDown size={12} color='#1F1F1F' />
                                     </div>
                                 </div>
                             </div>
-                            <div className="right flex items-center gap-2">
-                                <div className="caption1 text-secondary">Payment:</div>
-                                <div className="payment-img">
-                                    <Image
-                                        src={'/images/payment/Frame-0.png'}
-                                        width={500}
-                                        height={500}
-                                        alt={'payment'}
-                                        className='w-9'
-                                    />
-                                </div>
-                                <div className="payment-img">
-                                    <Image
-                                        src={'/images/payment/Frame-1.png'}
-                                        width={500}
-                                        height={500}
-                                        alt={'payment'}
-                                        className='w-9'
-                                    />
-                                </div>
-                                <div className="payment-img">
-                                    <Image
-                                        src={'/images/payment/Frame-2.png'}
-                                        width={500}
-                                        height={500}
-                                        alt={'payment'}
-                                        className='w-9'
-                                    />
-                                </div>
-                                <div className="payment-img">
-                                    <Image
-                                        src={'/images/payment/Frame-3.png'}
-                                        width={500}
-                                        height={500}
-                                        alt={'payment'}
-                                        className='w-9'
-                                    />
-                                </div>
-                                <div className="payment-img">
-                                    <Image
-                                        src={'/images/payment/Frame-4.png'}
-                                        width={500}
-                                        height={500}
-                                        alt={'payment'}
-                                        className='w-9'
-                                    />
-                                </div>
-                                <div className="payment-img">
-                                    <Image
-                                        src={'/images/payment/Frame-5.png'}
-                                        width={500}
-                                        height={500}
-                                        alt={'payment'}
-                                        className='w-9'
-                                    />
-                                </div>
+                            <div className="right flex items-center">
+                                <Link 
+                                    href="/admin/login" 
+                                    className="flex items-center gap-2 text-secondary hover:text-black transition-colors duration-300"
+                                    aria-label="Admin login"
+                                >
+                                    <Icon.ShieldCheck size={18} />
+                                    <span className="caption2 max-md:hidden">Admin</span>
+                                </Link>
                             </div>
                         </div>
                     </div>

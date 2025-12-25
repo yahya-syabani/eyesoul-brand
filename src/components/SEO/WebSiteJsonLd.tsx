@@ -8,8 +8,8 @@ type Props = {
 }
 
 export default function WebSiteJsonLd({
-  siteName = 'Anvogue',
-  siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://anvogue.com',
+  siteName = 'Eyesoul Eyewear',
+  siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://eyesoul-eyewear.com',
   searchPath = '/search-result',
   queryParam = 'query',
 }: Props) {

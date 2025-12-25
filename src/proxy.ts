@@ -5,7 +5,7 @@ export const config = {
   matcher: ['/admin/:path*'],
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Allow login page

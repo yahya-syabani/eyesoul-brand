@@ -1,14 +1,32 @@
 import React, { Suspense } from 'react'
 import type { Metadata } from 'next'
 import ProductDefaultContent from './ProductDefaultContent'
-import productData from '@/data/Product.json'
 import { generateProductMetadata } from '@/lib/metadata'
 import ProductSkeleton from '@/components/Loading/ProductSkeleton'
+
+async function fetchProduct(id: string) {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : 'http://localhost:3000'
+    const res = await fetch(`${baseUrl}/api/products/${id}`, { 
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    if (!res.ok) return null
+    return await res.json()
+  } catch (error) {
+    console.error('Error fetching product for metadata:', error)
+    return null
+  }
+}
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ id?: string }> }): Promise<Metadata> {
   const params = await searchParams
   const id = params?.id || '1'
-  const product = productData.find((p: { id: string }) => p.id === id)
+  const product = await fetchProduct(id)
   return generateProductMetadata(product)
 }
 

@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import { ProductType } from '@/type/ProductType'
 
-const siteName = 'Anvogue'
-const siteDescription = 'Multipurpose eCommerce Template - Discover the latest fashion trends and shop premium quality products'
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://anvogue.com'
+const siteName = 'Eyesoul Eyewear'
+const siteDescription = 'Multipurpose eCommerce Template - Discover the latest eyewear trends and shop premium quality products'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://eyesoul-eyewear.com'
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteUrl),

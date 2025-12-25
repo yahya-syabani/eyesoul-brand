@@ -3,13 +3,16 @@
 import { useRouter } from 'next/navigation'
 import React, { useRef, useState, useEffect } from 'react'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import productData from '@/data/Product.json'
 import { useModalQuickviewContext } from '@/context/ModalQuickviewContext';
 import Image from 'next/image';
 import { useModalA11y } from '@/hooks/useModalA11y'
+import { ProductType } from '@/type/ProductType'
 
 const ModalNewsletter = () => {
     const [open, setOpen] = useState<boolean>(false)
+    const [productData, setProductData] = useState<ProductType[]>([]);
+    const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
     const router = useRouter()
     const { openQuickview } = useModalQuickviewContext()
     const dialogRef = useRef<HTMLDivElement | null>(null)
@@ -24,6 +27,33 @@ const ModalNewsletter = () => {
             setOpen(true)
         }, 3000)
     }, [])
+
+    useEffect(() => {
+        if (open) {
+            const fetchProducts = async () => {
+                setLoading(true)
+                setError(null)
+                try {
+                    const res = await fetch('/api/products?limit=5&page=1', { cache: 'no-store' })
+                    if (res.ok) {
+                        const json = await res.json()
+                        setProductData(json.data || [])
+                        if (!json.data || json.data.length === 0) {
+                            setError('No products available at the moment.')
+                        }
+                    } else {
+                        setError('Failed to load products. Please try again later.')
+                    }
+                } catch (error) {
+                    console.error('Error fetching products:', error)
+                    setError('Unable to load products. Please check your connection.')
+                } finally {
+                    setLoading(false)
+                }
+            }
+            fetchProducts()
+        }
+    }, [open])
 
     useModalA11y({ isOpen: open, onClose: () => setOpen(false), containerRef: dialogRef })
 
@@ -65,38 +95,55 @@ const ModalNewsletter = () => {
                             </button>
                             <h2 id="newsletter-modal-title" className="heading5 pb-5">You May Also Like</h2>
                             <div className="list flex flex-col gap-5 overflow-x-auto sm:pr-6">
-                                {productData.slice(11, 16).map((item) => (
-                                    <div
-                                        key={item.id}
-                                        className='product-item item pb-5 flex items-center justify-between gap-3 border-b border-line'
-                                    >
-                                        <div
-                                            className="infor flex items-center gap-5 cursor-pointer"
-                                            onClick={() => handleDetailProduct(item.id)}
-                                        >
-                                            <div className="bg-img flex-shrink-0">
-                                                <Image width={5000} height={5000} src={item.thumbImage[0]} alt={item.name}
-                                                    className='w-[100px] aspect-square flex-shrink-0 rounded-lg' />
-                                            </div>
-                                            <div className=''>
-                                                <div className="name text-button">{item.name}</div>
-                                                <div className="flex items-center gap-2 mt-2">
-                                                    <div className="product-price text-title">${item.price}.00</div>
-                                                    <div className="product-origin-price text-title text-secondary2">
-                                                        <del>${item.originPrice}.00</del>
+                                {loading ? (
+                                    <div className="flex items-center justify-center py-10">
+                                        <div className="text-secondary">Loading products...</div>
+                                    </div>
+                                ) : error ? (
+                                    <div className="flex items-center justify-center py-10">
+                                        <div className="text-secondary text-center">{error}</div>
+                                    </div>
+                                ) : productData.length === 0 ? (
+                                    <div className="flex items-center justify-center py-10">
+                                        <div className="text-secondary text-center">No products available at the moment.</div>
+                                    </div>
+                                ) : (
+                                    productData.map((item) => {
+                                        const imageSrc = item.thumbImage?.[0] || item.images?.[0] || '/images/product/1000x1000.png'
+                                        return (
+                                            <div
+                                                key={item.id}
+                                                className='product-item item pb-5 flex items-center justify-between gap-3 border-b border-line'
+                                            >
+                                                <div
+                                                    className="infor flex items-center gap-5 cursor-pointer"
+                                                    onClick={() => handleDetailProduct(item.id)}
+                                                >
+                                                    <div className="bg-img flex-shrink-0">
+                                                        <Image width={5000} height={5000} src={imageSrc} alt={item.name}
+                                                            className='w-[100px] aspect-square flex-shrink-0 rounded-lg' />
+                                                    </div>
+                                                    <div className=''>
+                                                        <div className="name text-button">{item.name}</div>
+                                                        <div className="flex items-center gap-2 mt-2">
+                                                            <div className="product-price text-title">${item.price}.00</div>
+                                                            <div className="product-origin-price text-title text-secondary2">
+                                                                <del>${item.originPrice}.00</del>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <button
+                                                    className="quick-view-btn button-main sm:py-3 py-2 sm:px-5 px-4 bg-black hover:bg-green text-white rounded-full whitespace-nowrap"
+                                                    onClick={() => openQuickview(item)}
+                                                    type="button"
+                                                >
+                                                    QUICK VIEW
+                                                </button>
                                             </div>
-                                        </div>
-                                        <button
-                                            className="quick-view-btn button-main sm:py-3 py-2 sm:px-5 px-4 bg-black hover:bg-green text-white rounded-full whitespace-nowrap"
-                                            onClick={() => openQuickview(item)}
-                                            type="button"
-                                        >
-                                            QUICK VIEW
-                                        </button>
-                                    </div>
-                                ))}
+                                        )
+                                    })
+                                )}
                             </div>
                         </div>
                     </div>

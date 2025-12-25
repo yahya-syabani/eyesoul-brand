@@ -6,7 +6,7 @@ interface ProductJsonLdProps {
   siteUrl?: string
 }
 
-const ProductJsonLd: React.FC<ProductJsonLdProps> = ({ product, siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://anvogue.com' }) => {
+const ProductJsonLd: React.FC<ProductJsonLdProps> = ({ product, siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://eyesoul-eyewear.com' }) => {
   const productUrl = `${siteUrl}/product/default?id=${product.id}`
   const imageUrl = product.images?.[0] || product.thumbImage?.[0] || '/images/product/1000x1000.png'
   const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : `${siteUrl}${imageUrl}`
@@ -15,7 +15,7 @@ const ProductJsonLd: React.FC<ProductJsonLdProps> = ({ product, siteUrl = proces
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
-    description: product.description || `Shop ${product.name} at Anvogue`,
+    description: product.description || `Shop ${product.name} at Eyesoul Eyewear`,
     image: product.images?.map((img) => (img.startsWith('http') ? img : `${siteUrl}${img}`)) || [fullImageUrl],
     brand: {
       '@type': 'Brand',

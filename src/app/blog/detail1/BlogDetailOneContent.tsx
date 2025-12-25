@@ -1,28 +1,80 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import TopNavOne from '@/components/Header/TopNav/TopNavOne'
-import MenuTwo from '@/components/Header/Menu/MenuTwo'
-import blogData from '@/data/Blog.json'
 import NewsInsight from '@/components/Home3/NewsInsight';
 import Footer from '@/components/Footer/Footer'
 import { useRouter } from 'next/navigation'
 import BreadcrumbJsonLd from '@/components/SEO/BreadcrumbJsonLd'
 
+interface Blog {
+    id: string
+    category: string
+    tag: string | null
+    title: string
+    date: string
+    author: string
+    avatar: string | null
+    thumbImg: string | null
+    coverImg: string | null
+    subImg: string[]
+    shortDesc: string
+    description: string
+    slug: string
+}
+
 const BlogDetailOneContent = () => {
     const searchParams = useSearchParams()
     const router = useRouter()
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://anvogue.com'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://eyesoul-eyewear.com'
+    const [blogMain, setBlogMain] = useState<Blog | null>(null)
+    const [blogData, setBlogData] = useState<Blog[]>([])
+    const [loading, setLoading] = useState(true)
 
     let blogId = searchParams.get('id')
-    if (blogId === null) {
-        blogId = '14'
-    }
 
-    const blogMain = blogData[Number(blogId) - 1]
+    useEffect(() => {
+        loadBlogs()
+    }, [blogId])
+
+    const loadBlogs = async () => {
+        setLoading(true)
+        try {
+            // Load all blogs for navigation
+            const allRes = await fetch('/api/blogs?limit=100', { cache: 'no-store' })
+            if (allRes.ok) {
+                const allJson = await allRes.json()
+                setBlogData(allJson.data || [])
+            }
+
+            // Load specific blog
+            if (blogId) {
+                const res = await fetch(`/api/blogs/${blogId}`, { cache: 'no-store' })
+                if (res.ok) {
+                    const json = await res.json()
+                    setBlogMain(json)
+                } else if (allRes.ok) {
+                    // Fallback to first blog if ID not found
+                    const allJson = await allRes.json()
+                    if (allJson.data && allJson.data.length > 0) {
+                        setBlogMain(allJson.data[0])
+                    }
+                }
+            } else if (allRes.ok) {
+                // No ID provided, use first blog
+                const allJson = await allRes.json()
+                if (allJson.data && allJson.data.length > 0) {
+                    setBlogMain(allJson.data[0])
+                }
+            }
+        } catch (error) {
+            console.error('Error loading blogs:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const handleBlogClick = (category: string) => {
         router.push(`/blog/default?category=${category}`);
@@ -32,44 +84,54 @@ const BlogDetailOneContent = () => {
         router.push(`/blog/detail1?id=${id}`);
     };
 
+    if (loading || !blogMain) {
+        return (
+            <div className="text-secondary text-center py-20">Loading blog...</div>
+        )
+    }
+
+    const currentIndex = blogData.findIndex(b => b.id === blogMain.id)
+    const prevBlog = currentIndex > 0 ? blogData[currentIndex - 1] : blogData[blogData.length - 1]
+    const nextBlog = currentIndex < blogData.length - 1 ? blogData[currentIndex + 1] : blogData[0]
+
     return (
         <>
-            <TopNavOne props="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
             <div id="header" className='relative w-full'>
-                <MenuTwo />
             </div>
             <BreadcrumbJsonLd
                 items={[
                     { name: 'Home', item: `${siteUrl}/` },
                     { name: 'Blog', item: `${siteUrl}/blog/default` },
-                    { name: blogMain?.title || 'Blog Post', item: `${siteUrl}/blog/detail1?id=${blogId}` },
+                    { name: blogMain?.title || 'Blog Post', item: `${siteUrl}/blog/detail1?id=${blogMain.id}` },
                 ]}
             />
             <div className='blog detail1'>
                 <div className="bg-img md:mt-[74px] mt-14">
                     <Image
-                        src={blogMain.thumbImg}
+                        src={blogMain.thumbImg || '/images/blog/1.png'}
                         width={5000}
                         height={4000}
-                        alt={blogMain.thumbImg}
+                        alt={blogMain.thumbImg || 'blog'}
                         className='w-full min-[1600px]:h-[800px] xl:h-[640px] lg:h-[520px] sm:h-[380px] h-[260px] object-cover'
                     />
                 </div>
                 <div className="container md:pt-20 pt-10">
                     <div className="blog-content flex items-center justify-center">
                         <div className="main md:w-5/6 w-full">
-                            <div className="blog-tag bg-green py-1 px-2.5 rounded-full text-button-uppercase inline-block">{blogMain.tag}</div>
+                            <div className="blog-tag bg-green py-1 px-2.5 rounded-full text-button-uppercase inline-block">{blogMain.tag || 'Blog'}</div>
                             <div className="heading3 mt-3">{blogMain.title}</div>
                             <div className="author flex items-center gap-4 mt-4">
-                                <div className="avatar w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                                    <Image
-                                        src={blogMain.avatar}
-                                        width={200}
-                                        height={200}
-                                        alt='avatar'
-                                        className='w-full h-full object-cover'
-                                    />
-                                </div>
+                                {blogMain.avatar && (
+                                    <div className="avatar w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                                        <Image
+                                            src={blogMain.avatar}
+                                            width={200}
+                                            height={200}
+                                            alt='avatar'
+                                            className='w-full h-full object-cover'
+                                        />
+                                    </div>
+                                )}
                                 <div className='flex items-center gap-2'>
                                     <div className="caption1 text-secondary">by {blogMain.author}</div>
                                     <div className="line w-5 h-px bg-secondary"></div>
@@ -78,19 +140,20 @@ const BlogDetailOneContent = () => {
                             </div>
                             <div className="content md:mt-8 mt-5">
                                 <div className="body1">{blogMain.description}</div>
-                                <div className="body1 mt-3">I've always been passionate about underwear and shapewear and have a huge collection from over the years! When it came to shapewear, I could never find exactly what I was looking for and I would cut up pieces and sew them together to create the style and compression I needed.</div>
-                                <div className="grid sm:grid-cols-2 gap-[30px] md:mt-8 mt-5">
-                                    {blogMain.subImg.map((item, index) => (
-                                        <Image
-                                            key={index}
-                                            src={item}
-                                            width={3000}
-                                            height={2000}
-                                            alt={item}
-                                            className='w-full rounded-3xl'
-                                        />
-                                    ))}
-                                </div>
+                                {blogMain.subImg && blogMain.subImg.length > 0 && (
+                                    <div className="grid sm:grid-cols-2 gap-[30px] md:mt-8 mt-5">
+                                        {blogMain.subImg.map((item, index) => (
+                                            <Image
+                                                key={index}
+                                                src={item}
+                                                width={3000}
+                                                height={2000}
+                                                alt={item}
+                                                className='w-full rounded-3xl'
+                                            />
+                                        ))}
+                                    </div>
+                                )}
                                 <div className="heading4 md:mt-8 mt-5">How did SKIMS start?</div>
                                 <div className="body1 mt-4">This is such a hard question! Honestly, every time we drop a new collection I get obsessed with it. The pieces that have been my go-tos though are some of our simplest styles that we launched with. I wear our Fits Everybody Thong every single day – it is the only underwear I have now, it's so comfortable and stretchy and light enough that you can wear anything over it.</div>
                                 <div className="body1 mt-4">For bras, I love our Cotton Jersey Scoop Bralette – it's lined with this amazing power mesh so you get great support and is so comfy I can sleep in it. I also love our Seamless Sculpt Bodysuit – it's the perfect all in one sculpting, shaping and smoothing shapewear piece with different levels of support woven throughout.</div>
@@ -101,9 +164,9 @@ const BlogDetailOneContent = () => {
                                     <div className="list flex items-center gap-3 flex-wrap">
                                         <div
                                             className={`tags bg-surface py-1.5 px-4 rounded-full text-button-uppercase cursor-pointer duration-300 hover:bg-black hover:text-white`}
-                                            onClick={() => handleBlogClick('fashion')}
+                                            onClick={() => handleBlogClick('eyewear')}
                                         >
-                                            fashion
+                                            eyewear
                                         </div>
                                         <div
                                             className={`tags bg-surface py-1.5 px-4 rounded-full text-button-uppercase cursor-pointer duration-300 hover:bg-black hover:text-white`}
@@ -140,52 +203,44 @@ const BlogDetailOneContent = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="next-pre flex items-center justify-between md:mt-8 mt-5 py-6 border-y border-line">
-                                {blogId === '1' ? (
-                                    <>
-                                        <div className="left cursor-pointer"
-                                            onClick={() => handleBlogDetail(String(blogData.length))}
-                                        >
-                                            <div className="text-button-uppercase text-secondary2">Previous</div>
-                                            <div className="text-title mt-2">{blogData[blogData.length - 1].title}</div>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="left cursor-pointer"
-                                            onClick={() => handleBlogDetail(blogData[Number(blogId) - 2].id)}
-                                        >
-                                            <div className="text-button-uppercase text-secondary2">Previous</div>
-                                            <div className="text-title mt-2">{blogData[Number(blogId) - 2].title}</div>
-                                        </div>
-                                    </>
-                                )}
-                                {Number(blogId) === blogData.length ? (
-                                    <>
-                                        <div className="right text-right cursor-pointer"
-                                            onClick={() => handleBlogDetail('1')}
-                                        >
-                                            <div className="text-button-uppercase text-secondary2">Next</div>
-                                            <div className="text-title mt-2">{blogData[0].title}</div>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="right text-right cursor-pointer"
-                                            onClick={() => handleBlogDetail(blogData[Number(blogId)].id)}
-                                        >
-                                            <div className="text-button-uppercase text-secondary2">Next</div>
-                                            <div className="text-title mt-2">{blogData[Number(blogId)].title}</div>
-                                        </div>
-                                    </>
-                                )}
-
-                            </div>
+                            {blogData.length > 1 && (
+                                <div className="next-pre flex items-center justify-between md:mt-8 mt-5 py-6 border-y border-line">
+                                    <div className="left cursor-pointer"
+                                        onClick={() => handleBlogDetail(prevBlog.id)}
+                                    >
+                                        <div className="text-button-uppercase text-secondary2">Previous</div>
+                                        <div className="text-title mt-2">{prevBlog.title}</div>
+                                    </div>
+                                    <div className="right text-right cursor-pointer"
+                                        onClick={() => handleBlogDetail(nextBlog.id)}
+                                    >
+                                        <div className="text-button-uppercase text-secondary2">Next</div>
+                                        <div className="text-title mt-2">{nextBlog.title}</div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
                 <div className='md:pb-20 pb-10'>
-                    <NewsInsight data={blogData} start={0} limit={3} />
+                    <NewsInsight 
+                        data={blogData.map(b => ({
+                            id: b.id,
+                            category: b.category,
+                            tag: b.tag || '',
+                            title: b.title,
+                            date: b.date,
+                            author: b.author,
+                            avatar: b.avatar || '/images/avatar/1.png',
+                            thumbImg: b.thumbImg || '/images/blog/1.png',
+                            coverImg: b.coverImg || '/images/blog/1.png',
+                            subImg: b.subImg,
+                            shortDesc: b.shortDesc,
+                            description: b.description,
+                        }))} 
+                        start={0} 
+                        limit={3} 
+                    />
                 </div>
             </div>
             <Footer />

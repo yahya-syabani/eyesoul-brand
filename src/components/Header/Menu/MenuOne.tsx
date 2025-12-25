@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import * as Icon from '@phosphor-icons/react/dist/ssr'
 import { usePathname } from 'next/navigation'
@@ -28,19 +28,53 @@ const MenuOne: React.FC<Props> = ({ props }) => {
   
   const iconColor = resolvedTheme === 'dark' ? '#E5E5E5' : '#1F1F1F'
 
-  const [fixedHeader, setFixedHeader] = useState(false)
-  const [lastScrollPosition, setLastScrollPosition] = useState(0)
+  const [fixedHeader, setFixedHeader] = useState(true)
+  const lastScrollPosition = useRef(0)
 
   useEffect(() => {
+    let ticking = false
+    const scrollThreshold = 10
+
     const handleScroll = () => {
-      const scrollPosition = window.scrollY
-      setFixedHeader(scrollPosition > 0 && scrollPosition < lastScrollPosition)
-      setLastScrollPosition(scrollPosition)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollPosition = window.scrollY
+          // Top banner height: 30px mobile, 44px desktop
+          const topBannerHeight = window.innerWidth >= 768 ? 44 : 30
+          const totalTopHeight = topBannerHeight + scrollThreshold
+          
+          // At top (including top banner), always show
+          if (scrollPosition <= totalTopHeight) {
+            setFixedHeader(true)
+          } else {
+            // Below threshold: show when scrolling up, hide when scrolling down
+            const isScrollingUp = scrollPosition < lastScrollPosition.current - scrollThreshold
+            setFixedHeader(isScrollingUp)
+          }
+          
+          lastScrollPosition.current = scrollPosition
+          ticking = false
+        })
+        ticking = true
+      }
     }
 
-    window.addEventListener('scroll', handleScroll)
+    // Set initial state based on current scroll position
+    const initialScroll = window.scrollY
+    lastScrollPosition.current = initialScroll
+    const topBannerHeight = window.innerWidth >= 768 ? 44 : 30
+    const totalTopHeight = topBannerHeight + scrollThreshold
+    
+    if (initialScroll <= totalTopHeight) {
+      setFixedHeader(true)
+    } else {
+      // If not at top initially, start hidden
+      setFixedHeader(false)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [lastScrollPosition])
+  }, [])
 
   const isActive = (href: string) => {
     if (href === '/shop/default') return pathname.startsWith('/shop')
@@ -58,7 +92,7 @@ const MenuOne: React.FC<Props> = ({ props }) => {
   return (
     <>
       <div
-        className={`header-menu style-one ${fixedHeader ? 'fixed' : 'absolute'} top-0 left-0 right-0 w-full md:h-[74px] h-[56px] ${props}`}
+        className={`header-menu style-one fixed top-0 left-0 right-0 w-full md:h-[74px] h-[56px] ${fixedHeader ? 'visible' : 'hidden'} ${props}`}
       >
         <div className="container mx-auto h-full">
           <div className="header-main flex justify-between h-full">
@@ -68,7 +102,7 @@ const MenuOne: React.FC<Props> = ({ props }) => {
 
             <div className="left flex items-center gap-16">
               <Link href="/" className="flex items-center max-lg:absolute max-lg:left-1/2 max-lg:-translate-x-1/2">
-                <div className="heading4">Anvogue</div>
+                <div className="heading4">Eyesoul Eyewear</div>
               </Link>
               <div className="menu-main h-full max-lg:hidden">
                 <ul className="flex items-center gap-8 h-full">
@@ -146,7 +180,7 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                   <Icon.X size={14} />
                 </div>
                 <Link href="/" className="heading5" onClick={handleMenuMobile}>
-                  Anvogue
+                  Eyesoul Eyewear
                 </Link>
               </div>
 
