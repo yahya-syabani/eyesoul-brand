@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/i18n/routing'
 import React, { useRef, useState, useEffect } from 'react'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useModalQuickviewContext } from '@/context/ModalQuickviewContext';

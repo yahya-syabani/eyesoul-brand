@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import Image from 'next/image'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useModalCompareContext } from '@/context/ModalCompareContext'

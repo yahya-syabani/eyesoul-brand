@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useMemo, useState, useEffect } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { ProductType } from '@/type/ProductType';
@@ -11,6 +12,7 @@ import { useCartExpiry } from '@/hooks/useCartExpiry'
 import CountdownTimeType from '@/type/CountdownType';
 
 const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) => {
+    const t = useTranslations()
     const { timeLeft } = useCartExpiry()
 
     const [activeTab, setActiveTab] = useState<string | undefined>('')
@@ -70,7 +72,7 @@ const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) =>
                     aria-label="Shopping cart"
                 >
                     <section className="left w-1/2 border-r border-line py-6 max-md:hidden" aria-label="Recommended products">
-                        <h2 className="heading5 px-6 pb-3">You May Also Like</h2>
+                        <h2 className="heading5 px-6 pb-3">{t('modals.cart.youMayAlsoLike')}</h2>
                         <div className="list px-6">
                             {productData.slice(0, 4).map((product) => (
                                 <article key={product.id} className='item py-5 flex items-center justify-between gap-3 border-b border-line'>
@@ -109,11 +111,11 @@ const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) =>
                     </section>
                     <div className="right cart-block md:w-1/2 w-full py-6 relative overflow-hidden">
                         <div className="heading px-6 pb-3 flex items-center justify-between relative">
-                            <h2 id="cart-modal-title" className="heading5">Shopping Cart</h2>
+                            <h2 id="cart-modal-title" className="heading5">{t('modals.cart.title')}</h2>
                             <button
                                 className="close-btn absolute right-6 top-0 w-6 h-6 rounded-full bg-surface flex items-center justify-center duration-300 cursor-pointer hover:bg-black hover:text-white"
                                 onClick={closeModalCart}
-                                aria-label="Close shopping cart"
+                                aria-label={t('modals.cart.close')}
                                 type="button"
                             >
                                 <Icon.X size={14} aria-hidden="true" />
@@ -122,15 +124,17 @@ const ModalCart = ({ serverTimeLeft }: { serverTimeLeft: CountdownTimeType }) =>
                         <div className="time px-6">
                             <div className=" flex items-center gap-3 px-5 py-3 bg-green rounded-lg">
                                 <p className='text-3xl'>🔥</p>
-                                <div className="caption1">Your cart will expire in <span className='text-red caption1 font-semibold'>{timeLeft.minutes}:
-                                    {timeLeft.seconds < 10 ? `0${timeLeft.seconds}` : timeLeft.seconds}</span> minutes!<br />
-                                    Please checkout now before your items sell out!</div>
+                                <div className="caption1">{t('cart.cartExpiresIn', { 
+                                    minutes: timeLeft.minutes,
+                                    seconds: timeLeft.seconds < 10 ? `0${timeLeft.seconds}` : timeLeft.seconds
+                                })}<br />
+                                    {t('cart.checkoutNow')}</div>
                             </div>
                         </div>
                         <div className="heading banner mt-3 px-6">
-                            <div className="text">Buy <span className="text-button"> $<span className="more-price">{moneyForFreeship - totalCart > 0 ? (<>{moneyForFreeship - totalCart}</>) : (0)}</span>.00 </span>
-                                <span>more to get </span>
-                                <span className="text-button">freeship</span></div>
+                            <div className="text">{t('cart.buyMoreForFreeship', { 
+                                amount: moneyForFreeship - totalCart > 0 ? moneyForFreeship - totalCart : 0
+                            })} <span className="text-button">{t('cart.freeship')}</span></div>
                             <div className="tow-bar-block mt-3">
                                 <div
                                     className="progress-line"

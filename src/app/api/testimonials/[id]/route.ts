@@ -4,11 +4,29 @@ import prisma from '@/lib/prisma'
 import { handleApiError } from '@/lib/api-error-handler'
 import { requireAdminAuth } from '@/lib/api-auth'
 import { rateLimitApi, createRateLimitResponse } from '@/lib/rate-limit'
+import { stringToTranslation, TranslationObject, isValidTranslation } from '@/utils/translations'
+
+// Translation schema: accepts both String (backward compat) and JSON format
+const translationSchema = z.union([
+  z.string(),
+  z.object({
+    en: z.string(),
+    id: z.string().optional(),
+  }),
+])
 
 const updateTestimonialSchema = z.object({
   name: z.string().min(1).optional(),
-  title: z.string().min(1).optional(),
-  description: z.string().min(1).optional(),
+  title: translationSchema.optional(),
+  titleTranslations: z.object({
+    en: z.string(),
+    id: z.string().optional(),
+  }).optional(),
+  description: translationSchema.optional(),
+  descriptionTranslations: z.object({
+    en: z.string(),
+    id: z.string().optional(),
+  }).optional(),
   avatar: z.string().optional().nullable(),
   images: z.array(z.string()).optional(),
   star: z.number().int().min(1).max(5).optional(),
@@ -57,12 +75,54 @@ export async function PUT(
     const { id } = await params
     const payload = updateTestimonialSchema.parse(await request.json())
 
+    // Normalize translations if provided
+    const updateData: {
+      title?: string
+      titleTranslations?: TranslationObject
+      description?: string
+      descriptionTranslations?: TranslationObject
+      [key: string]: unknown
+    } = {}
+
+    // Normalize title translations
+    if (payload.title !== undefined || payload.titleTranslations !== undefined) {
+      if (payload.titleTranslations) {
+        updateData.titleTranslations = payload.titleTranslations
+        updateData.title = payload.titleTranslations.en
+      } else if (typeof payload.title === 'string') {
+        updateData.titleTranslations = stringToTranslation(payload.title)
+        updateData.title = payload.title
+      } else if (payload.title && typeof payload.title === 'object') {
+        updateData.titleTranslations = payload.title as TranslationObject
+        updateData.title = updateData.titleTranslations.en
+      }
+      if (updateData.titleTranslations && !isValidTranslation(updateData.titleTranslations)) {
+        return NextResponse.json({ error: 'Invalid titleTranslations format' }, { status: 400 })
+      }
+    }
+
+    // Normalize description translations
+    if (payload.description !== undefined || payload.descriptionTranslations !== undefined) {
+      if (payload.descriptionTranslations) {
+        updateData.descriptionTranslations = payload.descriptionTranslations
+        updateData.description = payload.descriptionTranslations.en
+      } else if (typeof payload.description === 'string') {
+        updateData.descriptionTranslations = stringToTranslation(payload.description)
+        updateData.description = payload.description
+      } else if (payload.description && typeof payload.description === 'object') {
+        updateData.descriptionTranslations = payload.description as TranslationObject
+        updateData.description = updateData.descriptionTranslations.en
+      }
+      if (updateData.descriptionTranslations && !isValidTranslation(updateData.descriptionTranslations)) {
+        return NextResponse.json({ error: 'Invalid descriptionTranslations format' }, { status: 400 })
+      }
+    }
+
     const updated = await prisma.testimonial.update({
       where: { id },
       data: {
+        ...updateData,
         ...(payload.name && { name: payload.name }),
-        ...(payload.title && { title: payload.title }),
-        ...(payload.description && { description: payload.description }),
         ...(payload.avatar !== undefined && { avatar: payload.avatar }),
         ...(payload.images !== undefined && { images: payload.images }),
         ...(payload.star !== undefined && { star: payload.star }),

@@ -1,0 +1,45 @@
+.service-hero {
+  .hero-image-wrapper {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.services-grid-section {
+  .services-grid {
+    .service-card {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      
+      &:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .service-image {
+        background: var(--surface);
+      }
+
+      .service-content {
+        min-height: 150px;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .service-hero {
+    .hero-image-wrapper {
+      .relative {
+        h1 {
+          font-size: 2rem;
+        }
+      }
+    }
+  }
+
+  .services-grid-section {
+    .services-grid {
+      gap: 1.5rem;
+    }
+  }
+}
+

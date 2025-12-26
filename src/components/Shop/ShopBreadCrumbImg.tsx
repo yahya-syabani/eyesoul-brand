@@ -2,8 +2,8 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image';
-import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { Link, useRouter } from '@/i18n/routing'
+import { useSearchParams } from 'next/navigation'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { ProductType } from '@/type/ProductType'
 import Product from '../Product/Product';

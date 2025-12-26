@@ -1,0 +1,443 @@
+{
+  "common": {
+    "loading": "Memuat...",
+    "error": "Kesalahan",
+    "success": "Berhasil",
+    "close": "Tutup",
+    "cancel": "Batal",
+    "save": "Simpan",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "add": "Tambah",
+    "remove": "Hapus",
+    "search": "Cari",
+    "filter": "Filter",
+    "sort": "Urutkan",
+    "view": "Lihat",
+    "back": "Kembali",
+    "next": "Selanjutnya",
+    "previous": "Sebelumnya",
+    "submit": "Kirim",
+    "confirm": "Konfirmasi",
+    "yes": "Ya",
+    "no": "Tidak",
+    "all": "Semua",
+    "none": "Tidak ada",
+    "selectLanguage": "Pilih bahasa"
+  },
+  "nav": {
+    "shop": "Toko",
+    "about": "Tentang",
+    "service": "Layanan",
+    "contact": "Kontak",
+    "blog": "Blog",
+    "storeLocation": "Lokasi Toko",
+    "home": "Beranda",
+    "myAccount": "Akun Saya",
+    "cart": "Keranjang",
+    "wishlist": "Daftar Keinginan",
+    "compare": "Bandingkan",
+    "login": "Masuk",
+    "register": "Daftar",
+    "logout": "Keluar",
+    "admin": "Admin",
+    "support": "Dukungan",
+    "help": "Bantuan"
+  },
+  "footer": {
+    "information": "Informasi",
+    "contactUs": "Hubungi Kami",
+    "services": "Layanan",
+    "myAccount": "Akun Saya",
+    "quickShop": "Belanja Cepat",
+    "shopAll": "Semua Produk",
+    "newArrivals": "Produk Baru",
+    "bestSellers": "Terlaris",
+    "blog": "Blog",
+    "customerServices": "Layanan Pelanggan",
+    "ordersFaqs": "FAQ Pesanan",
+    "shipping": "Pengiriman",
+    "privacyPolicy": "Kebijakan Privasi",
+    "returnRefund": "Pengembalian & Penggantian",
+    "copyright": "©{year} Eyesoul Eyewear. Hak Cipta Dilindungi.",
+    "admin": "Admin"
+  },
+  "home": {
+    "trendingRightNow": "Sedang Tren Sekarang",
+    "shopNow": "Beli Sekarang",
+    "limitedOffer": "Penawaran Terbatas: Gratis ongkir untuk pesanan di atas $50",
+    "slogan": "Penawaran Terbatas: Gratis ongkir untuk pesanan di atas $50"
+  },
+  "categories": {
+    "sunglasses": "Kacamata Hitam",
+    "prescriptionGlasses": "Kacamata Resep",
+    "readingGlasses": "Kacamata Baca",
+    "contactLenses": "Lensa Kontak",
+    "framesOnly": "Bingkai Saja"
+  },
+  "shop": {
+    "title": "Toko",
+    "browseCollection": "Jelajahi koleksi produk {type} kami. Temukan gaya yang sempurna untuk Anda.",
+    "noProducts": "Tidak ada produk ditemukan",
+    "loadingProducts": "Memuat produk...",
+    "filterBy": "Filter berdasarkan",
+    "priceRange": "Rentang Harga",
+    "sortBy": "Urutkan berdasarkan",
+    "viewAs": "Tampilkan sebagai"
+  },
+  "product": {
+    "addToCart": "Tambah ke Keranjang",
+    "buyNow": "Beli Sekarang",
+    "addToWishlist": "Tambah ke Daftar Keinginan",
+    "addToCompare": "Tambah ke Perbandingan",
+    "removeFromCompare": "Hapus dari Perbandingan",
+    "inStock": "Tersedia",
+    "outOfStock": "Habis",
+    "quantity": "Jumlah",
+    "size": "Ukuran",
+    "color": "Warna",
+    "description": "Deskripsi",
+    "specifications": "Spesifikasi",
+    "reviews": "Ulasan",
+    "relatedProducts": "Produk Terkait",
+    "youMayAlsoLike": "Anda Mungkin Juga Menyukai"
+  },
+  "cart": {
+    "title": "Keranjang Belanja",
+    "empty": "Keranjang Anda kosong",
+    "subtotal": "Subtotal",
+    "shipping": "Pengiriman",
+    "tax": "Pajak",
+    "total": "Total",
+    "checkout": "Checkout",
+    "continueShopping": "Lanjutkan Belanja",
+    "removeItem": "Hapus item",
+    "updateQuantity": "Perbarui jumlah",
+    "cartExpiresIn": "Keranjang Anda akan kedaluwarsa dalam {minutes}:{seconds} menit!",
+    "checkoutNow": "Silakan checkout sekarang sebelum item Anda habis!",
+    "buyMoreForFreeship": "Beli $ {amount}.00 lagi untuk mendapatkan gratis ongkir",
+    "freeship": "gratis ongkir"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "billingDetails": "Detail Penagihan",
+    "shippingDetails": "Detail Pengiriman",
+    "paymentMethod": "Metode Pembayaran",
+    "orderSummary": "Ringkasan Pesanan",
+    "placeOrder": "Buat Pesanan",
+    "processing": "Memproses...",
+    "orderSuccess": "Pesanan berhasil dibuat!"
+  },
+  "auth": {
+    "login": "Masuk",
+    "register": "Daftar",
+    "logout": "Keluar",
+    "email": "Email",
+    "password": "Kata Sandi",
+    "confirmPassword": "Konfirmasi Kata Sandi",
+    "forgotPassword": "Lupa Kata Sandi Anda?",
+    "dontHaveAccount": "Belum punya akun?",
+    "alreadyHaveAccount": "Sudah punya akun?",
+    "createAccount": "Buat Akun",
+    "termsOfUser": "Ketentuan Pengguna",
+    "rememberMe": "Ingat Saya"
+  },
+  "pages": {
+    "about": {
+      "title": "Tentang Kami",
+      "heading": "Tentang Kami",
+      "content": "Kami berkomitmen untuk memberikan kacamata berkualitas tinggi yang menggabungkan gaya modern dengan fungsionalitas yang luar biasa.",
+      "description": "Eyesoul Eyewear telah menjadi pilihan utama bagi mereka yang menghargai kualitas dan gaya dalam aksesori penglihatan. Dengan pengalaman bertahun-tahun di industri optik, kami menyediakan koleksi kacamata yang luas mulai dari kacamata resep, kacamata hitam, hingga lensa kontak berkualitas tinggi. Tim profesional kami yang berpengalaman siap membantu Anda menemukan kacamata yang sempurna untuk kebutuhan penglihatan dan gaya hidup Anda. Kami percaya bahwa setiap orang berhak mendapatkan penglihatan yang jelas dan tampil percaya diri dengan kacamata yang stylish."
+    },
+    "contact": {
+      "title": "Hubungi Kami",
+      "heading": "Hubungi Kami",
+      "formTitle": "Hubungi Kami",
+      "formDescription": "Gunakan formulir di bawah ini untuk menghubungi tim penjualan",
+      "namePlaceholder": "Nama Anda *",
+      "emailPlaceholder": "Email Anda *",
+      "subjectPlaceholder": "Subjek *",
+      "messagePlaceholder": "Pesan Anda *",
+      "sending": "Mengirim...",
+      "sendMessage": "Kirim pesan",
+      "messageSent": "Pesan berhasil dikirim!",
+      "ourStore": "Toko Kami",
+      "address": "Alamat",
+      "phone": "Telepon",
+      "email": "Email",
+      "openHours": "Jam Buka",
+      "monFri": "Sen - Jum",
+      "saturday": "Sabtu",
+      "sunday": "Minggu",
+      "storeAddress": "2163 Phillips Gap Rd, West Jefferson, North Carolina, United States",
+      "storePhone": "+1 666 8888",
+      "storeEmail": "hi.avitex@gmail.com",
+      "hoursWeekdays": "07:30 - 20:00 PST",
+      "hoursSaturday": "08:00 - 18:00 PST",
+      "hoursSunday": "09:00 - 17:00 PST"
+    },
+    "faqs": {
+      "title": "FAQ",
+      "heading": "Pertanyaan yang Sering Diajukan",
+      "tabs": {
+        "howToBuy": "cara membeli",
+        "paymentMethods": "metode pembayaran",
+        "delivery": "pengiriman",
+        "exchangesReturns": "tukar & kembali",
+        "registration": "pendaftaran",
+        "lookAfterGarments": "merawat produk",
+        "contacts": "kontak"
+      },
+      "questions": {
+        "covid19Affect": "Bagaimana COVID-19 mempengaruhi pesanan online dan pembelian toko saya?",
+        "plusSizes": "BARU! Ukuran besar untuk Wanita"
+      },
+      "answers": {
+        "covid19Short": "Perusahaan kurir telah menyesuaikan prosedur mereka untuk menjamin keselamatan karyawan kami dan komunitas kami. Kami berterima kasih atas kesabaran Anda, karena mungkin ada beberapa penundaan pengiriman. Kami mengingatkan Anda bahwa Anda masih dapat menemukan kami di Mango.com",
+        "plusSizesShort": "Perusahaan kurir telah menyesuaikan prosedur mereka untuk menjamin keselamatan karyawan kami dan komunitas kami. Kami berterima kasih atas kesabaran Anda, karena mungkin ada beberapa penundaan pengiriman. Kami mengingatkan Anda bahwa Anda masih dapat menemukan kami di Mango.com dan di semua saluran online kami. Layanan pelanggan kami masih ada untuk Anda, untuk menjawab pertanyaan apa pun yang mungkin Anda miliki, meskipun karena situasi saat ini, kami beroperasi dengan waktu tunggu yang lebih lama."
+      }
+    },
+    "storeLocation": {
+      "title": "Lokasi Toko",
+      "heading": "Lokasi Toko",
+      "findStores": "Temukan Toko Kami",
+      "description": "Kunjungi kami di salah satu lokasi kami. Staf kami yang ramah siap membantu Anda menemukan tepat apa yang Anda cari.",
+      "loadingMap": "Memuat peta...",
+      "loadingStores": "Memuat lokasi toko...",
+      "errorLoading": "Gagal memuat lokasi toko. Silakan coba lagi nanti.",
+      "noStores": "Tidak ada lokasi toko tersedia.",
+      "address": "Alamat",
+      "phone": "Telepon",
+      "email": "Email",
+      "openingHours": "Jam Buka",
+      "getDirections": "Dapatkan Petunjuk Arah"
+    },
+    "service": {
+      "title": "Layanan Kami",
+      "heading": "Layanan Kami",
+      "heroDescription": "Temukan rangkaian layanan kacamata profesional kami yang dirancang untuk memenuhi semua kebutuhan penglihatan dan gaya Anda.",
+      "sectionHeading": "Apa Yang Kami Tawarkan",
+      "sectionDescription": "Tim profesional berpengalaman kami berdedikasi untuk memberikan layanan yang luar biasa dan solusi kacamata berkualitas tinggi.",
+      "services": {
+        "eye-examination": {
+          "title": "Pemeriksaan Mata Komprehensif",
+          "description": "Pemeriksaan mata profesional menggunakan teknologi canggih untuk menilai penglihatan dan kesehatan mata Anda. Optometris bersertifikat kami memberikan evaluasi menyeluruh untuk memastikan perawatan mata yang optimal."
+        },
+        "prescription-lenses": {
+          "title": "Pemasangan Lensa Resep",
+          "description": "Pemasangan dan kustomisasi lensa resep ahli yang disesuaikan dengan kebutuhan penglihatan khusus Anda. Kami menawarkan berbagai pilihan lensa termasuk lensa progresif, bifokal, dan khusus."
+        },
+        "frame-selection": {
+          "title": "Pemilihan & Styling Bingkai",
+          "description": "Layanan pemilihan bingkai yang dipersonalisasi untuk membantu Anda menemukan kacamata sempurna yang sesuai dengan bentuk wajah, preferensi gaya, dan gaya hidup Anda. Stylist kami memandu Anda melalui koleksi ekstensif kami."
+        },
+        "repair-service": {
+          "title": "Perbaikan & Perawatan",
+          "description": "Layanan perbaikan profesional untuk kacamata Anda termasuk penyesuaian bingkai, penggantian lensa, dan perawatan umum. Kami memastikan kacamata Anda pas dengan sempurna dan bertahan lebih lama."
+        },
+        "contact-lens-fitting": {
+          "title": "Pemasangan Lensa Kontak",
+          "description": "Layanan pemasangan lensa kontak komprehensif dengan lensa uji coba dan perawatan lanjutan. Kami membantu Anda menemukan lensa kontak yang paling nyaman dan cocok untuk mata Anda."
+        },
+        "blue-light-protection": {
+          "title": "Perlindungan Sinar Biru",
+          "description": "Lensa khusus yang dirancang untuk melindungi mata Anda dari sinar biru berbahaya yang dipancarkan oleh layar digital. Sempurna untuk mereka yang menghabiskan waktu lama di depan komputer dan perangkat."
+        }
+      }
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Baca Selengkapnya",
+    "recentPosts": "Postingan Terbaru",
+    "categories": "Kategori",
+    "tags": "Tag",
+    "noPosts": "Tidak ada postingan blog ditemukan"
+  },
+  "modals": {
+    "search": {
+      "title": "Cari",
+      "placeholder": "Mencari...",
+      "featureKeywords": "Kata kunci fitur Hari Ini",
+      "recentlyViewed": "Produk yang baru dilihat"
+    },
+    "cart": {
+      "title": "Keranjang Belanja",
+      "close": "Tutup keranjang belanja",
+      "youMayAlsoLike": "Anda Mungkin Juga Menyukai"
+    },
+    "wishlist": {
+      "title": "Daftar Keinginan",
+      "empty": "Daftar keinginan Anda kosong"
+    },
+  "compare": {
+    "title": "Bandingkan Produk",
+    "empty": "Tidak ada produk untuk dibandingkan",
+    "rating": "Rating",
+    "price": "Harga",
+    "type": "Tipe",
+    "brand": "Merek",
+    "size": "Ukuran",
+    "colors": "Warna",
+    "material": "Bahan",
+    "addToCart": "Tambah ke Keranjang",
+    "cotton": "Katun"
+  }
+  },
+  "errors": {
+    "pageNotFound": "Halaman Tidak Ditemukan",
+    "somethingWentWrong": "Terjadi kesalahan",
+    "tryAgain": "Coba lagi",
+    "goHome": "Kembali ke Beranda"
+  },
+  "language": {
+    "english": "English",
+    "indonesia": "Indonesia"
+  },
+  "benefit": {
+    "customerService": {
+      "title": "Layanan Pelanggan 24/7",
+      "description": "Kami siap membantu Anda dengan pertanyaan atau kekhawatiran apa pun yang Anda miliki, 24/7."
+    },
+    "moneyBack": {
+      "title": "Garansi Uang Kembali 14 Hari",
+      "description": "Jika Anda tidak puas dengan pembelian Anda, cukup kembalikan dalam 14 hari untuk pengembalian dana."
+    },
+    "guarantee": {
+      "title": "Jaminan Kami",
+      "description": "Kami mendukung produk dan layanan kami dan menjamin kepuasan Anda."
+    },
+    "shipping": {
+      "title": "Pengiriman ke Seluruh Dunia",
+      "description": "Kami mengirimkan produk kami ke seluruh dunia, membuatnya dapat diakses oleh pelanggan di mana saja."
+    }
+  },
+  "wishlist": {
+    "heading": "Daftar Keinginan",
+    "productsFound": "Produk Ditemukan",
+    "type": "Tipe",
+    "sorting": "Urutkan",
+    "bestSelling": "Terlaris",
+    "bestDiscount": "Diskon Terbaik",
+    "priceHighToLow": "Harga Tertinggi ke Terendah",
+    "priceLowToHigh": "Harga Terendah ke Tertinggi",
+    "clearAll": "Hapus Semua",
+    "noProductsMatch": "Tidak ada produk yang sesuai dengan kriteria yang dipilih."
+  },
+  "myAccount": {
+    "heading": "Akun Saya",
+    "information": "Informasi",
+    "firstName": "Nama depan",
+    "lastName": "Nama belakang",
+    "emailAddress": "Alamat email",
+    "phoneNumber": "Nomor telepon",
+    "chooseCountry": "Pilih Negara/Wilayah",
+    "password": "Kata Sandi *",
+    "newPassword": "Kata Sandi Baru *",
+    "confirmPassword": "Konfirmasi Kata Sandi *",
+    "changePassword": "Ubah Kata Sandi",
+    "updateAccount": "Perbarui Akun",
+    "accountDetails": "Detail Akun",
+    "yourOrders": "Pesanan Anda",
+    "myAddress": "Alamat Saya",
+    "logout": "Keluar",
+    "countries": {
+      "india": "India",
+      "france": "Prancis",
+      "singapore": "Singapura"
+    }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "billingDetails": "Detail Penagihan",
+    "shippingDetails": "Detail Pengiriman",
+    "paymentMethod": "Metode Pembayaran",
+    "orderSummary": "Ringkasan Pesanan",
+    "placeOrder": "Buat Pesanan",
+    "processing": "Memproses...",
+    "orderSuccess": "Pesanan berhasil dibuat!",
+    "alreadyHaveAccount": "Sudah punya akun?",
+    "login": "Masuk",
+    "usernameOrEmail": "Nama pengguna atau email",
+    "password": "Kata Sandi",
+    "information": "Informasi",
+    "firstName": "Nama Depan *",
+    "lastName": "Nama Belakang *",
+    "emailAddress": "Alamat Email *",
+    "phoneNumbers": "Nomor Telepon *",
+    "chooseCountry": "Pilih Negara/Wilayah",
+    "townCity": "Kota/Kabupaten *",
+    "street": "Jalan,...",
+    "chooseState": "Pilih Provinsi",
+    "postalCode": "Kode Pos *",
+    "writeNote": "Tulis catatan...",
+    "choosePaymentOption": "Pilih Opsi Pembayaran:",
+    "creditCard": "Kartu Kredit",
+    "creditCardDescription": "Lakukan pembayaran Anda langsung ke rekening bank kami. Pesanan Anda tidak akan dikirim sampai dana telah dibersihkan di akun kami.",
+    "cardNumbers": "Nomor Kartu",
+    "cardNumberPlaceholder": "contoh:1234567290",
+    "date": "Tanggal",
+    "ccv": "CCV",
+    "ccvPlaceholder": "****",
+    "saveCardDetails": "Simpan Detail Kartu",
+    "cashOnDelivery": "Bayar di tempat",
+    "cashDeliveryDescription": "Lakukan pembayaran Anda langsung ke rekening bank kami. Pesanan Anda tidak akan dikirim sampai dana telah dibersihkan di akun kami.",
+    "applePay": "Apple Pay",
+    "applePayDescription": "Lakukan pembayaran Anda langsung ke rekening bank kami. Pesanan Anda tidak akan dikirim sampai dana telah dibersihkan di akun kami.",
+    "paypal": "PayPal",
+    "paypalDescription": "Lakukan pembayaran Anda langsung ke rekening bank kami. Pesanan Anda tidak akan dikirim sampai dana telah dibersihkan di akun kami.",
+    "payment": "Pembayaran",
+    "yourOrder": "Pesanan Anda",
+    "noProductInCart": "Tidak ada produk di keranjang",
+    "discounts": "Diskon",
+    "shipping": "Pengiriman",
+    "free": "Gratis",
+    "total": "Total"
+  },
+  "cart": {
+    "title": "Keranjang Belanja",
+    "empty": "Keranjang Anda kosong",
+    "subtotal": "Subtotal",
+    "shipping": "Pengiriman",
+    "tax": "Pajak",
+    "total": "Total",
+    "checkout": "Checkout",
+    "continueShopping": "Lanjutkan Belanja",
+    "removeItem": "Hapus item",
+    "updateQuantity": "Perbarui jumlah",
+    "cartExpiresIn": "Keranjang Anda akan kedaluwarsa dalam {minutes}:{seconds} menit!",
+    "checkoutNow": "Silakan checkout sekarang sebelum item Anda habis!",
+    "buyMoreForFreeship": "Beli $ {amount}.00 lagi untuk mendapatkan gratis ongkir",
+    "freeship": "gratis ongkir",
+    "minutes": "menit! Silakan checkout sekarang sebelum item Anda habis!",
+    "buy": "Beli",
+    "more": "lagi untuk mendapatkan",
+    "products": "Produk",
+    "price": "Harga",
+    "quantity": "Jumlah",
+    "totalPrice": "Total Harga",
+    "noProductInCart": "Tidak ada produk di keranjang",
+    "applyPromoCode": "Terapkan Kode Promo",
+    "enterCode": "Masukkan kode",
+    "apply": "Terapkan",
+    "removePromoCode": "Hapus Kode Promo",
+    "invalidPromoCode": "Kode promo tidak valid",
+    "failedToValidate": "Gagal memvalidasi kode promo",
+    "orderSummary": "Ringkasan Pesanan",
+    "discounts": "Diskon",
+    "shipping": "Pengiriman",
+    "processToCheckout": "Lanjut ke Checkout",
+    "continueShopping": "Lanjutkan Belanja",
+    "applied": "Diterapkan",
+    "applyCode": "Terapkan Kode",
+    "freeShipping": "Gratis Ongkir:",
+    "local": "Lokal:",
+    "flatRate": "Tarif Tetap:",
+    "loadingPromotions": "Memuat promosi...",
+    "noPromotionsAvailable": "Tidak ada promosi tersedia",
+    "discount": "Diskon",
+    "forAllOrders": "Untuk semua pesanan",
+    "from": "dari"
+  }
+}
+

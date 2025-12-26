@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link';
+import { Link } from '@/i18n/routing'
 import Product from '../Product/Product'
 import { ProductType } from '@/type/ProductType'
 import { countdownTime } from '@/store/countdownTime'

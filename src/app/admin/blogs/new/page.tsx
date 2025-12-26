@@ -6,8 +6,10 @@ import { AdminInput, AdminTextarea } from '@/components/Admin/AdminFormField'
 
 const NewBlogPage = () => {
   const router = useRouter()
+  const [activeLanguage, setActiveLanguage] = useState<'en' | 'id'>('en')
   const [form, setForm] = useState({
-    title: '',
+    titleEn: '',
+    titleId: '',
     slug: '',
     category: 'eyewear',
     tag: '',
@@ -16,8 +18,10 @@ const NewBlogPage = () => {
     thumbImg: '',
     coverImg: '',
     subImg: [] as string[],
-    shortDesc: '',
-    description: '',
+    shortDescEn: '',
+    shortDescId: '',
+    descriptionEn: '',
+    descriptionId: '',
     date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
   })
   const [subImgInput, setSubImgInput] = useState('')
@@ -41,13 +45,33 @@ const NewBlogPage = () => {
     setLoading(true)
 
     try {
+      // Build translation objects
+      const titleTranslations = {
+        en: form.titleEn.trim(),
+        id: form.titleId.trim() || undefined,
+      }
+      const shortDescTranslations = {
+        en: form.shortDescEn.trim(),
+        id: form.shortDescId.trim() || undefined,
+      }
+      const descriptionTranslations = {
+        en: form.descriptionEn.trim(),
+        id: form.descriptionId.trim() || undefined,
+      }
+
       const payload = {
-        ...form,
+        titleTranslations,
+        slug: form.slug,
+        category: form.category,
         tag: form.tag || null,
+        author: form.author,
         avatar: form.avatar || null,
         thumbImg: form.thumbImg || null,
         coverImg: form.coverImg || null,
         subImg: form.subImg,
+        shortDescTranslations,
+        descriptionTranslations,
+        date: form.date,
       }
 
       const res = await fetch('/api/blogs', {
@@ -74,12 +98,44 @@ const NewBlogPage = () => {
     <div className="max-w-4xl">
       <h1 className="heading4 mb-6">New Blog</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Language Tabs */}
+        <div className="flex gap-2 border-b border-line mb-4">
+          <button
+            type="button"
+            onClick={() => setActiveLanguage('en')}
+            className={`px-4 py-2 border-b-2 transition-colors ${
+              activeLanguage === 'en'
+                ? 'border-black text-black font-medium'
+                : 'border-transparent text-secondary hover:text-black'
+            }`}
+          >
+            English
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveLanguage('id')}
+            className={`px-4 py-2 border-b-2 transition-colors ${
+              activeLanguage === 'id'
+                ? 'border-black text-black font-medium'
+                : 'border-transparent text-secondary hover:text-black'
+            }`}
+          >
+            Indonesian
+          </button>
+        </div>
+
         <AdminInput
-          label="Title"
+          label={`Title (${activeLanguage === 'en' ? 'English' : 'Indonesian'})`}
           type="text"
-          required
-          value={form.title}
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
+          required={activeLanguage === 'en'}
+          value={activeLanguage === 'en' ? form.titleEn : form.titleId}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              [activeLanguage === 'en' ? 'titleEn' : 'titleId']: e.target.value,
+            })
+          }
+          placeholder={activeLanguage === 'en' ? 'Enter blog title in English' : 'Enter blog title in Indonesian (optional)'}
         />
 
         <AdminInput
@@ -176,19 +232,31 @@ const NewBlogPage = () => {
         </div>
 
         <AdminTextarea
-          label="Short Description"
-          required
+          label={`Short Description (${activeLanguage === 'en' ? 'English' : 'Indonesian'})`}
+          required={activeLanguage === 'en'}
           rows={3}
-          value={form.shortDesc}
-          onChange={(e) => setForm({ ...form, shortDesc: e.target.value })}
+          value={activeLanguage === 'en' ? form.shortDescEn : form.shortDescId}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              [activeLanguage === 'en' ? 'shortDescEn' : 'shortDescId']: e.target.value,
+            })
+          }
+          placeholder={activeLanguage === 'en' ? 'Enter short description in English' : 'Enter short description in Indonesian (optional)'}
         />
 
         <AdminTextarea
-          label="Description"
-          required
+          label={`Description (${activeLanguage === 'en' ? 'English' : 'Indonesian'})`}
+          required={activeLanguage === 'en'}
           rows={10}
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          value={activeLanguage === 'en' ? form.descriptionEn : form.descriptionId}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              [activeLanguage === 'en' ? 'descriptionEn' : 'descriptionId']: e.target.value,
+            })
+          }
+          placeholder={activeLanguage === 'en' ? 'Enter blog description in English' : 'Enter blog description in Indonesian (optional)'}
         />
 
         <AdminInput

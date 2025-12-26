@@ -1,0 +1,45 @@
+[
+  {
+    "id": "eye-examination",
+    "title": "Comprehensive Eye Examination",
+    "description": "Professional eye exams using advanced technology to assess your vision and eye health. Our certified optometrists provide thorough evaluations to ensure optimal eye care.",
+    "image": "/images/other/about-us1.png",
+    "icon": "icon-eye"
+  },
+  {
+    "id": "prescription-lenses",
+    "title": "Prescription Lens Fitting",
+    "description": "Expert fitting and customization of prescription lenses tailored to your specific vision needs. We offer a wide range of lens options including progressive, bifocal, and specialty lenses.",
+    "image": "/images/other/about-us2.png",
+    "icon": "icon-lens"
+  },
+  {
+    "id": "frame-selection",
+    "title": "Frame Selection & Styling",
+    "description": "Personalized frame selection service to help you find the perfect eyewear that matches your face shape, style preferences, and lifestyle. Our stylists guide you through our extensive collection.",
+    "image": "/images/other/about-us3.png",
+    "icon": "icon-frame"
+  },
+  {
+    "id": "repair-service",
+    "title": "Repair & Maintenance",
+    "description": "Professional repair services for your eyewear including frame adjustments, lens replacement, and general maintenance. We ensure your glasses fit perfectly and last longer.",
+    "image": "/images/other/about-us1.png",
+    "icon": "icon-tools"
+  },
+  {
+    "id": "contact-lens-fitting",
+    "title": "Contact Lens Fitting",
+    "description": "Comprehensive contact lens fitting service with trial lenses and follow-up care. We help you find the most comfortable and suitable contact lenses for your eyes.",
+    "image": "/images/other/about-us2.png",
+    "icon": "icon-contact"
+  },
+  {
+    "id": "blue-light-protection",
+    "title": "Blue Light Protection",
+    "description": "Specialized lenses designed to protect your eyes from harmful blue light emitted by digital screens. Perfect for those who spend long hours in front of computers and devices.",
+    "image": "/images/other/about-us3.png",
+    "icon": "icon-shield"
+  }
+]
+

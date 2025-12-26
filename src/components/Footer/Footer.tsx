@@ -1,22 +1,62 @@
 'use client'
 
 import React, { useState, useRef } from 'react'
-import Link from 'next/link'
+import { useTranslations, useLocale } from 'next-intl'
+import { Link, useRouter, usePathname } from '@/i18n/routing'
+import { motion, AnimatePresence } from 'framer-motion'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 const Footer = () => {
+    const t = useTranslations()
+    const locale = useLocale()
+    const router = useRouter()
+    const pathname = usePathname()
     const [isOpenLanguage, setIsOpenLanguage] = useState(false)
-    const [language, setLanguage] = useState('English')
+    const [focusedIndex, setFocusedIndex] = useState<number | null>(null)
     const languageRef = useRef<HTMLDivElement>(null)
+    const currentLanguage = locale === 'en' ? t('language.english') : t('language.indonesia')
 
     useClickOutside(languageRef, () => {
         setIsOpenLanguage(false)
+        setFocusedIndex(null)
     })
 
-    const handleLanguageSelect = (item: string) => {
-        setLanguage(item)
+    const handleLanguageSelect = (newLocale: 'en' | 'id') => {
         setIsOpenLanguage(false)
+        setFocusedIndex(null)
+        router.replace(pathname, { locale: newLocale })
+    }
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            setIsOpenLanguage(!isOpenLanguage)
+            if (!isOpenLanguage) {
+                setFocusedIndex(0)
+            }
+        } else if (e.key === 'Escape') {
+            setIsOpenLanguage(false)
+            setFocusedIndex(null)
+            languageRef.current?.focus()
+        } else if (isOpenLanguage && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+            e.preventDefault()
+            const languages: ('en' | 'id')[] = ['en', 'id']
+            const currentIndex = focusedIndex ?? (locale === 'en' ? 0 : 1)
+            let newIndex = currentIndex
+
+            if (e.key === 'ArrowDown') {
+                newIndex = (currentIndex + 1) % languages.length
+            } else {
+                newIndex = (currentIndex - 1 + languages.length) % languages.length
+            }
+
+            setFocusedIndex(newIndex)
+        } else if (isOpenLanguage && e.key === 'Enter' && focusedIndex !== null) {
+            e.preventDefault()
+            const languages: ('en' | 'id')[] = ['en', 'id']
+            handleLanguageSelect(languages[focusedIndex])
+        }
     }
     return (
         <>
@@ -32,55 +72,99 @@ const Footer = () => {
                             <div className="right-content flex flex-wrap gap-y-8 basis-3/4 max-lg:basis-full">
                                 <nav className="list-nav flex justify-between basis-full gap-4" aria-label="Footer navigation">
                                     <div className="item flex flex-col basis-1/3 ">
-                                        <h3 className="text-button-uppercase pb-3">Infomation</h3>
-                                        <Link className='caption1 has-line-before duration-300 w-fit' href={'/pages/contact'}>Contact us</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/my-account'}>My Account</Link>
+                                        <h3 className="text-button-uppercase pb-3">{t('footer.information')}</h3>
+                                        <Link className='caption1 has-line-before duration-300 w-fit' href={'/pages/contact'}>{t('footer.contactUs')}</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/service'}>{t('footer.services')}</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/my-account'}>{t('footer.myAccount')}</Link>
                                     </div>
                                     <div className="item flex flex-col basis-1/3 ">
-                                        <h3 className="text-button-uppercase pb-3">Quick Shop</h3>
-                                        <Link className='caption1 has-line-before duration-300 w-fit' href={'/shop/default'}>Shop All</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/shop/default'}>New Arrivals</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/shop/default'}>Best Sellers</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/blog/default'}>Blog</Link>
+                                        <h3 className="text-button-uppercase pb-3">{t('footer.quickShop')}</h3>
+                                        <Link className='caption1 has-line-before duration-300 w-fit' href={'/shop/default'}>{t('footer.shopAll')}</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/shop/default'}>{t('footer.newArrivals')}</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/shop/default'}>{t('footer.bestSellers')}</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/blog/default'}>{t('footer.blog')}</Link>
                                     </div>
                                     <div className="item flex flex-col basis-1/3 ">
-                                        <h3 className="text-button-uppercase pb-3">Customer Services</h3>
-                                        <Link className='caption1 has-line-before duration-300 w-fit' href={'/pages/faqs'}>Orders FAQs</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/faqs'}>Shipping</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/faqs'}>Privacy Policy</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/faqs'}>Return & Refund</Link>
+                                        <h3 className="text-button-uppercase pb-3">{t('footer.customerServices')}</h3>
+                                        <Link className='caption1 has-line-before duration-300 w-fit' href={'/pages/faqs'}>{t('footer.ordersFaqs')}</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/faqs'}>{t('footer.shipping')}</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/faqs'}>{t('footer.privacyPolicy')}</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/faqs'}>{t('footer.returnRefund')}</Link>
                                     </div>
                                 </nav>
                             </div>
                         </div>
                         <div className="footer-bottom py-3 flex items-center justify-between gap-5 max-lg:justify-center max-lg:flex-col border-t border-line">
                             <div className="left flex items-center gap-8">
-                                <div className="copyright caption1 text-secondary">©{new Date().getFullYear()} Eyesoul Eyewear. All Rights Reserved.</div>
+                                <div className="copyright caption1 text-secondary">{t('footer.copyright', { year: new Date().getFullYear() })}</div>
                                 <div className="select-block flex items-center gap-5 max-md:hidden">
                                     <div
                                         ref={languageRef}
-                                        className="choose-type choose-language flex items-center gap-1.5"
+                                        role="button"
+                                        aria-label={t('common.selectLanguage') || 'Select language'}
+                                        aria-expanded={isOpenLanguage}
+                                        aria-haspopup="true"
+                                        tabIndex={0}
+                                        className="choose-type choose-language language-selector flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-surface/50 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-black/20"
                                         onClick={() => {
                                             setIsOpenLanguage(!isOpenLanguage)
                                         }}
+                                        onKeyDown={handleKeyDown}
                                     >
+                                        <Icon.Globe size={16} className="text-secondary flex-shrink-0" />
                                         <div className="select relative">
-                                            <p className="selected caption2 text-secondary">{language}</p>
-                                            <ul className={`list-option bg-white ${isOpenLanguage ? 'open' : ''}`}>
-                                                {
-                                                    ['English', 'Indonesia'].map((item, index) => (
-                                                        <li 
-                                                            key={index} 
-                                                            className="caption2" 
-                                                            onClick={() => handleLanguageSelect(item)}
+                                            <p className="selected caption2 text-secondary">{currentLanguage}</p>
+                                            <AnimatePresence>
+                                                {isOpenLanguage && (
+                                                    <motion.ul
+                                                        initial={{ opacity: 0, y: -5 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        exit={{ opacity: 0, y: -5 }}
+                                                        transition={{ duration: 0.15, ease: 'easeOut' }}
+                                                        className="list-option bg-white open shadow-sm rounded-md min-w-[120px] py-1"
+                                                        role="listbox"
+                                                    >
+                                                        <motion.li
+                                                            role="option"
+                                                            aria-selected={locale === 'en'}
+                                                            whileHover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
+                                                            className={`caption2 cursor-pointer px-3 py-2 ${
+                                                                locale === 'en' ? 'font-medium text-black' : 'text-secondary'
+                                                            } ${focusedIndex === 0 ? 'bg-black/5' : ''}`}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                handleLanguageSelect('en')
+                                                            }}
+                                                            onMouseEnter={() => setFocusedIndex(0)}
                                                         >
-                                                            {item}
-                                                        </li>
-                                                    ))
-                                                }
-                                            </ul>
+                                                            {t('language.english')}
+                                                        </motion.li>
+                                                        <motion.li
+                                                            role="option"
+                                                            aria-selected={locale === 'id'}
+                                                            whileHover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
+                                                            className={`caption2 cursor-pointer px-3 py-2 ${
+                                                                locale === 'id' ? 'font-medium text-black' : 'text-secondary'
+                                                            } ${focusedIndex === 1 ? 'bg-black/5' : ''}`}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                handleLanguageSelect('id')
+                                                            }}
+                                                            onMouseEnter={() => setFocusedIndex(1)}
+                                                        >
+                                                            {t('language.indonesia')}
+                                                        </motion.li>
+                                                    </motion.ul>
+                                                )}
+                                            </AnimatePresence>
                                         </div>
-                                        <Icon.CaretDown size={12} color='#1F1F1F' />
+                                        <motion.div
+                                            animate={{ rotate: isOpenLanguage ? 180 : 0 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="flex-shrink-0"
+                                        >
+                                            <Icon.CaretDown size={12} className="text-secondary" />
+                                        </motion.div>
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +175,7 @@ const Footer = () => {
                                     aria-label="Admin login"
                                 >
                                     <Icon.ShieldCheck size={18} />
-                                    <span className="caption2 max-md:hidden">Admin</span>
+                                    <span className="caption2 max-md:hidden">{t('footer.admin')}</span>
                                 </Link>
                             </div>
                         </div>

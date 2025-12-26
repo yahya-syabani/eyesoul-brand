@@ -22,6 +22,11 @@ export async function GET(request: Request) {
           { name: { contains: q, mode: 'insensitive' } },
           { description: { contains: q, mode: 'insensitive' } },
           { brand: { contains: q, mode: 'insensitive' } },
+          // Search in JSON translation fields
+          { nameTranslations: { path: ['en'], string_contains: q } },
+          { nameTranslations: { path: ['id'], string_contains: q } },
+          { descriptionTranslations: { path: ['en'], string_contains: q } },
+          { descriptionTranslations: { path: ['id'], string_contains: q } },
         ],
       },
       take: limit,
@@ -29,7 +34,11 @@ export async function GET(request: Request) {
       orderBy: { createdAt: 'desc' },
     })
 
-    return NextResponse.json(products.map(transformProductForFrontend))
+    // Get locale from Accept-Language header or default to 'en'
+    const locale = request.headers.get('accept-language')?.split(',')[0]?.split('-')[0] || 'en'
+    const normalizedLocale = locale === 'id' ? 'id' : 'en'
+
+    return NextResponse.json(products.map((product) => transformProductForFrontend(product, normalizedLocale)))
   } catch (error) {
     return handleApiError(error)
   }

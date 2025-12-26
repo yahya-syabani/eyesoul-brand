@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import ToastContainer from '@/components/Toast/ToastContainer'
 import type CountdownTimeType from '@/type/CountdownType'
@@ -19,17 +20,24 @@ type Props = {
 }
 
 export default function ClientShell({ children, serverTimeLeft }: Props) {
+  const pathname = usePathname()
+  const isAdminPage = pathname?.startsWith('/admin')
+
   return (
     <>
-      <Header topNavProps="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />
+      {!isAdminPage && <Header topNavProps="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />}
       {children}
       <ToastContainer />
-      <ModalCart serverTimeLeft={serverTimeLeft} />
-      <ModalWishlist />
-      <ModalSearch />
-      <ModalQuickview />
-      <ModalCompare />
-      <ModalNewsletter />
+      {!isAdminPage && (
+        <>
+          <ModalCart serverTimeLeft={serverTimeLeft} />
+          <ModalWishlist />
+          <ModalSearch />
+          <ModalQuickview />
+          <ModalCompare />
+          <ModalNewsletter />
+        </>
+      )}
     </>
   )
 }

@@ -1,0 +1,443 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "remove": "Remove",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "all": "All",
+    "none": "None",
+    "selectLanguage": "Select language"
+  },
+  "nav": {
+    "shop": "Shop",
+    "about": "About",
+    "service": "Service",
+    "contact": "Contact",
+    "blog": "Blog",
+    "storeLocation": "Store Location",
+    "home": "Home",
+    "myAccount": "My Account",
+    "cart": "Cart",
+    "wishlist": "Wishlist",
+    "compare": "Compare",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "admin": "Admin",
+    "support": "Support",
+    "help": "Help"
+  },
+  "footer": {
+    "information": "Infomation",
+    "contactUs": "Contact us",
+    "services": "Services",
+    "myAccount": "My Account",
+    "quickShop": "Quick Shop",
+    "shopAll": "Shop All",
+    "newArrivals": "New Arrivals",
+    "bestSellers": "Best Sellers",
+    "blog": "Blog",
+    "customerServices": "Customer Services",
+    "ordersFaqs": "Orders FAQs",
+    "shipping": "Shipping",
+    "privacyPolicy": "Privacy Policy",
+    "returnRefund": "Return & Refund",
+    "copyright": "©{year} Eyesoul Eyewear. All Rights Reserved.",
+    "admin": "Admin"
+  },
+  "home": {
+    "trendingRightNow": "Trending Right Now",
+    "shopNow": "Shop Now",
+    "limitedOffer": "Limited Offer: Free shipping on orders over $50",
+    "slogan": "Limited Offer: Free shipping on orders over $50"
+  },
+  "categories": {
+    "sunglasses": "Sunglasses",
+    "prescriptionGlasses": "Prescription",
+    "readingGlasses": "Reading",
+    "contactLenses": "Contact Lenses",
+    "framesOnly": "Frames Only"
+  },
+  "shop": {
+    "title": "Shop",
+    "browseCollection": "Browse our collection of {type} products. Find the perfect style for you.",
+    "noProducts": "No products found",
+    "loadingProducts": "Loading products...",
+    "filterBy": "Filter by",
+    "priceRange": "Price Range",
+    "sortBy": "Sort By",
+    "viewAs": "View As"
+  },
+  "product": {
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "addToWishlist": "Add to Wishlist",
+    "addToCompare": "Add to Compare",
+    "removeFromCompare": "Remove from Compare",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "quantity": "Quantity",
+    "size": "Size",
+    "color": "Color",
+    "description": "Description",
+    "specifications": "Specifications",
+    "reviews": "Reviews",
+    "relatedProducts": "Related Products",
+    "youMayAlsoLike": "You May Also Like"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "total": "Total",
+    "checkout": "Checkout",
+    "continueShopping": "Continue Shopping",
+    "removeItem": "Remove item",
+    "updateQuantity": "Update quantity",
+    "cartExpiresIn": "Your cart will expire in {minutes}:{seconds} minutes!",
+    "checkoutNow": "Please checkout now before your items sell out!",
+    "buyMoreForFreeship": "Buy $ {amount}.00 more to get freeship",
+    "freeship": "freeship"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "billingDetails": "Billing Details",
+    "shippingDetails": "Shipping Details",
+    "paymentMethod": "Payment Method",
+    "orderSummary": "Order Summary",
+    "placeOrder": "Place Order",
+    "processing": "Processing...",
+    "orderSuccess": "Order placed successfully!"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Your Password?",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "createAccount": "Create Account",
+    "termsOfUser": "Terms of User",
+    "rememberMe": "Remember Me"
+  },
+  "pages": {
+    "about": {
+      "title": "About Us",
+      "heading": "About Us",
+      "content": "We are committed to providing high-quality eyewear that combines modern style with exceptional functionality.",
+      "description": "Eyesoul Eyewear has become the top choice for those who value quality and style in vision accessories. With years of experience in the optical industry, we offer a wide collection of eyewear ranging from prescription glasses, sunglasses, to high-quality contact lenses. Our experienced professional team is ready to help you find the perfect glasses for your vision needs and lifestyle. We believe that everyone deserves clear vision and the confidence to look stylish with fashionable eyewear."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "heading": "Contact Us",
+      "formTitle": "Drop Us A Line",
+      "formDescription": "Use the form below to get in touch with the sales team",
+      "namePlaceholder": "Your Name *",
+      "emailPlaceholder": "Your Email *",
+      "subjectPlaceholder": "Subject *",
+      "messagePlaceholder": "Your Message *",
+      "sending": "Sending...",
+      "sendMessage": "Send message",
+      "messageSent": "Message sent successfully!",
+      "ourStore": "Our Store",
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "openHours": "Open Hours",
+      "monFri": "Mon - Fri",
+      "saturday": "Saturday",
+      "sunday": "Sunday",
+      "storeAddress": "2163 Phillips Gap Rd, West Jefferson, North Carolina, United States",
+      "storePhone": "+1 666 8888",
+      "storeEmail": "hi.avitex@gmail.com",
+      "hoursWeekdays": "7:30am - 8:00pm PST",
+      "hoursSaturday": "8:00am - 6:00pm PST",
+      "hoursSunday": "9:00am - 5:00pm PST"
+    },
+    "faqs": {
+      "title": "FAQs",
+      "heading": "Frequently Asked Questions",
+      "tabs": {
+        "howToBuy": "how to buy",
+        "paymentMethods": "payment methods",
+        "delivery": "delivery",
+        "exchangesReturns": "exchanges & returns",
+        "registration": "registration",
+        "lookAfterGarments": "look after your garments",
+        "contacts": "contacts"
+      },
+      "questions": {
+        "covid19Affect": "How does COVID-19 affect my online orders and store purchases?",
+        "plusSizes": "NEW! Plus sizes for Woman"
+      },
+      "answers": {
+        "covid19Short": "The courier companies have adapted their procedures to guarantee the safety of our employees and our community. We thank you for your patience, as there may be some delays to deliveries. We remind you that you can still find us at Mango.com",
+        "plusSizesShort": "The courier companies have adapted their procedures to guarantee the safety of our employees and our community. We thank you for your patience, as there may be some delays to deliveries. We remind you that you can still find us at Mango.com and on all our online channels. Our customer services are still there for you, to answer any questions you may have, although due to the current situation, we are operating with longer waiting times."
+      }
+    },
+    "storeLocation": {
+      "title": "Store Location",
+      "heading": "Store Location",
+      "findStores": "Find Our Stores",
+      "description": "Visit us at one of our locations. Our friendly staff is ready to help you find exactly what you're looking for.",
+      "loadingMap": "Loading map...",
+      "loadingStores": "Loading store locations...",
+      "errorLoading": "Failed to load store locations. Please try again later.",
+      "noStores": "No store locations available.",
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "openingHours": "Opening Hours",
+      "getDirections": "Get Directions"
+    },
+    "service": {
+      "title": "Our Services",
+      "heading": "Our Services",
+      "heroDescription": "Discover our comprehensive range of professional eyewear services designed to meet all your vision and style needs.",
+      "sectionHeading": "What We Offer",
+      "sectionDescription": "Our team of experienced professionals is dedicated to providing you with exceptional service and the highest quality eyewear solutions.",
+      "services": {
+        "eye-examination": {
+          "title": "Comprehensive Eye Examination",
+          "description": "Professional eye exams using advanced technology to assess your vision and eye health. Our certified optometrists provide thorough evaluations to ensure optimal eye care."
+        },
+        "prescription-lenses": {
+          "title": "Prescription Lens Fitting",
+          "description": "Expert fitting and customization of prescription lenses tailored to your specific vision needs. We offer a wide range of lens options including progressive, bifocal, and specialty lenses."
+        },
+        "frame-selection": {
+          "title": "Frame Selection & Styling",
+          "description": "Personalized frame selection service to help you find the perfect eyewear that matches your face shape, style preferences, and lifestyle. Our stylists guide you through our extensive collection."
+        },
+        "repair-service": {
+          "title": "Repair & Maintenance",
+          "description": "Professional repair services for your eyewear including frame adjustments, lens replacement, and general maintenance. We ensure your glasses fit perfectly and last longer."
+        },
+        "contact-lens-fitting": {
+          "title": "Contact Lens Fitting",
+          "description": "Comprehensive contact lens fitting service with trial lenses and follow-up care. We help you find the most comfortable and suitable contact lenses for your eyes."
+        },
+        "blue-light-protection": {
+          "title": "Blue Light Protection",
+          "description": "Specialized lenses designed to protect your eyes from harmful blue light emitted by digital screens. Perfect for those who spend long hours in front of computers and devices."
+        }
+      }
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Read More",
+    "recentPosts": "Recent Posts",
+    "categories": "Categories",
+    "tags": "Tags",
+    "noPosts": "No blog posts found"
+  },
+  "modals": {
+    "search": {
+      "title": "Search",
+      "placeholder": "Searching...",
+      "featureKeywords": "Feature keywords Today",
+      "recentlyViewed": "Recently viewed products"
+    },
+    "cart": {
+      "title": "Shopping Cart",
+      "close": "Close shopping cart",
+      "youMayAlsoLike": "You May Also Like"
+    },
+    "wishlist": {
+      "title": "Wishlist",
+      "empty": "Your wishlist is empty"
+    },
+  "compare": {
+    "title": "Compare Products",
+    "empty": "No products to compare",
+    "rating": "Rating",
+    "price": "Price",
+    "type": "Type",
+    "brand": "Brand",
+    "size": "Size",
+    "colors": "Colors",
+    "material": "Metarial",
+    "addToCart": "Add To Cart",
+    "cotton": "Cotton"
+  }
+  },
+  "errors": {
+    "pageNotFound": "Page Not Found",
+    "somethingWentWrong": "Something went wrong",
+    "tryAgain": "Try again",
+    "goHome": "Go Home"
+  },
+  "language": {
+    "english": "English",
+    "indonesia": "Indonesia"
+  },
+  "benefit": {
+    "customerService": {
+      "title": "24/7 Customer Service",
+      "description": "We're here to help you with any questions or concerns you have, 24/7."
+    },
+    "moneyBack": {
+      "title": "14-Day Money Back",
+      "description": "If you're not satisfied with your purchase, simply return it within 14 days for a refund."
+    },
+    "guarantee": {
+      "title": "Our Guarantee",
+      "description": "We stand behind our products and services and guarantee your satisfaction."
+    },
+    "shipping": {
+      "title": "Shipping worldwide",
+      "description": "We ship our products worldwide, making them accessible to customers everywhere."
+    }
+  },
+  "wishlist": {
+    "heading": "Wish list",
+    "productsFound": "Products Found",
+    "type": "Type",
+    "sorting": "Sorting",
+    "bestSelling": "Best Selling",
+    "bestDiscount": "Best Discount",
+    "priceHighToLow": "Price High To Low",
+    "priceLowToHigh": "Price Low To High",
+    "clearAll": "Clear All",
+    "noProductsMatch": "No products match the selected criteria."
+  },
+  "myAccount": {
+    "heading": "My Account",
+    "information": "Information",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "emailAddress": "Email address",
+    "phoneNumber": "Phone number",
+    "chooseCountry": "Choose Country/Region",
+    "password": "Password *",
+    "newPassword": "New Password *",
+    "confirmPassword": "Confirm Password *",
+    "changePassword": "Change Password",
+    "updateAccount": "Update Account",
+    "accountDetails": "Account Details",
+    "yourOrders": "Your Orders",
+    "myAddress": "My Address",
+    "logout": "Logout",
+    "countries": {
+      "india": "India",
+      "france": "France",
+      "singapore": "Singapore"
+    }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "billingDetails": "Billing Details",
+    "shippingDetails": "Shipping Details",
+    "paymentMethod": "Payment Method",
+    "orderSummary": "Order Summary",
+    "placeOrder": "Place Order",
+    "processing": "Processing...",
+    "orderSuccess": "Order placed successfully!",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Login",
+    "usernameOrEmail": "Username or email",
+    "password": "Password",
+    "information": "Information",
+    "firstName": "First Name *",
+    "lastName": "Last Name *",
+    "emailAddress": "Email Address *",
+    "phoneNumbers": "Phone Numbers *",
+    "chooseCountry": "Choose Country/Region",
+    "townCity": "Town/City *",
+    "street": "Street,...",
+    "chooseState": "Choose State",
+    "postalCode": "Postal Code *",
+    "writeNote": "Write note...",
+    "choosePaymentOption": "Choose payment Option:",
+    "creditCard": "Credit Card",
+    "creditCardDescription": "Make your payment directly into our bank account. Your order will not be shipped until the funds have cleared in our account.",
+    "cardNumbers": "Card Numbers",
+    "cardNumberPlaceholder": "ex.1234567290",
+    "date": "Date",
+    "ccv": "CCV",
+    "ccvPlaceholder": "****",
+    "saveCardDetails": "Save Card Details",
+    "cashOnDelivery": "Cash on delivery",
+    "cashDeliveryDescription": "Make your payment directly into our bank account. Your order will not be shipped until the funds have cleared in our account.",
+    "applePay": "Apple Pay",
+    "applePayDescription": "Make your payment directly into our bank account. Your order will not be shipped until the funds have cleared in our account.",
+    "paypal": "PayPal",
+    "paypalDescription": "Make your payment directly into our bank account. Your order will not be shipped until the funds have cleared in our account.",
+    "payment": "Payment",
+    "yourOrder": "Your Order",
+    "noProductInCart": "No product in cart",
+    "discounts": "Discounts",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "total": "Total",
+    "checkout": "Checkout",
+    "continueShopping": "Continue Shopping",
+    "removeItem": "Remove item",
+    "updateQuantity": "Update quantity",
+    "cartExpiresIn": "Your cart will expire in {minutes}:{seconds} minutes!",
+    "checkoutNow": "Please checkout now before your items sell out!",
+    "buyMoreForFreeship": "Buy $ {amount}.00 more to get freeship",
+    "freeship": "freeship",
+    "minutes": "minutes! Please checkout now before your items sell out!",
+    "buy": "Buy",
+    "more": "more to get",
+    "products": "Products",
+    "price": "Price",
+    "quantity": "Quantity",
+    "totalPrice": "Total Price",
+    "noProductInCart": "No product in cart",
+    "applyPromoCode": "Apply Promo Code",
+    "enterCode": "Enter code",
+    "apply": "Apply",
+    "removePromoCode": "Remove Promo Code",
+    "invalidPromoCode": "Invalid promotion code",
+    "failedToValidate": "Failed to validate promotion code",
+    "orderSummary": "Order Summary",
+    "discounts": "Discounts",
+    "shipping": "Shipping",
+    "processToCheckout": "Process To Checkout",
+    "continueShopping": "Continue Shopping",
+    "applied": "Applied",
+    "applyCode": "Apply Code",
+    "freeShipping": "Free Shipping:",
+    "local": "Local:",
+    "flatRate": "Flat Rate:",
+    "loadingPromotions": "Loading promotions...",
+    "noPromotionsAvailable": "No promotions available",
+    "discount": "Discount",
+    "forAllOrders": "For all orders",
+    "from": "from"
+  }
+}
+

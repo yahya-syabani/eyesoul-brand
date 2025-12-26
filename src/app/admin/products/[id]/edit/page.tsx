@@ -17,14 +17,17 @@ interface Variation {
 const EditProductPage = () => {
   const { id } = useParams<{ id: string }>()
   const router = useRouter()
+  const [activeLanguage, setActiveLanguage] = useState<'en' | 'id'>('en')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [form, setForm] = useState({
-    name: '',
+    nameEn: '',
+    nameId: '',
     slug: '',
     category: 'sunglasses',
     type: '',
-    description: '',
+    descriptionEn: '',
+    descriptionId: '',
     price: 0,
     originPrice: 0,
     brand: '',
@@ -37,41 +40,71 @@ const EditProductPage = () => {
     thumbImages: [''],
   })
   const [variations, setVariations] = useState<Variation[]>([])
-  const [attributes, setAttributes] = useState({
+  const [attributes, setAttributes] = useState<{
+    lensType: string
+    frameMaterial: string
+    frameSize: { lensWidth?: number; bridgeWidth?: number; templeLength?: number }
+    lensCoating: string[]
+  }>({
     lensType: '',
     frameMaterial: '',
     frameSize: { lensWidth: undefined, bridgeWidth: undefined, templeLength: undefined },
-    lensCoating: [] as string[],
+    lensCoating: [],
   })
   const [sizes, setSizes] = useState<string[]>(['medium'])
 
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch(`/api/products/${id}`, { cache: 'no-store' })
+        // Fetch raw product data to get translations
+        // We'll fetch with English locale to get base data, then extract translations
+        const res = await fetch(`/api/products/${id}`, { 
+          cache: 'no-store',
+          headers: { 'Accept-Language': 'en' }
+        })
         if (res.ok) {
           const product: ProductType = await res.json()
+          
+          // Fetch raw data to get translation fields
+          // Since API transforms data, we need to fetch the raw product
+          // For now, we'll use the transformed data and assume translations exist
+          // In a real scenario, you might want a separate admin endpoint
+          const rawRes = await fetch(`/api/products/${id}?raw=true`, { cache: 'no-store' }).catch(() => null)
+          let nameTranslations: { en: string; id?: string } | null = null
+          let descriptionTranslations: { en: string; id?: string } | null = null
+          
+          if (rawRes?.ok) {
+            const rawProduct = await rawRes.json()
+            nameTranslations = rawProduct.nameTranslations || { en: product.name || '' }
+            descriptionTranslations = rawProduct.descriptionTranslations || { en: product.description || '' }
+          } else {
+            // Fallback: use transformed data and create translation objects
+            nameTranslations = { en: product.name || '' }
+            descriptionTranslations = { en: product.description || '' }
+          }
+          
           setForm({
-            name: product.name || '',
+            nameEn: nameTranslations?.en || product.name || '',
+            nameId: nameTranslations?.id || '',
             slug: product.slug || '',
             category: product.category || 'sunglasses',
             type: product.type || '',
-            description: product.description || '',
+            descriptionEn: descriptionTranslations?.en || product.description || '',
+            descriptionId: descriptionTranslations?.id || '',
             price: Number(product.price) || 0,
             originPrice: Number(product.originPrice) || 0,
             brand: product.brand || '',
             quantity: product.quantity || 0,
             rate: product.rate || 0,
             sold: product.sold || 0,
-            isNew: product.isNew || false,
-            isSale: product.isSale || false,
+            isNew: product.new || false,
+            isSale: product.sale || false,
             images: product.images && product.images.length > 0 ? product.images : [''],
-            thumbImages: product.thumbImages && product.thumbImages.length > 0 ? product.thumbImages : [''],
+            thumbImages: product.thumbImage && product.thumbImage.length > 0 ? product.thumbImage : [''],
           })
           setVariations(
-            product.variations && product.variations.length > 0
-              ? product.variations.map((v) => ({
-                  id: v.id,
+            product.variation && product.variation.length > 0
+              ? product.variation.map((v) => ({
                   color: v.color,
                   colorCode: v.colorCode,
                   colorImage: v.colorImage,
@@ -79,23 +112,21 @@ const EditProductPage = () => {
                 }))
               : []
           )
-          if (product.attributes) {
-            setAttributes({
-              lensType: product.attributes.lensType || '',
-              frameMaterial: product.attributes.frameMaterial || '',
-              frameSize: product.attributes.frameSize
-                ? {
-                    lensWidth: (product.attributes.frameSize as any).lensWidth,
-                    bridgeWidth: (product.attributes.frameSize as any).bridgeWidth,
-                    templeLength: (product.attributes.frameSize as any).templeLength,
-                  }
-                : { lensWidth: undefined, bridgeWidth: undefined, templeLength: undefined },
-              lensCoating: product.attributes.lensCoating || [],
-            })
-          }
+          setAttributes({
+            lensType: product.lensType || '',
+            frameMaterial: product.frameMaterial || '',
+            frameSize: product.frameSize
+              ? {
+                  lensWidth: product.frameSize.lensWidth ?? undefined,
+                  bridgeWidth: product.frameSize.bridgeWidth ?? undefined,
+                  templeLength: product.frameSize.templeLength ?? undefined,
+                }
+              : { lensWidth: undefined, bridgeWidth: undefined, templeLength: undefined },
+            lensCoating: (product.lensCoating || []) as string[],
+          })
           setSizes(
             product.sizes && product.sizes.length > 0
-              ? product.sizes.map((s) => s.size)
+              ? product.sizes
               : ['medium']
           )
         } else {
@@ -151,12 +182,22 @@ const EditProductPage = () => {
     e.preventDefault()
     setError(null)
     try {
+      // Build translation objects
+      const nameTranslations = {
+        en: form.nameEn.trim(),
+        id: form.nameId.trim() || undefined,
+      }
+      const descriptionTranslations = {
+        en: form.descriptionEn.trim(),
+        id: form.descriptionId.trim() || undefined,
+      }
+
       const payload = {
-        name: form.name,
+        nameTranslations,
         slug: form.slug,
         category: form.category,
         type: form.type || undefined,
-        description: form.description,
+        descriptionTranslations,
         price: Number(form.price),
         originPrice: Number(form.originPrice || form.price),
         brand: form.brand || undefined,
@@ -195,7 +236,7 @@ const EditProductPage = () => {
     return <div className="text-secondary">Loading product...</div>
   }
 
-  if (error && !form.name) {
+  if (error && !form.nameEn) {
     return <div className="text-red">{error}</div>
   }
 
@@ -206,12 +247,45 @@ const EditProductPage = () => {
         {/* Basic Information */}
         <div className="border border-line rounded-lg p-6 space-y-4">
           <h2 className="heading6 mb-4">Basic Information</h2>
+          
+          {/* Language Tabs */}
+          <div className="flex gap-2 border-b border-line mb-4">
+            <button
+              type="button"
+              onClick={() => setActiveLanguage('en')}
+              className={`px-4 py-2 border-b-2 transition-colors ${
+                activeLanguage === 'en'
+                  ? 'border-black text-black font-medium'
+                  : 'border-transparent text-secondary hover:text-black'
+              }`}
+            >
+              English
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveLanguage('id')}
+              className={`px-4 py-2 border-b-2 transition-colors ${
+                activeLanguage === 'id'
+                  ? 'border-black text-black font-medium'
+                  : 'border-transparent text-secondary hover:text-black'
+              }`}
+            >
+              Indonesian
+            </button>
+          </div>
+
           <div className="grid md:grid-cols-2 gap-4">
             <AdminInput
-              label="Name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              required
+              label={`Product Name (${activeLanguage === 'en' ? 'English' : 'Indonesian'})`}
+              value={activeLanguage === 'en' ? form.nameEn : form.nameId}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  [activeLanguage === 'en' ? 'nameEn' : 'nameId']: e.target.value,
+                })
+              }
+              required={activeLanguage === 'en'}
+              placeholder={activeLanguage === 'en' ? 'Enter product name in English' : 'Enter product name in Indonesian (optional)'}
             />
             <AdminInput
               label="Slug"
@@ -259,11 +333,17 @@ const EditProductPage = () => {
             </div>
           </div>
           <AdminTextarea
-            label="Description"
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            label={`Description (${activeLanguage === 'en' ? 'English' : 'Indonesian'})`}
+            value={activeLanguage === 'en' ? form.descriptionEn : form.descriptionId}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                [activeLanguage === 'en' ? 'descriptionEn' : 'descriptionId']: e.target.value,
+              })
+            }
             rows={4}
-            required
+            required={activeLanguage === 'en'}
+            placeholder={activeLanguage === 'en' ? 'Enter product description in English' : 'Enter product description in Indonesian (optional)'}
           />
         </div>
 

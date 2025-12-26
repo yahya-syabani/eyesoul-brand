@@ -1,9 +1,8 @@
 'use client'
 
 import React, { useEffect, useState, useRef } from 'react'
-import Link from 'next/link'
+import { Link, usePathname } from '@/i18n/routing'
 import * as Icon from '@phosphor-icons/react/dist/ssr'
-import { usePathname } from 'next/navigation'
 import useLoginPopup from '@/store/useLoginPopup'
 import useMenuMobile from '@/store/useMenuMobile'
 import { useModalCartContext } from '@/context/ModalCartContext'

@@ -148,14 +148,14 @@ const EditPromotionPage = () => {
         <AdminInput
           label="Valid From (optional)"
           type="datetime-local"
-          value={form.validFrom}
+          value={form.validFrom || ''}
           onChange={(e) => setForm({ ...form, validFrom: e.target.value })}
         />
 
         <AdminInput
           label="Valid Until (optional)"
           type="datetime-local"
-          value={form.validUntil}
+          value={form.validUntil || ''}
           onChange={(e) => setForm({ ...form, validUntil: e.target.value })}
         />
 

@@ -30,6 +30,8 @@ function serializeOrder(order: OrderWithRelations): SerializedOrderWithRelations
     status: order.status,
     totalAmount: Number(order.totalAmount),
     shippingAddress: order.shippingAddress,
+    promotionId: order.promotionId,
+    discountAmount: order.discountAmount ? Number(order.discountAmount) : null,
     createdAt: order.createdAt,
     updatedAt: order.updatedAt,
     items: order.items.map((item): SerializedOrderItem => ({
@@ -86,7 +88,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     }
 
     // Calculate new total if items are being updated
-    let totalAmount = existing.totalAmount
+    let totalAmount: Prisma.Decimal | number = existing.totalAmount
     if (payload.items && payload.items.length > 0) {
       totalAmount = payload.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
     }
@@ -97,6 +99,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
         shippingAddress: payload.shippingAddress as Prisma.InputJsonValue,
       }),
       ...(payload.userId !== undefined && { userId: payload.userId || null }),
+      ...(totalAmount !== existing.totalAmount && { totalAmount }),
       ...(payload.items && {
         items: {
           deleteMany: { orderId: id },

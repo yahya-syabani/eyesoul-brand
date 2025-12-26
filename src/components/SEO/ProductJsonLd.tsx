@@ -4,10 +4,11 @@ import { ProductType } from '@/type/ProductType'
 interface ProductJsonLdProps {
   product: ProductType
   siteUrl?: string
+  localePrefix?: string
 }
 
-const ProductJsonLd: React.FC<ProductJsonLdProps> = ({ product, siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://eyesoul-eyewear.com' }) => {
-  const productUrl = `${siteUrl}/product/default?id=${product.id}`
+const ProductJsonLd: React.FC<ProductJsonLdProps> = ({ product, siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://eyesoul-eyewear.com', localePrefix = '' }) => {
+  const productUrl = `${siteUrl}${localePrefix}/product/default?id=${product.id}`
   const imageUrl = product.images?.[0] || product.thumbImage?.[0] || '/images/product/1000x1000.png'
   const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : `${siteUrl}${imageUrl}`
 

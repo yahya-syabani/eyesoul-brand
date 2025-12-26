@@ -35,22 +35,29 @@ export function generatePageMetadata(
   title: string,
   description?: string,
   image?: string,
-  path?: string
+  path?: string,
+  locale?: string
 ): Metadata {
   const fullTitle = title === siteName ? title : `${title} | ${siteName}`
   const metaDescription = description || siteDescription
-  const canonicalUrl = path ? `${siteUrl}${path}` : siteUrl
+  const localePrefix = locale && locale !== 'en' ? `/${locale}` : ''
+  const canonicalUrl = path ? `${siteUrl}${localePrefix}${path}` : `${siteUrl}${localePrefix}`
 
   return {
     title: fullTitle,
     description: metaDescription,
     alternates: {
       canonical: canonicalUrl,
+      languages: {
+        'en': `${siteUrl}/en${path || ''}`,
+        'id': `${siteUrl}/id${path || ''}`,
+      },
     },
     openGraph: {
       title: fullTitle,
       description: metaDescription,
       url: canonicalUrl,
+      locale: locale === 'id' ? 'id_ID' : 'en_US',
       ...(image && { images: [{ url: image }] }),
     },
     twitter: {
@@ -61,9 +68,9 @@ export function generatePageMetadata(
   }
 }
 
-export function generateProductMetadata(product?: ProductType): Metadata {
+export function generateProductMetadata(product?: ProductType, locale?: string): Metadata {
   if (!product) {
-    return generatePageMetadata('Product Not Found', 'The product you are looking for could not be found.')
+    return generatePageMetadata('Product Not Found', 'The product you are looking for could not be found.', undefined, undefined, locale)
   }
 
   const title = `${product.name} | ${siteName}`
@@ -71,8 +78,8 @@ export function generateProductMetadata(product?: ProductType): Metadata {
   const price = `$${product.price}.00`
   const image = product.images?.[0] || product.thumbImage?.[0] || '/images/product/1000x1000.png'
   const fullImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`
-
-  const productUrl = `${siteUrl}/product/default?id=${product.id}`
+  const localePrefix = locale && locale !== 'en' ? `/${locale}` : ''
+  const productUrl = `${siteUrl}${localePrefix}/product/default?id=${product.id}`
 
   return {
     title,
@@ -87,6 +94,7 @@ export function generateProductMetadata(product?: ProductType): Metadata {
       images: [{ url: fullImageUrl }],
       siteName,
       url: productUrl,
+      locale: locale === 'id' ? 'id_ID' : 'en_US',
     },
     twitter: {
       card: 'summary_large_image',

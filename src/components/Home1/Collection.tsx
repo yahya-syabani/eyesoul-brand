@@ -2,11 +2,10 @@
 
 import React from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link, useRouter } from '@/i18n/routing'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
-import { useRouter } from 'next/navigation';
 // import Fade from 'react-reveal'
 
 const Collection = () => {

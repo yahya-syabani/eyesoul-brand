@@ -59,8 +59,9 @@ export interface SerializedOrderItem extends Omit<OrderItem, 'price'> {
 /**
  * Serialized order for API responses (with numeric totalAmount and items)
  */
-export interface SerializedOrder extends Omit<Order, 'totalAmount'> {
+export interface SerializedOrder extends Omit<Order, 'totalAmount' | 'discountAmount'> {
   totalAmount: number
+  discountAmount: number | null
   items: SerializedOrderItem[]
 }
 

@@ -9,6 +9,7 @@ import { requireAdminAuth } from '@/lib/api-auth'
 import { rateLimitApi, createRateLimitResponse } from '@/lib/rate-limit'
 import { ERROR_MESSAGES } from '@/lib/api-constants'
 import { ProductWithRelations } from '@/lib/prisma-types'
+import { stringToTranslation, TranslationObject, isValidTranslation } from '@/utils/translations'
 
 const variationSchema = z.object({
   color: z.enum(PRODUCT_COLORS).or(z.string()),
@@ -23,12 +24,29 @@ const frameSizeSchema = z.object({
   lensWidth: z.number().optional(),
 }).partial()
 
+// Translation schema: accepts both String (backward compat) and JSON format
+const translationSchema = z.union([
+  z.string(),
+  z.object({
+    en: z.string(),
+    id: z.string().optional(),
+  }),
+])
+
 const productSchema = z.object({
-  name: z.string().optional(),
+  name: translationSchema.optional(),
+  nameTranslations: z.object({
+    en: z.string(),
+    id: z.string().optional(),
+  }).optional(),
   slug: z.string().optional(),
   category: z.enum(PRODUCT_CATEGORIES).or(z.string()).optional(),
   type: z.string().optional(),
-  description: z.string().optional(),
+  description: translationSchema.optional(),
+  descriptionTranslations: z.object({
+    en: z.string(),
+    id: z.string().optional(),
+  }).optional(),
   price: z.number().optional(),
   originPrice: z.number().optional(),
   brand: z.string().optional(),
@@ -59,7 +77,11 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
       return NextResponse.json({ error: ERROR_MESSAGES.PRODUCT_NOT_FOUND }, { status: 404 })
     }
 
-    return NextResponse.json(transformProductForFrontend(product as ProductWithRelations))
+    // Get locale from Accept-Language header or default to 'en'
+    const locale = request.headers.get('accept-language')?.split(',')[0]?.split('-')[0] || 'en'
+    const normalizedLocale = locale === 'id' ? 'id' : 'en'
+
+    return NextResponse.json(transformProductForFrontend(product as ProductWithRelations, normalizedLocale))
   } catch (error) {
     return handleApiError(error)
   }
@@ -87,14 +109,63 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       throw createNotFoundError('Product')
     }
 
+    // Normalize name translations if provided
+    const updateData: {
+      name?: string
+      nameTranslations?: TranslationObject
+      description?: string
+      descriptionTranslations?: TranslationObject
+      [key: string]: unknown
+    } = {}
+
+    if (payload.name !== undefined || payload.nameTranslations !== undefined) {
+      if (payload.nameTranslations) {
+        // Use provided translations
+        updateData.nameTranslations = payload.nameTranslations
+        updateData.name = payload.nameTranslations.en
+      } else if (typeof payload.name === 'string') {
+        // Convert String to JSON format
+        updateData.nameTranslations = stringToTranslation(payload.name)
+        updateData.name = payload.name
+      } else if (payload.name && typeof payload.name === 'object') {
+        // JSON format provided directly
+        updateData.nameTranslations = payload.name as TranslationObject
+        updateData.name = updateData.nameTranslations.en
+      }
+      // Validate if translations provided
+      if (updateData.nameTranslations && !isValidTranslation(updateData.nameTranslations)) {
+        return NextResponse.json({ error: 'Invalid nameTranslations format' }, { status: 400 })
+      }
+    }
+
+    // Normalize description translations if provided
+    if (payload.description !== undefined || payload.descriptionTranslations !== undefined) {
+      if (payload.descriptionTranslations) {
+        // Use provided translations
+        updateData.descriptionTranslations = payload.descriptionTranslations
+        updateData.description = payload.descriptionTranslations.en
+      } else if (typeof payload.description === 'string') {
+        // Convert String to JSON format
+        updateData.descriptionTranslations = stringToTranslation(payload.description)
+        updateData.description = payload.description
+      } else if (payload.description && typeof payload.description === 'object') {
+        // JSON format provided directly
+        updateData.descriptionTranslations = payload.description as TranslationObject
+        updateData.description = updateData.descriptionTranslations.en
+      }
+      // Validate if translations provided
+      if (updateData.descriptionTranslations && !isValidTranslation(updateData.descriptionTranslations)) {
+        return NextResponse.json({ error: 'Invalid descriptionTranslations format' }, { status: 400 })
+      }
+    }
+
     const updated = await prisma.product.update({
       where: { id },
       data: {
-        name: payload.name,
+        ...updateData,
         slug: payload.slug,
         category: payload.category ? (payload.category as EyewearCategory) : undefined,
         type: payload.type,
-        description: payload.description,
         price: payload.price,
         originPrice: payload.originPrice,
         brand: payload.brand,
@@ -144,7 +215,11 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       include: { variations: true, attributes: true, sizes: true },
     })
 
-    return NextResponse.json(transformProductForFrontend(updated as ProductWithRelations))
+    // Get locale from Accept-Language header or default to 'en'
+    const locale = request.headers.get('accept-language')?.split(',')[0]?.split('-')[0] || 'en'
+    const normalizedLocale = locale === 'id' ? 'id' : 'en'
+
+    return NextResponse.json(transformProductForFrontend(updated as ProductWithRelations, normalizedLocale))
   } catch (error) {
     return handleApiError(error)
   }

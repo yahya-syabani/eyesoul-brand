@@ -1,7 +1,7 @@
 'use client'
 
 import React, { Component, ErrorInfo, ReactNode } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import { reportError } from '@/lib/reportError'
 
 interface Props {

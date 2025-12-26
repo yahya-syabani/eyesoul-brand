@@ -15,12 +15,15 @@ interface Variation {
 
 const NewProductPage = () => {
   const router = useRouter()
+  const [activeLanguage, setActiveLanguage] = useState<'en' | 'id'>('en')
   const [form, setForm] = useState({
-    name: '',
+    nameEn: '',
+    nameId: '',
     slug: '',
     category: 'sunglasses',
     type: '',
-    description: '',
+    descriptionEn: '',
+    descriptionId: '',
     price: 0,
     originPrice: 0,
     brand: 'eyesoul',
@@ -33,11 +36,16 @@ const NewProductPage = () => {
     thumbImages: [''],
   })
   const [variations, setVariations] = useState<Variation[]>([])
-  const [attributes, setAttributes] = useState({
+  const [attributes, setAttributes] = useState<{
+    lensType: string
+    frameMaterial: string
+    frameSize: { lensWidth?: number; bridgeWidth?: number; templeLength?: number }
+    lensCoating: string[]
+  }>({
     lensType: '',
     frameMaterial: '',
     frameSize: { lensWidth: undefined, bridgeWidth: undefined, templeLength: undefined },
-    lensCoating: [] as string[],
+    lensCoating: [],
   })
   const [sizes, setSizes] = useState<string[]>(['medium'])
   const [error, setError] = useState<string | null>(null)
@@ -85,12 +93,22 @@ const NewProductPage = () => {
     setError(null)
     setLoading(true)
     try {
+      // Build translation objects
+      const nameTranslations = {
+        en: form.nameEn.trim(),
+        id: form.nameId.trim() || undefined,
+      }
+      const descriptionTranslations = {
+        en: form.descriptionEn.trim(),
+        id: form.descriptionId.trim() || undefined,
+      }
+
       const payload = {
-        name: form.name,
+        nameTranslations,
         slug: form.slug,
         category: form.category,
         type: form.type || undefined,
-        description: form.description,
+        descriptionTranslations,
         price: Number(form.price),
         originPrice: Number(form.originPrice || form.price),
         brand: form.brand || undefined,
@@ -134,12 +152,45 @@ const NewProductPage = () => {
         {/* Basic Information */}
         <div className="border border-line rounded-lg p-6 space-y-4">
           <h2 className="heading6 mb-4">Basic Information</h2>
+          
+          {/* Language Tabs */}
+          <div className="flex gap-2 border-b border-line mb-4">
+            <button
+              type="button"
+              onClick={() => setActiveLanguage('en')}
+              className={`px-4 py-2 border-b-2 transition-colors ${
+                activeLanguage === 'en'
+                  ? 'border-black text-black font-medium'
+                  : 'border-transparent text-secondary hover:text-black'
+              }`}
+            >
+              English
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveLanguage('id')}
+              className={`px-4 py-2 border-b-2 transition-colors ${
+                activeLanguage === 'id'
+                  ? 'border-black text-black font-medium'
+                  : 'border-transparent text-secondary hover:text-black'
+              }`}
+            >
+              Indonesian
+            </button>
+          </div>
+
           <div className="grid md:grid-cols-2 gap-4">
             <AdminInput
-              label="Name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              required
+              label={`Product Name (${activeLanguage === 'en' ? 'English' : 'Indonesian'})`}
+              value={activeLanguage === 'en' ? form.nameEn : form.nameId}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  [activeLanguage === 'en' ? 'nameEn' : 'nameId']: e.target.value,
+                })
+              }
+              required={activeLanguage === 'en'}
+              placeholder={activeLanguage === 'en' ? 'Enter product name in English' : 'Enter product name in Indonesian (optional)'}
             />
             <AdminInput
               label="Slug"
@@ -187,11 +238,17 @@ const NewProductPage = () => {
             </div>
           </div>
           <AdminTextarea
-            label="Description"
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            label={`Description (${activeLanguage === 'en' ? 'English' : 'Indonesian'})`}
+            value={activeLanguage === 'en' ? form.descriptionEn : form.descriptionId}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                [activeLanguage === 'en' ? 'descriptionEn' : 'descriptionId']: e.target.value,
+              })
+            }
             rows={4}
-            required
+            required={activeLanguage === 'en'}
+            placeholder={activeLanguage === 'en' ? 'Enter product description in English' : 'Enter product description in Indonesian (optional)'}
           />
         </div>
 

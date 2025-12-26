@@ -6,10 +6,13 @@ import { AdminInput, AdminTextarea, AdminSelect } from '@/components/Admin/Admin
 
 const NewTestimonialPage = () => {
   const router = useRouter()
+  const [activeLanguage, setActiveLanguage] = useState<'en' | 'id'>('en')
   const [form, setForm] = useState({
     name: '',
-    title: '',
-    description: '',
+    titleEn: '',
+    titleId: '',
+    descriptionEn: '',
+    descriptionId: '',
     avatar: '',
     images: [] as string[],
     star: 5,
@@ -38,11 +41,26 @@ const NewTestimonialPage = () => {
     setLoading(true)
 
     try {
+      // Build translation objects
+      const titleTranslations = {
+        en: form.titleEn.trim(),
+        id: form.titleId.trim() || undefined,
+      }
+      const descriptionTranslations = {
+        en: form.descriptionEn.trim(),
+        id: form.descriptionId.trim() || undefined,
+      }
+
       const payload = {
-        ...form,
+        name: form.name,
+        titleTranslations,
+        descriptionTranslations,
         avatar: form.avatar || null,
         address: form.address || null,
         images: form.images,
+        star: form.star,
+        date: form.date,
+        category: form.category,
       }
 
       const res = await fetch('/api/testimonials', {
@@ -77,20 +95,58 @@ const NewTestimonialPage = () => {
           onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
 
+        {/* Language Tabs */}
+        <div className="flex gap-2 border-b border-line mb-4">
+          <button
+            type="button"
+            onClick={() => setActiveLanguage('en')}
+            className={`px-4 py-2 border-b-2 transition-colors ${
+              activeLanguage === 'en'
+                ? 'border-black text-black font-medium'
+                : 'border-transparent text-secondary hover:text-black'
+            }`}
+          >
+            English
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveLanguage('id')}
+            className={`px-4 py-2 border-b-2 transition-colors ${
+              activeLanguage === 'id'
+                ? 'border-black text-black font-medium'
+                : 'border-transparent text-secondary hover:text-black'
+            }`}
+          >
+            Indonesian
+          </button>
+        </div>
+
         <AdminInput
-          label="Title"
+          label={`Title (${activeLanguage === 'en' ? 'English' : 'Indonesian'})`}
           type="text"
-          required
-          value={form.title}
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
+          required={activeLanguage === 'en'}
+          value={activeLanguage === 'en' ? form.titleEn : form.titleId}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              [activeLanguage === 'en' ? 'titleEn' : 'titleId']: e.target.value,
+            })
+          }
+          placeholder={activeLanguage === 'en' ? 'Enter testimonial title in English' : 'Enter testimonial title in Indonesian (optional)'}
         />
 
         <AdminTextarea
-          label="Description"
-          required
+          label={`Description (${activeLanguage === 'en' ? 'English' : 'Indonesian'})`}
+          required={activeLanguage === 'en'}
           rows={5}
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          value={activeLanguage === 'en' ? form.descriptionEn : form.descriptionId}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              [activeLanguage === 'en' ? 'descriptionEn' : 'descriptionId']: e.target.value,
+            })
+          }
+          placeholder={activeLanguage === 'en' ? 'Enter testimonial description in English' : 'Enter testimonial description in Indonesian (optional)'}
         />
 
         <AdminInput

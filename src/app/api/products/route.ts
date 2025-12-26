@@ -8,6 +8,7 @@ import { ProductWithRelations } from '@/lib/prisma-types'
 import { handleApiError } from '@/lib/api-error-handler'
 import { requireAdminAuth } from '@/lib/api-auth'
 import { rateLimitApi, createRateLimitResponse } from '@/lib/rate-limit'
+import { stringToTranslation, TranslationObject, isValidTranslation } from '@/utils/translations'
 
 const variationSchema = z.object({
   color: z.enum(PRODUCT_COLORS).or(z.string()),
@@ -22,12 +23,29 @@ const frameSizeSchema = z.object({
   lensWidth: z.number().optional(),
 }).partial()
 
+// Translation schema: accepts both String (backward compat) and JSON format
+const translationSchema = z.union([
+  z.string(),
+  z.object({
+    en: z.string(),
+    id: z.string().optional(),
+  }),
+])
+
 const productSchema = z.object({
-  name: z.string(),
+  name: translationSchema,
+  nameTranslations: z.object({
+    en: z.string(),
+    id: z.string().optional(),
+  }).optional(),
   slug: z.string(),
   category: z.enum(PRODUCT_CATEGORIES).or(z.string()),
   type: z.string().optional(),
-  description: z.string(),
+  description: translationSchema,
+  descriptionTranslations: z.object({
+    en: z.string(),
+    id: z.string().optional(),
+  }).optional(),
   price: z.number(),
   originPrice: z.number(),
   brand: z.string().optional(),
@@ -65,6 +83,11 @@ export async function GET(request: Request) {
           OR: [
             { name: { contains: search, mode: Prisma.QueryMode.insensitive } },
             { description: { contains: search, mode: Prisma.QueryMode.insensitive } },
+            // Search in JSON translation fields
+            { nameTranslations: { path: ['en'], string_contains: search } },
+            { nameTranslations: { path: ['id'], string_contains: search } },
+            { descriptionTranslations: { path: ['en'], string_contains: search } },
+            { descriptionTranslations: { path: ['id'], string_contains: search } },
           ],
         }
       : {}),
@@ -90,8 +113,12 @@ export async function GET(request: Request) {
       prisma.product.count({ where }),
     ])
 
+    // Get locale from Accept-Language header or default to 'en'
+    const locale = request.headers.get('accept-language')?.split(',')[0]?.split('-')[0] || 'en'
+    const normalizedLocale = locale === 'id' ? 'id' : 'en'
+
     return NextResponse.json({
-      data: items.map(transformProductForFrontend),
+      data: items.map((item) => transformProductForFrontend(item, normalizedLocale)),
       pagination: {
         page,
         limit,
@@ -120,13 +147,57 @@ export async function POST(request: Request) {
   try {
     const payload = productSchema.parse(await request.json())
 
+    // Normalize name: Convert String to JSON format if needed
+    let nameTranslations: TranslationObject
+    let name: string
+    if (payload.nameTranslations) {
+      // Use provided translations
+      nameTranslations = payload.nameTranslations
+      name = nameTranslations.en
+    } else if (typeof payload.name === 'string') {
+      // Convert String to JSON format
+      nameTranslations = stringToTranslation(payload.name)
+      name = payload.name
+    } else {
+      // JSON format provided directly
+      nameTranslations = payload.name as TranslationObject
+      name = nameTranslations.en
+    }
+
+    // Normalize description: Convert String to JSON format if needed
+    let descriptionTranslations: TranslationObject
+    let description: string
+    if (payload.descriptionTranslations) {
+      // Use provided translations
+      descriptionTranslations = payload.descriptionTranslations
+      description = descriptionTranslations.en
+    } else if (typeof payload.description === 'string') {
+      // Convert String to JSON format
+      descriptionTranslations = stringToTranslation(payload.description)
+      description = payload.description
+    } else {
+      // JSON format provided directly
+      descriptionTranslations = payload.description as TranslationObject
+      description = descriptionTranslations.en
+    }
+
+    // Validate translations
+    if (!isValidTranslation(nameTranslations)) {
+      return NextResponse.json({ error: 'Invalid nameTranslations format' }, { status: 400 })
+    }
+    if (!isValidTranslation(descriptionTranslations)) {
+      return NextResponse.json({ error: 'Invalid descriptionTranslations format' }, { status: 400 })
+    }
+
     const created = await prisma.product.create({
       data: {
-        name: payload.name,
+        name, // Keep String field for backward compatibility
+        nameTranslations, // Store JSON translations
         slug: payload.slug,
         category: payload.category as EyewearCategory,
         type: payload.type,
-        description: payload.description,
+        description, // Keep String field for backward compatibility
+        descriptionTranslations, // Store JSON translations
         price: payload.price,
         originPrice: payload.originPrice,
         brand: payload.brand,
@@ -164,7 +235,11 @@ export async function POST(request: Request) {
       include: { variations: true, attributes: true, sizes: true },
     })
 
-    return NextResponse.json(transformProductForFrontend(created), { status: 201 })
+    // Get locale from Accept-Language header or default to 'en'
+    const locale = request.headers.get('accept-language')?.split(',')[0]?.split('-')[0] || 'en'
+    const normalizedLocale = locale === 'id' ? 'id' : 'en'
+
+    return NextResponse.json(transformProductForFrontend(created, normalizedLocale), { status: 201 })
   } catch (error) {
     return handleApiError(error)
   }

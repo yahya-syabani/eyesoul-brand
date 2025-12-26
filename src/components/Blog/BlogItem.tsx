@@ -2,10 +2,9 @@
 
 import React from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link, useRouter } from '@/i18n/routing'
 import { BlogType } from '@/type/BlogType'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import { useRouter } from 'next/navigation'
 
 interface BlogProps {
     data: BlogType
@@ -29,7 +28,7 @@ const BlogItem: React.FC<BlogProps> = ({ data, type }) => {
                     <div className="blog-main h-full block">
                         <div className="blog-thumb rounded-[20px] overflow-hidden">
                             <Image
-                                src={data.thumbImg}
+                                src={data.thumbImg || '/images/blog/1.png'}
                                 width={2000}
                                 height={1500}
                                 alt='blog-img'
@@ -57,7 +56,7 @@ const BlogItem: React.FC<BlogProps> = ({ data, type }) => {
                             <div className="blog-main h-full flex max-md:flex-col md:items-center md:gap-9 gap-6">
                                 <div className="blog-thumb md:w-1/2 w-full rounded-[20px] overflow-hidden flex-shrink-0">
                                     <Image
-                                        src={data.thumbImg}
+                                        src={data.thumbImg || '/images/blog/1.png'}
                                         width={2000}
                                         height={1500}
                                         alt='blog-img'
@@ -87,7 +86,7 @@ const BlogItem: React.FC<BlogProps> = ({ data, type }) => {
                                     <div className="blog-main h-full block pb-8 border-b border-line">
                                         <div className="blog-thumb rounded-[20px] overflow-hidden">
                                             <Image
-                                                src={data.thumbImg}
+                                                src={data.thumbImg || '/images/blog/1.png'}
                                                 width={2000}
                                                 height={1500}
                                                 alt='blog-img'

@@ -47,7 +47,7 @@ const NewUserPage = () => {
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           required
-          error={error}
+          error={error || undefined}
         />
         <AdminInput
           label="Password"

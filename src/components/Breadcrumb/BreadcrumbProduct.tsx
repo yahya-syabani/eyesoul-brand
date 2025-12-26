@@ -1,10 +1,9 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
+import { Link, useRouter } from '@/i18n/routing'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { ProductType } from '@/type/ProductType'
-import { useRouter } from 'next/navigation'
 
 interface Props {
     data: Array<ProductType>

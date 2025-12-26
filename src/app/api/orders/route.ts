@@ -29,6 +29,8 @@ function serializeOrder(order: OrderWithRelations): SerializedOrderWithRelations
     status: order.status,
     totalAmount: Number(order.totalAmount),
     shippingAddress: order.shippingAddress,
+    promotionId: order.promotionId,
+    discountAmount: order.discountAmount ? Number(order.discountAmount) : null,
     createdAt: order.createdAt,
     updatedAt: order.updatedAt,
     items: order.items.map((item): SerializedOrderItem => ({

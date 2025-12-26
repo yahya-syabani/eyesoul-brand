@@ -85,7 +85,7 @@ const EditUserPage = () => {
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           required
-          error={error}
+          error={error || undefined}
         />
         <AdminSelect
           label="Role"
