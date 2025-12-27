@@ -1,12 +1,9 @@
 'use client'
 
 import React from 'react'
-import { Link, useRouter } from '@/i18n/routing'
+import { useRouter } from '@/i18n/routing'
 import Image from 'next/image'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Scrollbar } from 'swiper/modules';
 import { useTranslations } from 'next-intl';
-import 'swiper/css/bundle';
 
 interface ProductCounts {
     'sunglasses': number;
@@ -43,54 +40,27 @@ const TrendingNow: React.FC<TrendingNowProps> = ({ productCounts }) => {
                 <div className="container">
                     <div className="heading3 text-center">{t('home.trendingRightNow')}
                     </div>
-                    <div className="list-trending section-swiper-navigation style-small-border style-outline md:mt-10 mt-6">
-                        <Swiper
-                            spaceBetween={12}
-                            slidesPerView={2}
-                            navigation
-                            loop={true}
-                            modules={[Navigation, Autoplay]}
-                            breakpoints={{
-                                576: {
-                                    slidesPerView: 3,
-                                    spaceBetween: 12,
-                                },
-                                768: {
-                                    slidesPerView: 4,
-                                    spaceBetween: 20,
-                                },
-                                992: {
-                                    slidesPerView: 5,
-                                    spaceBetween: 20,
-                                },
-                                1290: {
-                                    slidesPerView: 6,
-                                    spaceBetween: 30,
-                                },
-                            }}
-                            className='h-full'
-                        >
+                    <div className="list-trending md:mt-10 mt-6">
+                        <div className="flex flex-wrap justify-between items-start gap-4 md:gap-6">
                             {trendingItems.map((item, index) => (
-                                <SwiperSlide key={index}>
-                                    <div className="trending-item block relative cursor-pointer" onClick={() => handleTypeClick(item.type)}>
-                                        <div className="bg-img rounded-full overflow-hidden">
-                                            <Image
-                                                src={item.image}
-                                                width={1000}
-                                                height={1000}
-                                                alt={item.label}
-                                                priority={true}
-                                                className='w-full'
-                                            />
-                                        </div>
-                                        <div className="trending-name text-center mt-5 duration-500">
-                                            <span className='heading5'>{item.label}</span>
-                                            <span className='text-secondary'> ({item.count})</span>
-                                        </div>
+                                <div key={index} className="trending-item block relative cursor-pointer flex-1 min-w-0" onClick={() => handleTypeClick(item.type)}>
+                                    <div className="bg-img rounded-full overflow-hidden">
+                                        <Image
+                                            src={item.image}
+                                            width={1000}
+                                            height={1000}
+                                            alt={item.label}
+                                            priority={true}
+                                            className='w-full'
+                                        />
                                     </div>
-                                </SwiperSlide>
+                                    <div className="trending-name text-center mt-5 duration-500">
+                                        <span className='heading5'>{item.label}</span>
+                                        <span className='text-secondary'> ({item.count})</span>
+                                    </div>
+                                </div>
                             ))}
-                        </Swiper>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -15,6 +15,7 @@ export interface StoreLocationType {
     address: string
     phone: string
     email?: string | null
+    imageUrl?: string | null
     hours: StoreLocationHours
     mapUrl: string
     coordinates: StoreLocationCoordinates

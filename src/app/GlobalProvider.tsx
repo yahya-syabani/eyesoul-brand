@@ -9,6 +9,7 @@ import { CompareProvider } from '@/context/CompareContext'
 import { ModalCompareProvider } from '@/context/ModalCompareContext'
 import { ModalSearchProvider } from '@/context/ModalSearchContext'
 import { ModalQuickviewProvider } from '@/context/ModalQuickviewContext'
+import { ModalStoreLocationProvider } from '@/context/ModalStoreLocationContext'
 
 const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const providers = [
@@ -22,6 +23,7 @@ const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
         ModalCompareProvider,
         ModalSearchProvider,
         ModalQuickviewProvider,
+        ModalStoreLocationProvider,
     ] as const
 
     return providers.reduceRight<React.ReactNode>((acc, Provider) => <Provider>{acc}</Provider>, children)

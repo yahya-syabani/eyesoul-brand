@@ -210,7 +210,19 @@
       "phone": "Telepon",
       "email": "Email",
       "openingHours": "Jam Buka",
-      "getDirections": "Dapatkan Petunjuk Arah"
+      "getDirections": "Dapatkan Petunjuk Arah",
+      "viewOnMap": "Lihat di Peta",
+      "viewAllStores": "Lihat Semua Toko",
+      "clickToViewOnMap": "Klik untuk melihat di peta",
+      "storeImage": "Gambar toko",
+      "call": "Telepon",
+      "closeModal": "Tutup lokasi toko",
+      "searchPlaceholder": "Cari berdasarkan nama toko, kota, atau alamat",
+      "searchResults": "{{count}} toko ditemukan",
+      "openNow": "Buka Sekarang",
+      "closed": "Tutup",
+      "noResults": "Tidak ada toko yang sesuai dengan pencarian Anda",
+      "copy": "Salin"
     },
     "service": {
       "title": "Layanan Kami",

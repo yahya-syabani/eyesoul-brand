@@ -4,7 +4,6 @@ import React, { useState, useRef } from 'react'
 import * as Icon from '@phosphor-icons/react/dist/ssr'
 import { useTranslations, useLocale } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/routing'
-import { motion, AnimatePresence } from 'framer-motion'
 import useLoginPopup from '@/store/useLoginPopup'
 import useMenuMobile from '@/store/useMenuMobile'
 import { useModalCartContext } from '@/context/ModalCartContext'
@@ -118,66 +117,50 @@ const Header: React.FC<HeaderProps> = ({
                   aria-expanded={isOpenLanguage}
                   aria-haspopup="true"
                   tabIndex={0}
-                  className="choose-type choose-language language-selector flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/50"
+                  className="choose-type choose-language language-selector flex items-center gap-2.5 px-4 py-2 bg-white/5 hover:bg-white/15 transition-[background-color] duration-200 ease-out cursor-pointer focus:outline-none"
                   onClick={() => {
                     setIsOpenLanguage(!isOpenLanguage)
                   }}
                   onKeyDown={handleKeyDown}
                 >
-                  <Icon.Globe size={16} className="text-white flex-shrink-0" />
+                  <Icon.Globe size={18} className="text-white flex-shrink-0" />
                   <div className="select relative">
                     <p className="selected caption2 text-white">{currentLanguage}</p>
-                    <AnimatePresence>
-                      {isOpenLanguage && (
-                        <motion.ul
-                          initial={{ opacity: 0, y: -5 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -5 }}
-                          transition={{ duration: 0.15, ease: 'easeOut' }}
-                          className="list-option bg-white open shadow-sm rounded-md min-w-[120px] py-1"
-                          role="listbox"
+                    {isOpenLanguage && (
+                      <ul
+                        className="list-option bg-white open"
+                        role="listbox"
+                      >
+                        <li
+                          role="option"
+                          aria-selected={locale === 'en'}
+                          className={`caption2 cursor-pointer ${locale === 'en' ? 'selected text-black' : 'text-secondary'} ${focusedIndex === 0 ? 'bg-surface' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleLanguageChange('en')
+                          }}
+                          onMouseEnter={() => setFocusedIndex(0)}
                         >
-                          <motion.li
-                            role="option"
-                            aria-selected={locale === 'en'}
-                            whileHover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
-                            className={`caption2 cursor-pointer px-3 py-2 ${
-                              locale === 'en' ? 'font-medium text-black' : 'text-secondary'
-                            } ${focusedIndex === 0 ? 'bg-black/5' : ''}`}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleLanguageChange('en')
-                            }}
-                            onMouseEnter={() => setFocusedIndex(0)}
-                          >
-                            {t('language.english')}
-                          </motion.li>
-                          <motion.li
-                            role="option"
-                            aria-selected={locale === 'id'}
-                            whileHover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
-                            className={`caption2 cursor-pointer px-3 py-2 ${
-                              locale === 'id' ? 'font-medium text-black' : 'text-secondary'
-                            } ${focusedIndex === 1 ? 'bg-black/5' : ''}`}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleLanguageChange('id')
-                            }}
-                            onMouseEnter={() => setFocusedIndex(1)}
-                          >
-                            {t('language.indonesia')}
-                          </motion.li>
-                        </motion.ul>
-                      )}
-                    </AnimatePresence>
+                          {t('language.english')}
+                        </li>
+                        <li
+                          role="option"
+                          aria-selected={locale === 'id'}
+                          className={`caption2 cursor-pointer ${locale === 'id' ? 'selected text-black' : 'text-secondary'} ${focusedIndex === 1 ? 'bg-surface' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleLanguageChange('id')
+                          }}
+                          onMouseEnter={() => setFocusedIndex(1)}
+                        >
+                          {t('language.indonesia')}
+                        </li>
+                      </ul>
+                    )}
                   </div>
-                  <motion.div
-                    animate={{ rotate: isOpenLanguage ? 180 : 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex-shrink-0"
-                  >
-                    <Icon.CaretDown size={12} className="text-white" />
-                  </motion.div>
+                  <div className="flex-shrink-0">
+                    <Icon.CaretDown size={14} className={`text-white transition-transform ${isOpenLanguage ? 'rotate-180' : ''}`} />
+                  </div>
                 </div>
                 <Link href={'/pages/store-location'} className='caption2 text-white hover:underline'>
                   {t('nav.storeLocation')}

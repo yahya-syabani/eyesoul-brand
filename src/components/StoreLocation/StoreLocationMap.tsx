@@ -19,6 +19,7 @@ if (typeof window !== 'undefined') {
 interface StoreLocationMapProps {
   locations: StoreLocationType[]
   selectedLocationId?: string | null
+  onMarkerClick?: (storeId: string) => void
 }
 
 // Component to handle map centering when selectedLocationId changes
@@ -41,7 +42,7 @@ function MapCenterHandler({ selectedLocationId, locations }: { selectedLocationI
   return null
 }
 
-const StoreLocationMap: React.FC<StoreLocationMapProps> = ({ locations, selectedLocationId }) => {
+const StoreLocationMap: React.FC<StoreLocationMapProps> = ({ locations, selectedLocationId, onMarkerClick }) => {
   const [isMounted, setIsMounted] = useState(false)
   const mapKeyRef = useRef(`map-${Date.now()}`)
 
@@ -134,7 +135,17 @@ const StoreLocationMap: React.FC<StoreLocationMapProps> = ({ locations, selected
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {validLocations.map((location) => (
-            <Marker key={location.id} position={[location.coordinates.lat, location.coordinates.lng]}>
+            <Marker 
+              key={location.id} 
+              position={[location.coordinates.lat, location.coordinates.lng]}
+              eventHandlers={{
+                click: () => {
+                  if (onMarkerClick) {
+                    onMarkerClick(location.id)
+                  }
+                }
+              }}
+            >
               <Popup maxWidth={300} className="store-location-popup">
                 <div className="p-4 min-w-[250px]">
                   <div className="font-semibold text-base mb-3 text-black">{location.name}</div>

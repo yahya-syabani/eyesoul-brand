@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { AdminInput } from '@/components/Admin/AdminFormField'
 
 const NewStoreLocationPage = () => {
@@ -11,6 +12,7 @@ const NewStoreLocationPage = () => {
     address: '',
     phone: '',
     email: '',
+    imageUrl: '',
     hoursWeekdays: 'Mon - Fri: 9:00am - 9:00pm',
     hoursSaturday: 'Saturday: 10:00am - 8:00pm',
     hoursSunday: 'Sunday: 11:00am - 7:00pm',
@@ -55,6 +57,7 @@ const NewStoreLocationPage = () => {
         address: form.address,
         phone: form.phone,
         email: form.email || null,
+        imageUrl: form.imageUrl || null,
         hoursWeekdays: form.hoursWeekdays,
         hoursSaturday: form.hoursSaturday,
         hoursSunday: form.hoursSunday,
@@ -123,6 +126,27 @@ const NewStoreLocationPage = () => {
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           placeholder="store@eyesoul.com"
         />
+
+        <div className="space-y-2">
+          <AdminInput
+            label="Image URL"
+            type="text"
+            value={form.imageUrl}
+            onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
+            placeholder="/images/store-location/store1.png"
+          />
+          {form.imageUrl && (
+            <div className="w-full h-48 relative border border-line rounded overflow-hidden">
+              <Image
+                src={form.imageUrl}
+                alt="Preview"
+                fill
+                className="object-contain"
+                onError={() => setError('Invalid image URL')}
+              />
+            </div>
+          )}
+        </div>
 
         <AdminInput
           label="Hours (Weekdays)"

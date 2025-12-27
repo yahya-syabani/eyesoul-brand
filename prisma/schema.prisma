@@ -201,6 +201,7 @@ model StoreLocation {
   address       String
   phone         String
   email         String?
+  imageUrl      String?
   hoursWeekdays String
   hoursSaturday String
   hoursSunday   String

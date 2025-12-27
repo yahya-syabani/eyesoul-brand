@@ -210,7 +210,19 @@
       "phone": "Phone",
       "email": "Email",
       "openingHours": "Opening Hours",
-      "getDirections": "Get Directions"
+      "getDirections": "Get Directions",
+      "viewOnMap": "View on Map",
+      "viewAllStores": "View All Stores",
+      "clickToViewOnMap": "Click to view on map",
+      "storeImage": "Store image",
+      "call": "Call",
+      "closeModal": "Close store locations",
+      "searchPlaceholder": "Search by store name, city, or address",
+      "searchResults": "{{count}} stores found",
+      "openNow": "Open Now",
+      "closed": "Closed",
+      "noResults": "No stores found matching your search",
+      "copy": "Copy"
     },
     "service": {
       "title": "Our Services",

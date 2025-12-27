@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+import Image from 'next/image'
 import { AdminInput } from '@/components/Admin/AdminFormField'
 
 interface StoreLocation {
@@ -10,6 +11,7 @@ interface StoreLocation {
   address: string
   phone: string
   email: string | null
+  imageUrl: string | null
   hours: {
     weekdays: string
     saturday: string
@@ -33,6 +35,7 @@ const EditStoreLocationPage = () => {
     address: string
     phone: string
     email: string
+    imageUrl: string
     hoursWeekdays: string
     hoursSaturday: string
     hoursSunday: string
@@ -61,6 +64,7 @@ const EditStoreLocationPage = () => {
           address: data.address,
           phone: data.phone,
           email: data.email || '',
+          imageUrl: data.imageUrl || '',
           hoursWeekdays: data.hours.weekdays,
           hoursSaturday: data.hours.saturday,
           hoursSunday: data.hours.sunday,
@@ -115,6 +119,7 @@ const EditStoreLocationPage = () => {
         address: form.address,
         phone: form.phone,
         email: form.email || null,
+        imageUrl: form.imageUrl || null,
         hoursWeekdays: form.hoursWeekdays,
         hoursSaturday: form.hoursSaturday,
         hoursSunday: form.hoursSunday,
@@ -187,6 +192,27 @@ const EditStoreLocationPage = () => {
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
+
+        <div className="space-y-2">
+          <AdminInput
+            label="Image URL"
+            type="text"
+            value={form.imageUrl}
+            onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
+            placeholder="/images/store-location/store1.png"
+          />
+          {form.imageUrl && (
+            <div className="w-full h-48 relative border border-line rounded overflow-hidden">
+              <Image
+                src={form.imageUrl}
+                alt="Preview"
+                fill
+                className="object-contain"
+                onError={() => setError('Invalid image URL')}
+              />
+            </div>
+          )}
+        </div>
 
         <AdminInput
           label="Hours (Weekdays)"

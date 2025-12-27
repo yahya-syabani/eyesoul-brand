@@ -103,54 +103,66 @@ const TopNavThree: React.FC<Props> = ({ props }) => {
                                 aria-expanded={isOpenLanguage}
                                 aria-haspopup="true"
                                 tabIndex={0}
-                                className="choose-type choose-language language-selector flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-surface/50 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-black/20"
+                                className="choose-type choose-language language-selector flex items-center gap-2.5 px-4 py-2 bg-surface/40 hover:bg-surface/60 transition-[background-color] duration-200 ease-out cursor-pointer focus:outline-none"
                                 onClick={() => {
                                     setIsOpenLanguage(!isOpenLanguage)
                                     setIsOpenCurrence(false)
                                 }}
                                 onKeyDown={handleKeyDown}
                             >
-                                <Icon.Globe size={16} className="text-secondary flex-shrink-0" />
+                                <Icon.Globe size={18} className="text-secondary flex-shrink-0" />
                                 <div className="select relative">
-                                    <p className="selected caption2 text-secondary">{currentLanguage}</p>
+                                    <p className="selected caption1 font-medium text-secondary">{currentLanguage}</p>
                                     <AnimatePresence>
                                         {isOpenLanguage && (
                                             <motion.ul
-                                                initial={{ opacity: 0, y: -5 }}
+                                                initial={{ opacity: 0, y: -8 }}
                                                 animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: -5 }}
-                                                transition={{ duration: 0.15, ease: 'easeOut' }}
-                                                className="list-option bg-white open shadow-sm rounded-md min-w-[120px] py-1"
+                                                exit={{ opacity: 0, y: -8 }}
+                                                transition={{ 
+                                                    duration: 0.2, 
+                                                    ease: [0.4, 0, 0.2, 1],
+                                                    staggerChildren: 0.05
+                                                }}
+                                                className="list-option bg-white open"
                                                 role="listbox"
                                             >
                                                 <motion.li
                                                     role="option"
                                                     aria-selected={locale === 'en'}
-                                                    whileHover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
-                                                    className={`caption2 cursor-pointer px-3 py-2 ${
-                                                        locale === 'en' ? 'font-medium text-black' : 'text-secondary'
-                                                    } ${focusedIndex === 0 ? 'bg-black/5' : ''}`}
+                                                    initial={{ opacity: 0, x: -8 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: -8 }}
+                                                    transition={{ duration: 0.15 }}
+                                                    className={`caption1 cursor-pointer ${locale === 'en' ? 'selected font-semibold text-black' : 'text-secondary'} ${focusedIndex === 0 ? 'bg-surface' : ''}`}
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         handleLanguageChange('en')
                                                     }}
                                                     onMouseEnter={() => setFocusedIndex(0)}
                                                 >
+                                                    {locale === 'en' && (
+                                                        <Icon.Check size={16} weight="bold" className="text-green flex-shrink-0" />
+                                                    )}
                                                     {t('language.english')}
                                                 </motion.li>
                                                 <motion.li
                                                     role="option"
                                                     aria-selected={locale === 'id'}
-                                                    whileHover={{ backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
-                                                    className={`caption2 cursor-pointer px-3 py-2 ${
-                                                        locale === 'id' ? 'font-medium text-black' : 'text-secondary'
-                                                    } ${focusedIndex === 1 ? 'bg-black/5' : ''}`}
+                                                    initial={{ opacity: 0, x: -8 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: -8 }}
+                                                    transition={{ duration: 0.15 }}
+                                                    className={`caption1 cursor-pointer ${locale === 'id' ? 'selected font-semibold text-black' : 'text-secondary'} ${focusedIndex === 1 ? 'bg-surface' : ''}`}
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         handleLanguageChange('id')
                                                     }}
                                                     onMouseEnter={() => setFocusedIndex(1)}
                                                 >
+                                                    {locale === 'id' && (
+                                                        <Icon.Check size={16} weight="bold" className="text-green flex-shrink-0" />
+                                                    )}
                                                     {t('language.indonesia')}
                                                 </motion.li>
                                             </motion.ul>
@@ -159,10 +171,10 @@ const TopNavThree: React.FC<Props> = ({ props }) => {
                                 </div>
                                 <motion.div
                                     animate={{ rotate: isOpenLanguage ? 180 : 0 }}
-                                    transition={{ duration: 0.2 }}
+                                    transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
                                     className="flex-shrink-0"
                                 >
-                                    <Icon.CaretDown size={12} className="text-secondary" />
+                                    <Icon.CaretDown size={14} className="text-secondary" />
                                 </motion.div>
                             </div>
                             <div

@@ -1,0 +1,241 @@
+.store-location-list {
+    .store-list-item {
+        transition: box-shadow 0.3s ease-out, border-color 0.3s ease-out;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+        &:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .store-item-header {
+            transition: background-color 0.2s ease-out;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.02);
+            }
+
+            &:active {
+                background-color: rgba(0, 0, 0, 0.04);
+            }
+
+            .status-badge {
+                transition: opacity 0.2s ease-out;
+            }
+        }
+
+        .store-item-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s ease-out;
+            overflow: hidden;
+
+            > * {
+                min-height: 0;
+                overflow: hidden;
+                width: 100%;
+            }
+
+            // Hide image when collapsed
+            .store-image-full {
+                opacity: 0;
+                visibility: hidden;
+                max-height: 0;
+                transition: opacity 0.3s ease-out, visibility 0.3s ease-out, max-height 0.3s ease-out;
+            }
+        }
+
+        &.expanded {
+            border-color: rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+            .store-item-content {
+                grid-template-rows: 1fr;
+
+                // Show image when expanded
+                .store-image-full {
+                    opacity: 1;
+                    visibility: visible;
+                    max-height: clamp(120px, 20vh, 200px);
+                }
+            }
+        }
+
+        .store-image-full {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out, visibility 0.3s ease-out, max-height 0.3s ease-out;
+
+            &:hover {
+                transform: scale(1.02);
+            }
+        }
+
+        .info-item {
+            transition: background-color 0.2s ease-out;
+            border-radius: clamp(0.75rem, 2vw, 1rem);
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.02);
+            }
+
+            .info-icon-wrapper {
+                transition: background-color 0.2s ease-out, transform 0.2s ease-out;
+
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.05);
+                    transform: scale(1.05);
+                }
+            }
+
+            .copy-btn {
+                transition: background-color 0.2s ease-out, color 0.2s ease-out, transform 0.2s ease-out;
+
+                &:hover {
+                    transform: scale(1.1);
+                }
+
+                &:active {
+                    transform: scale(0.95);
+                }
+            }
+        }
+
+        .action-buttons {
+            .button-main {
+                transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out, color 0.2s ease-out;
+
+                &:hover {
+                    transform: translateY(-1px);
+                }
+
+                &:active {
+                    transform: translateY(0);
+                }
+            }
+
+            .view-on-map-btn {
+                transition: transform 0.2s ease-out, background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out;
+
+                &:hover {
+                    transform: translateY(-1px);
+                }
+
+                &:active {
+                    transform: translateY(0);
+                }
+            }
+        }
+    }
+}
+
+// Responsive grid gaps
+.store-info-grid {
+    gap: clamp(0.75rem, 2vw, 1rem);
+}
+
+.contact-section {
+    gap: clamp(0.5rem, 1.5vw, 0.75rem) !important;
+}
+
+// Search bar styles
+.modal-store-location-header {
+    .search-bar {
+        input {
+            transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+
+            &::placeholder {
+                color: var(--secondary2);
+                opacity: 0.7;
+            }
+
+            &:focus {
+                box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
+}
+
+// Empty state styles
+.modal-store-location-content {
+    .empty-state {
+        animation: fadeIn 0.3s ease-out;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Responsive header padding with clamp
+.modal-store-location-header {
+    padding-left: clamp(1rem, 4vw, 1.25rem);
+    padding-right: clamp(1rem, 4vw, 1.25rem);
+}
+
+// Responsive content padding with clamp
+.modal-store-location-content {
+    padding-left: clamp(1rem, 4vw, 1.25rem);
+    padding-right: clamp(1rem, 4vw, 1.25rem);
+}
+
+// Responsive adjustments
+@media (max-width: 767.98px) {
+    .store-location-list {
+        .store-list-item {
+            border-radius: clamp(0.75rem, 2vw, 1rem);
+
+            .store-item-header {
+                padding: clamp(0.75rem, 2vw, 1rem);
+            }
+
+            .store-item-content {
+                .store-details {
+                    padding-left: clamp(0.75rem, 2vw, 1rem);
+                    padding-right: clamp(0.75rem, 2vw, 1rem);
+                    padding-bottom: clamp(0.75rem, 2vw, 1rem);
+                    padding-top: 0;
+                }
+            }
+        }
+    }
+}
+
+// Base responsive padding for store-details (applies to all screen sizes)
+.store-details {
+    padding-left: clamp(0.75rem, 2vw, 1rem);
+    padding-right: clamp(0.75rem, 2vw, 1rem);
+}
+
+// Ensure collapsed content takes no space
+.store-list-item:not(.expanded) .store-item-content {
+    .store-details {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
+
+// Scrollbar styling for modal content
+.modal-store-location-content {
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+        transition: background-color 0.2s ease-out;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+    }
+}
