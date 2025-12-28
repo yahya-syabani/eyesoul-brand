@@ -34,7 +34,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full mx-4">
+      <div className="bg-white dark:bg-surface rounded-lg shadow-lg p-6 max-w-md w-full mx-4">
         <div className="flex items-start gap-4 mb-4">
           <div
             className={`p-2 rounded-full ${
@@ -42,7 +42,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                 ? 'bg-red/10'
                 : variant === 'warning'
                 ? 'bg-yellow/10'
-                : 'bg-black/10'
+                : 'bg-black/10 dark:bg-white/10'
             }`}
           >
             {variant === 'danger' ? (
@@ -50,7 +50,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             ) : variant === 'warning' ? (
               <Icon.Warning size={24} className="text-yellow" />
             ) : (
-              <Icon.Info size={24} className="text-black" />
+              <Icon.Info size={24} />
             )}
           </div>
           <div className="flex-1">
@@ -61,7 +61,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         <div className="flex gap-3 justify-end">
           <button
             onClick={onCancel}
-            className="px-4 py-2 border border-line rounded-lg text-title hover:bg-surface transition-colors"
+            className="px-4 py-2 border border-line rounded-lg text-title hover:bg-surface dark:hover:bg-surface1 transition-colors"
           >
             {cancelText}
           </button>

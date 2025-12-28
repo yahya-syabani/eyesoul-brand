@@ -74,6 +74,7 @@ const Footer = () => {
                                         <h3 className="text-button-uppercase pb-3">{t('footer.information')}</h3>
                                         <Link className='caption1 has-line-before duration-300 w-fit' href={'/pages/contact'}>{t('footer.contactUs')}</Link>
                                         <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/service'}>{t('footer.services')}</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/insurance'}>{t('footer.insurance')}</Link>
                                         <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/my-account'}>{t('footer.myAccount')}</Link>
                                     </div>
                                     <div className="item flex flex-col basis-1/3 ">
@@ -110,7 +111,6 @@ const Footer = () => {
                                         }}
                                         onKeyDown={handleKeyDown}
                                     >
-                                        <Icon.Globe size={18} className="text-secondary flex-shrink-0" />
                                         <div className="select relative">
                                             <p className="selected caption1 text-secondary">{currentLanguage}</p>
                                             {isOpenLanguage && (
@@ -151,7 +151,16 @@ const Footer = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="right flex items-center">
+                            <div className="right flex items-center gap-4">
+                                <a 
+                                    href="https://www.instagram.com/eyesoul.eyewear/" 
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center text-secondary hover:text-black transition-colors duration-300"
+                                    aria-label="Follow us on Instagram"
+                                >
+                                    <i className="icon-instagram text-xl"></i>
+                                </a>
                                 <Link 
                                     href="/admin/login" 
                                     className="flex items-center gap-2 text-secondary hover:text-black transition-colors duration-300"

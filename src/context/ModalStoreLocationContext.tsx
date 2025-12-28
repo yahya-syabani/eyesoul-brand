@@ -11,9 +11,11 @@ interface ModalStoreLocationContextValue {
     isModalOpen: boolean;
     stores: StoreLocationType[];
     expandedStoreIds: Set<string>;
+    selectedProvince: string | null;
     openModalWithAllStores: (stores: StoreLocationType[]) => void;
     openModalWithStore: (stores: StoreLocationType[], storeId: string) => void;
     toggleStoreExpand: (storeId: string) => void;
+    setSelectedProvince: (province: string | null) => void;
     closeModalStoreLocation: () => void;
 }
 
@@ -31,6 +33,7 @@ export const ModalStoreLocationProvider: React.FC<ModalStoreLocationContextProps
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [stores, setStores] = useState<StoreLocationType[]>([]);
     const [expandedStoreIds, setExpandedStoreIds] = useState<Set<string>>(new Set());
+    const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const openModalWithAllStores = useCallback((storeList: StoreLocationType[]) => {
@@ -41,6 +44,7 @@ export const ModalStoreLocationProvider: React.FC<ModalStoreLocationContextProps
         }
         setStores(storeList);
         setExpandedStoreIds(new Set()); // All collapsed by default
+        setSelectedProvince(null); // Reset province selection
         setIsModalOpen(true);
     }, []);
 
@@ -50,8 +54,10 @@ export const ModalStoreLocationProvider: React.FC<ModalStoreLocationContextProps
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
         }
+        const store = storeList.find(s => s.id === storeId);
         setStores(storeList);
         setExpandedStoreIds(new Set([storeId])); // Expand the specific store
+        setSelectedProvince(store?.province || null); // Select the province of the store
         setIsModalOpen(true);
     }, []);
 
@@ -73,6 +79,7 @@ export const ModalStoreLocationProvider: React.FC<ModalStoreLocationContextProps
         timeoutRef.current = setTimeout(() => {
             setStores([]);
             setExpandedStoreIds(new Set());
+            setSelectedProvince(null);
             timeoutRef.current = null;
         }, 500); // Match CSS transition duration (0.5s)
     }, []);
@@ -90,13 +97,15 @@ export const ModalStoreLocationProvider: React.FC<ModalStoreLocationContextProps
         return { 
             isModalOpen, 
             stores, 
-            expandedStoreIds, 
+            expandedStoreIds,
+            selectedProvince,
             openModalWithAllStores, 
             openModalWithStore, 
-            toggleStoreExpand, 
+            toggleStoreExpand,
+            setSelectedProvince,
             closeModalStoreLocation 
         };
-    }, [closeModalStoreLocation, isModalOpen, openModalWithAllStores, openModalWithStore, stores, expandedStoreIds, toggleStoreExpand]);
+    }, [closeModalStoreLocation, isModalOpen, openModalWithAllStores, openModalWithStore, stores, expandedStoreIds, selectedProvince, toggleStoreExpand]);
 
     return (
         <ModalStoreLocationContext.Provider value={contextValue}>

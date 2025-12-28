@@ -1,0 +1,32 @@
+[
+  {
+    "id": "admedika",
+    "name": "AdMedika",
+    "logo": "/images/insurance/admedika.png",
+    "description": "Penyedia layanan kesehatan terkemuka di Indonesia dengan jaringan lebih dari 8.800 fasilitas kesehatan dan melayani lebih dari 5,1 juta anggota",
+    "coverageTypes": ["Kesehatan", "Medis", "Mata", "Pemeriksaan Mata"],
+    "website": "https://www.admedika.co.id",
+    "phone": "+62 21 5088 8888",
+    "acceptsOnline": true
+  },
+  {
+    "id": "medika-plaza",
+    "name": "Medika Plaza",
+    "logo": "/images/insurance/medika-plaza.png",
+    "description": "Layanan medis terintegrasi dengan fokus pada layanan kesehatan korporat dan pemeriksaan medis di lokasi kerja",
+    "coverageTypes": ["Kesehatan", "Medis", "Kesehatan Korporat", "Mata"],
+    "website": "https://medikaplaza.com",
+    "phone": "+62 21 2996 8888",
+    "acceptsOnline": true
+  },
+  {
+    "id": "meditap",
+    "name": "Meditap",
+    "logo": "/images/insurance/meditap.png",
+    "description": "Penyedia asuransi kesehatan Indonesia dengan layanan terintegrasi untuk perawatan medis dan kesehatan",
+    "coverageTypes": ["Kesehatan", "Medis", "Mata", "Pemeriksaan Mata"],
+    "website": "https://www.meditap.co.id",
+    "phone": "+62 21 5555 8888",
+    "acceptsOnline": true
+  }
+]

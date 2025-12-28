@@ -166,7 +166,7 @@ async function main() {
           'Summer Sale Collections',
           'Koleksi Diskon Musim Panas',
         ),
-        imageUrl: '/images/slider/bg7-1.png',
+        imageUrl: 'https://picsum.photos/1920/1080?random=20',
         ctaText: 'Shop Now',
         ctaTextTranslations: stringToTranslation('Shop Now', 'Belanja Sekarang'),
         ctaLink: '/shop/default',
@@ -183,7 +183,7 @@ async function main() {
           'Discover the Latest Trends in Eyewear',
           'Temukan Tren Terbaru dalam Kacamata',
         ),
-        imageUrl: '/images/slider/bg2-2.png',
+        imageUrl: 'https://picsum.photos/1920/1080?random=21',
         ctaText: 'Shop Now',
         ctaTextTranslations: stringToTranslation('Shop Now', 'Belanja Sekarang'),
         ctaLink: '/shop/default',
@@ -200,7 +200,7 @@ async function main() {
           'New season, new wardrobe!',
           'Musim baru, lemari baru!',
         ),
-        imageUrl: '/images/slider/bg2-3.png',
+        imageUrl: 'https://picsum.photos/1920/1080?random=22',
         ctaText: 'Shop Now',
         ctaTextTranslations: stringToTranslation('Shop Now', 'Belanja Sekarang'),
         ctaLink: '/shop/default',
@@ -287,19 +287,19 @@ async function main() {
               images:
                 item.images && item.images.length > 0
                   ? item.images
-                  : ['/images/product/1000x1000.png'],
+                  : [], // Images should be uploaded via admin interface
               thumbImages:
                 item.thumbImage && item.thumbImage.length > 0
                   ? item.thumbImage
-                  : ['/images/product/1000x1000.png'],
+                  : [], // Images should be uploaded via admin interface
               variations:
                 item.variation && item.variation.length
                   ? {
                       create: item.variation.map((v: any) => ({
                         color: v.color || 'black',
                         colorCode: v.colorCode || '#1F1F1F',
-                        colorImage: v.colorImage || '/images/product/color/48x48.png',
-                        image: v.image || '/images/product/1000x1000.png',
+                        colorImage: v.colorImage || null, // Color swatch images should be uploaded via admin
+                        image: v.image || null, // Variation images should be uploaded via admin
                       })),
                     }
                   : undefined,
@@ -531,19 +531,24 @@ async function main() {
     )
   } else {
     console.log('📍 Seeding store locations...')
-    // Helper to get placeholder image based on index (cycles through banner images 1-10)
+    // Helper to get placeholder image based on index (uses Unsplash retail store images)
+    // NOTE: Store locations should have real images uploaded via admin interface
+    // This provides example images from Unsplash for seeding
     const getPlaceholderImage = (index: number) => {
-      const imageNum = (index % 10) + 1
-      return `/images/banner/${imageNum}.png`
+      const keywords = ['optometry-store', 'retail-shop', 'eyewear-store', 'store-interior', 'shop-front', 'retail-interior', 'optical-shop', 'boutique-store', 'mall-shop', 'retail-space']
+      const keyword = keywords[index % keywords.length]
+      const seed = 30 + (index % 10)
+      return `https://picsum.photos/1920/1080?random=${seed}`
     }
     const storeLocations = [
       {
         name: 'Eyesoul Living World Alam Sutera',
         address:
           'Living World Alam Sutera, Lt. UG, Jl. Alam Sutera Boulevard Kav. 21, Pakulonan, Tangerang Selatan, Banten 15325',
+        province: 'Banten',
         phone: '+62 817 110 558',
         email: 'cs@eyesouleyewear.co.id',
-        imageUrl: '/images/banner/1.png',
+        imageUrl: 'https://picsum.photos/1920/1080?random=30',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
         hoursSaturday: 'Saturday: 10:00am - 10:00pm',
         hoursSunday: 'Sunday: 10:00am - 10:00pm',
@@ -556,9 +561,10 @@ async function main() {
         name: 'Eyesoul Galaxy Mall Surabaya',
         address:
           'Galaxy Mall 1, Lt. 1, Jl. Dharmahusada Indah Timur No. 35-37, Mulyorejo, Surabaya, Jawa Timur 60115',
+        province: 'Jawa Timur',
         phone: '+62 817 110 572',
         email: 'cs@eyesouleyewear.co.id',
-        imageUrl: '/images/banner/2.png',
+        imageUrl: 'https://picsum.photos/1920/1080?random=31',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
         hoursSaturday: 'Saturday: 10:00am - 10:00pm',
         hoursSunday: 'Sunday: 10:00am - 10:00pm',
@@ -571,6 +577,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Jababeka',
         address:
           'Living Plaza Jababeka, Lt. GF, Jl. Niaga Raya No. 2, Mekarmukti, Cikarang Utara, Bekasi, Jawa Barat 17530',
+        province: 'Jawa Barat',
         phone: '+62 817 110 556',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -585,6 +592,7 @@ async function main() {
         name: 'Eyesoul QBig BSD City',
         address:
           'QBig BSD City, Jl. BSD Raya Utama No. 22, Lengkong Kulon, Pagedangan, Tangerang, Banten 15331',
+        province: 'Banten',
         phone: '+62 817 110 570',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -599,6 +607,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Kota Harapan Indah',
         address:
           'Living Plaza KHI, Lt. GF, Jl. Harapan Indah Boulevard, Medan Satria, Bekasi, Jawa Barat 17132',
+        province: 'Jawa Barat',
         phone: '+62 817 110 568',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -612,6 +621,7 @@ async function main() {
       {
         name: 'Eyesoul Living Plaza Cinere',
         address: 'Living Plaza Cinere, Jl. Cinere Raya No. 100, Cinere, Depok, Jawa Barat 16514',
+        province: 'Jawa Barat',
         phone: '+62 817 110 559',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -626,6 +636,7 @@ async function main() {
         name: 'Eyesoul Gandaria City',
         address:
           'Gandaria City Mall, Lt. UG, Jl. Sultan Iskandar Muda No. 8, Kebayoran Lama, Jakarta Selatan, DKI Jakarta 12240',
+        province: 'DKI Jakarta',
         phone: '+62 817 110 575',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -640,6 +651,7 @@ async function main() {
         name: 'Eyesoul Queen City Semarang',
         address:
           'Queen City Mall, Lt. GF, Jl. Pemuda No. 29-33, Pandansari, Semarang Tengah, Jawa Tengah 50139',
+        province: 'Jawa Tengah',
         phone: '+62 817 110 575',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -654,6 +666,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Cirebon',
         address:
           'Living Plaza Cirebon, Lt. GF, Jl. Brigjend Dharsono, Sunyaragi, Cirebon, Jawa Barat 45132',
+        province: 'Jawa Barat',
         phone: '+62 817 110 190',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -668,6 +681,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Hertasning',
         address:
           'Living Plaza Hertasning, Lt. GF, Jl. Tun Abdul Razak, Tombolo, Gowa, Sulawesi Selatan 90233',
+        province: 'Sulawesi Selatan',
         phone: '+62 817 110 773',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -682,6 +696,7 @@ async function main() {
         name: 'Eyesoul Living World Pekanbaru',
         address:
           'Living World Pekanbaru, Lt. UG, Jl. Soekarno-Hatta, Marpoyan Damai, Pekanbaru, Riau 28292',
+        province: 'Riau',
         phone: '+62 811 110 0249',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -696,6 +711,7 @@ async function main() {
         name: 'Eyesoul Plaza IBCC Bandung',
         address:
           'Plaza IBCC, Lt. GF, Jl. Jendral Ahmad Yani No. 296, Kacapiring, Bandung, Jawa Barat 40271',
+        province: 'Jawa Barat',
         phone: '+62 817 110 075',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -710,6 +726,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Sawojajar',
         address:
           'Living Plaza Sawojajar, Lt. GF, Jl. Danau Toba No. 5, Madyopuro, Malang, Jawa Timur 65139',
+        province: 'Jawa Timur',
         phone: '+62 811 110 0237',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -724,6 +741,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Perintis',
         address:
           'Living Plaza Perintis, Lt. GF, Jl. Perintis Kemerdekaan KM 9, Tamalanrea Jaya, Makassar, Sulawesi Selatan 90245',
+        province: 'Sulawesi Selatan',
         phone: '+62 818 110 166',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -738,6 +756,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Ahmad Yani Bekasi',
         address:
           'Living Plaza AYB, Lt. GF, Jl. Jend. Ahmad Yani No. 9, Pekayon Jaya, Bekasi, Jawa Barat 17148',
+        province: 'Jawa Barat',
         phone: '+62 817 110 600',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -752,6 +771,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Paskal',
         address:
           'Living Plaza Pasir Kaliki (Paskal), Lt. GF, Jl. Pasir Kaliki No. 134, Cicendo, Bandung, Jawa Barat 40173',
+        province: 'Jawa Barat',
         phone: '+62 817 110 076',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -766,6 +786,7 @@ async function main() {
         name: 'Eyesoul Living World Denpasar',
         address:
           'Living World Denpasar, Lt. 1, Jl. Gatot Subroto Timur, Tonja, Denpasar Utara, Bali 80237',
+        province: 'Bali',
         phone: '+62 817 110 214',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -780,6 +801,7 @@ async function main() {
         name: 'Eyesoul Living World Kota Wisata',
         address:
           'Living World Kota Wisata, Lt. 2, Ciangsana, Kec. Gunung Putri, Bogor, Jawa Barat 16968',
+        province: 'Jawa Barat',
         phone: '+62 817 110 603',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -794,6 +816,7 @@ async function main() {
         name: 'Eyesoul The Park Pejaten',
         address:
           'The Park Pejaten, Jl. Warung Jati Barat No. 39, Jati Padang, Pasar Minggu, Jakarta Selatan, DKI Jakarta 12540',
+        province: 'DKI Jakarta',
         phone: '+62 817 110 603',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -808,6 +831,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Bintaro',
         address:
           'Living Plaza Bintaro, Lt. 1, Jl. Bintaro Utama 9, Pondok Jaya, Pondok Aren, Tangerang Selatan, Banten 15229',
+        province: 'Banten',
         phone: '+62 817 110 603',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -822,6 +846,7 @@ async function main() {
         name: 'Eyesoul Citimall Garut',
         address:
           'Citimall Garut, Lt. G, Jl. Jendral Sudirman No. 31, Sucikaler, Garut, Jawa Barat 44182',
+        province: 'Jawa Barat',
         phone: '+62 811 110 0223',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -836,6 +861,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Pettarani',
         address:
           'Living Plaza Pettarani, Jl. A. P. Pettarani Kav. 1, Tidung, Rappocini, Makassar, Sulawesi Selatan 90222',
+        province: 'Sulawesi Selatan',
         phone: '+62 817 110 782',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -850,6 +876,7 @@ async function main() {
         name: 'Eyesoul Living World Grand Wisata',
         address:
           'Living World Grand Wisata, Lt. 1, Jl. Esplanade Avenue No. 11, Lambangjaya, Bekasi, Jawa Barat 17510',
+        province: 'Jawa Barat',
         phone: '+62 811 110 0223',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -864,6 +891,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Banjarmasin',
         address:
           'Living Plaza Banjarmasin, Jl. A. Yani KM 9, Mandar Sari, Kertak Hanyar, Banjar, Kalimantan Selatan 70654',
+        province: 'Kalimantan Selatan',
         phone: '+62 817 110 133',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -878,6 +906,7 @@ async function main() {
         name: 'Eyesoul Cihampelas Walk',
         address:
           'Cihampelas Walk, Lt. LG, Jl. Cihampelas No. 160, Cipaganti, Coblong, Bandung, Jawa Barat 40131',
+        province: 'Jawa Barat',
         phone: '+62 817 110 078',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -892,6 +921,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Puri',
         address:
           'Living Plaza Puri, Jl. Puri Harum No. 2, Kembangan Selatan, Jakarta Barat, DKI Jakarta 11610',
+        province: 'DKI Jakarta',
         phone: '+62 817 110 595',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -906,6 +936,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Palu',
         address:
           'Living Plaza Palu, Jl. Prof. Moh. Yamin, Palu Selatan, Palu, Sulawesi Tengah 94111',
+        province: 'Sulawesi Tengah',
         phone: '+62 811 110 0250',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
@@ -920,6 +951,7 @@ async function main() {
         name: 'Eyesoul Living Plaza Batam',
         address:
           'Living Plaza Batam (ex Fanindo), Jl. Nadim, Belian, Batam Kota, Kepulauan Riau 29464',
+        province: 'Kepulauan Riau',
         phone: '+62 811 110 0260',
         email: 'cs@eyesouleyewear.co.id',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',

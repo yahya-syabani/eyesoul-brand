@@ -29,6 +29,7 @@
     "shop": "Shop",
     "about": "About",
     "service": "Service",
+    "insurance": "Insurance",
     "contact": "Contact",
     "blog": "Blog",
     "storeLocation": "Store Location",
@@ -48,6 +49,7 @@
     "information": "Infomation",
     "contactUs": "Contact us",
     "services": "Services",
+    "insurance": "Insurance",
     "myAccount": "My Account",
     "quickShop": "Quick Shop",
     "shopAll": "Shop All",
@@ -65,8 +67,10 @@
   "home": {
     "trendingRightNow": "Trending Right Now",
     "shopNow": "Shop Now",
-    "limitedOffer": "Limited Offer: Free shipping on orders over $50",
-    "slogan": "Limited Offer: Free shipping on orders over $50"
+    "limitedOffer": "Special Promo: Up to 30% Off Premium Eyewear",
+    "slogan": "Special Promo: Up to 30% Off Premium Eyewear",
+    "popularProducts": "Popular Products",
+    "whyChooseUs": "Why Choose Us"
   },
   "categories": {
     "sunglasses": "Sunglasses",
@@ -218,7 +222,7 @@
       "call": "Call",
       "closeModal": "Close store locations",
       "searchPlaceholder": "Search by store name, city, or address",
-      "searchResults": "{{count}} stores found",
+      "searchResults": "{count} stores found",
       "openNow": "Open Now",
       "closed": "Closed",
       "noResults": "No stores found matching your search",
@@ -256,6 +260,19 @@
           "description": "Specialized lenses designed to protect your eyes from harmful blue light emitted by digital screens. Perfect for those who spend long hours in front of computers and devices."
         }
       }
+    },
+    "insurance": {
+      "title": "Accepted Insurance",
+      "heading": "Accepted Insurance",
+      "heroDescription": "We accept a wide range of vision insurance plans to make quality eye care accessible and affordable. Check if your insurance provider is in our network.",
+      "sectionHeading": "Insurance Providers We Accept",
+      "sectionDescription": "We work with leading vision insurance providers to ensure you receive the best coverage for your eyewear needs. All listed providers accept online claims for your convenience.",
+      "viewAll": "View All Insurance Providers",
+      "infoHeading": "Using Your Insurance",
+      "infoText1": "When you visit our store or shop online, simply provide your insurance information at checkout. Our team will verify your coverage and apply any applicable benefits to your purchase.",
+      "infoText2": "Most insurance plans cover eye exams, frames, lenses, and contact lenses. Coverage amounts and benefits vary by plan, so we recommend contacting your insurance provider directly to confirm your specific benefits.",
+      "infoText3": "If you don't see your insurance provider listed, please contact us. We may still be able to accept your insurance or help you find alternative payment options.",
+      "acceptsOnlineClaims": "Accepts Online Claims"
     }
   },
   "blog": {

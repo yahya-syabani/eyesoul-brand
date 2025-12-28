@@ -199,6 +199,7 @@ model StoreLocation {
   id            String   @id @default(cuid())
   name          String
   address       String
+  province      String
   phone         String
   email         String?
   imageUrl      String?
@@ -215,6 +216,7 @@ model StoreLocation {
 
   @@index([isActive])
   @@index([displayOrder])
+  @@index([province])
 }
 
 model HeroSlide {

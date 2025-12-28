@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { AdminInput, AdminTextarea } from '@/components/Admin/AdminFormField'
+import { ImageUploadField } from '@/components/Admin/ImageUploadField'
 
 interface Blog {
   id: string
@@ -25,7 +26,6 @@ const EditBlogPage = () => {
   const params = useParams()
   const id = params.id as string
   const [form, setForm] = useState<Blog | null>(null)
-  const [subImgInput, setSubImgInput] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(true)
@@ -48,19 +48,6 @@ const EditBlogPage = () => {
       setError('Failed to load blog')
     } finally {
       setFetching(false)
-    }
-  }
-
-  const addSubImg = () => {
-    if (subImgInput.trim() && form) {
-      setForm({ ...form, subImg: [...form.subImg, subImgInput.trim()] })
-      setSubImgInput('')
-    }
-  }
-
-  const removeSubImg = (index: number) => {
-    if (form) {
-      setForm({ ...form, subImg: form.subImg.filter((_, i) => i !== index) })
     }
   }
 
@@ -158,59 +145,28 @@ const EditBlogPage = () => {
           onChange={(e) => setForm({ ...form, avatar: e.target.value })}
         />
 
-        <AdminInput
-          label="Thumbnail Image URL"
-          type="text"
+        <ImageUploadField
+          label="Thumbnail Image"
           value={form.thumbImg || ''}
-          onChange={(e) => setForm({ ...form, thumbImg: e.target.value })}
+          onChange={(value) => setForm({ ...form, thumbImg: Array.isArray(value) ? value[0] : value })}
+          entityType="blogs"
         />
 
-        <AdminInput
-          label="Cover Image URL"
-          type="text"
+        <ImageUploadField
+          label="Cover Image"
           value={form.coverImg || ''}
-          onChange={(e) => setForm({ ...form, coverImg: e.target.value })}
+          onChange={(value) => setForm({ ...form, coverImg: Array.isArray(value) ? value[0] : value })}
+          entityType="blogs"
         />
 
-        <div>
-          <label className="text-title block mb-2">Sub Images</label>
-          <div className="flex gap-2 mb-2">
-            <input
-              type="text"
-              value={subImgInput}
-              onChange={(e) => setSubImgInput(e.target.value)}
-              placeholder="Image URL"
-              className="flex-1 border border-line rounded px-3 py-2"
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault()
-                  addSubImg()
-                }
-              }}
-            />
-            <button
-              type="button"
-              onClick={addSubImg}
-              className="px-4 py-2 border border-line rounded-lg hover:bg-surface"
-            >
-              Add
-            </button>
-          </div>
-          <div className="space-y-1">
-            {form.subImg.map((img, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <span className="text-sm text-secondary flex-1 truncate">{img}</span>
-                <button
-                  type="button"
-                  onClick={() => removeSubImg(index)}
-                  className="text-red text-sm hover:underline"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ImageUploadField
+          label="Sub Images"
+          value={form.subImg}
+          onChange={(value) => setForm({ ...form, subImg: Array.isArray(value) ? value : [value] })}
+          entityType="blogs"
+          multiple
+          maxImages={10}
+        />
 
         <AdminTextarea
           label="Short Description"

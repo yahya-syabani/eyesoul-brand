@@ -151,7 +151,7 @@ const TopNavOne: React.FC<Props> = ({ props, slogan }) => {
                                     <Icon.CaretDown size={14} className="text-white" />
                                 </motion.div>
                             </div>
-                            <Link href={'/pages/store-location'} className='caption2 text-white hover:underline'>
+                            <Link href={'/pages/store-location'} className='caption2 text-white'>
                                 {t('nav.storeLocation')}
                             </Link>
                         </div>
@@ -159,9 +159,15 @@ const TopNavOne: React.FC<Props> = ({ props, slogan }) => {
                             {displaySlogan}
                         </div>
                         <div className="right-content flex items-center gap-5 max-md:hidden">
-                            <Link href={'https://www.instagram.com/'} target='_blank'>
+                            <a 
+                                href="https://www.instagram.com/eyesoul.eyewear/" 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center"
+                                aria-label="Follow us on Instagram"
+                            >
                                 <i className="icon-instagram text-white"></i>
-                            </Link>
+                            </a>
                         </div>
 
                     </div>

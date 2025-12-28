@@ -8,8 +8,8 @@
     "price": 120,
     "originPrice": 150,
     "brand": "eyesoul",
-    "images": ["/images/product/1000x1000.png"],
-    "thumbImage": ["/images/product/1000x1000.png"],
+    "images": ["https://picsum.photos/1000/1000?random=1"],
+    "thumbImage": ["https://picsum.photos/1000/1000?random=1"],
     "rate": 5,
     "sold": 10,
     "quantity": 50,
@@ -19,8 +19,8 @@
       {
         "color": "black",
         "colorCode": "#1F1F1F",
-        "colorImage": "/images/product/color/48x48.png",
-        "image": "/images/product/1000x1000.png"
+        "colorImage": "https://picsum.photos/48/48?random=8",
+        "image": "https://picsum.photos/1000/1000?random=7"
       }
     ],
     "sizes": ["medium"]
@@ -34,8 +34,8 @@
     "price": 90,
     "originPrice": 120,
     "brand": "clarity",
-    "images": ["/images/product/1000x1000.png"],
-    "thumbImage": ["/images/product/1000x1000.png"],
+    "images": ["https://picsum.photos/1000/1000?random=3"],
+    "thumbImage": ["https://picsum.photos/1000/1000?random=3"],
     "rate": 4,
     "sold": 5,
     "quantity": 80,
@@ -45,8 +45,8 @@
       {
         "color": "red",
         "colorCode": "#DB4444",
-        "colorImage": "/images/product/color/48x48.png",
-        "image": "/images/product/1000x1000.png"
+        "colorImage": "https://picsum.photos/48/48?random=8",
+        "image": "https://picsum.photos/1000/1000?random=7"
       }
     ],
     "sizes": ["small"]
@@ -60,8 +60,8 @@
     "price": 180,
     "originPrice": 220,
     "brand": "eyesoul",
-    "images": ["/images/product/1000x1000.png"],
-    "thumbImage": ["/images/product/1000x1000.png"],
+    "images": ["https://picsum.photos/1000/1000?random=4"],
+    "thumbImage": ["https://picsum.photos/1000/1000?random=4"],
     "rate": 5,
     "sold": 25,
     "quantity": 60,
@@ -71,14 +71,14 @@
       {
         "color": "black",
         "colorCode": "#1F1F1F",
-        "colorImage": "/images/product/color/48x48.png",
-        "image": "/images/product/1000x1000.png"
+        "colorImage": "https://picsum.photos/48/48?random=8",
+        "image": "https://picsum.photos/1000/1000?random=7"
       },
       {
         "color": "brown",
         "colorCode": "#8B4513",
-        "colorImage": "/images/product/color/48x48.png",
-        "image": "/images/product/1000x1000.png"
+        "colorImage": "https://picsum.photos/48/48?random=8",
+        "image": "https://picsum.photos/1000/1000?random=7"
       }
     ],
     "sizes": ["medium", "large"]
@@ -92,8 +92,8 @@
     "price": 45,
     "originPrice": 60,
     "brand": "eyesoul",
-    "images": ["/images/product/1000x1000.png"],
-    "thumbImage": ["/images/product/1000x1000.png"],
+    "images": ["https://picsum.photos/1000/1000?random=5"],
+    "thumbImage": ["https://picsum.photos/1000/1000?random=5"],
     "rate": 4,
     "sold": 30,
     "quantity": 100,
@@ -103,8 +103,8 @@
       {
         "color": "purple",
         "colorCode": "#8684D4",
-        "colorImage": "/images/product/color/48x48.png",
-        "image": "/images/product/1000x1000.png"
+        "colorImage": "https://picsum.photos/48/48?random=8",
+        "image": "https://picsum.photos/1000/1000?random=7"
       }
     ],
     "sizes": ["medium"]
@@ -118,8 +118,8 @@
     "price": 35,
     "originPrice": 45,
     "brand": "eyesoul",
-    "images": ["/images/product/1000x1000.png"],
-    "thumbImage": ["/images/product/1000x1000.png"],
+    "images": ["https://picsum.photos/1000/1000?random=6"],
+    "thumbImage": ["https://picsum.photos/1000/1000?random=6"],
     "rate": 5,
     "sold": 50,
     "quantity": 200,
@@ -129,8 +129,8 @@
       {
         "color": "clear",
         "colorCode": "#FFFFFF",
-        "colorImage": "/images/product/color/48x48.png",
-        "image": "/images/product/1000x1000.png"
+        "colorImage": "https://picsum.photos/48/48?random=8",
+        "image": "https://picsum.photos/1000/1000?random=7"
       }
     ],
     "sizes": ["30-pack"]

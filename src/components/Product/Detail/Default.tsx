@@ -806,69 +806,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                             },
                                         }}
                                     >
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src={'/images/product/1000x1000.png'}
-                                                width={400}
-                                                height={400}
-                                                alt=''
-                                                className='w-[120px] aspect-square object-cover rounded-lg'
-                                            />
-                                        </SwiperSlide>
+                                        {/* Review images will be displayed here when reviews with images are available */}
                                     </Swiper>
                                 </div>
                                 <div className="sorting flex items-center flex-wrap md:gap-5 gap-3 gap-y-3 mt-6">
@@ -885,29 +823,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                         <div className="list-review">
                             <div className="item flex max-lg:flex-col gap-y-4 w-full py-6 border-t border-line">
                                 <div className="left lg:w-1/4 w-full lg:pr-[15px]">
-                                    <div className="list-img-review flex gap-2">
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                    </div>
+                                    {/* Review images will be displayed here when reviews with images are available */}
                                     <div className="user mt-3">
                                         <div className="text-title">Tony Nguyen</div>
                                         <div className="flex items-center gap-2">
@@ -934,29 +850,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                             </div>
                             <div className="item flex max-lg:flex-col gap-y-4 w-full py-6 border-t border-line">
                                 <div className="left lg:w-1/4 w-full lg:pr-[15px]">
-                                    <div className="list-img-review flex gap-2">
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                    </div>
+                                    {/* Review images will be displayed here when reviews with images are available */}
                                     <div className="user mt-3">
                                         <div className="text-title">Tony Nguyen</div>
                                         <div className="flex items-center gap-2">
@@ -983,29 +877,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                             </div>
                             <div className="item flex max-lg:flex-col gap-y-4 w-full py-6 border-t border-line">
                                 <div className="left lg:w-1/4 w-full lg:pr-[15px]">
-                                    <div className="list-img-review flex gap-2">
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                        <Image
-                                            src={'/images/product/1000x1000.png'}
-                                            width={200}
-                                            height={200}
-                                            alt='img'
-                                            className='w-[60px] aspect-square rounded-lg'
-                                        />
-                                    </div>
+                                    {/* Review images will be displayed here when reviews with images are available */}
                                     <div className="user mt-3">
                                         <div className="text-title">Tony Nguyen</div>
                                         <div className="flex items-center gap-2">

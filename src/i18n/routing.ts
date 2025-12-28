@@ -35,7 +35,8 @@ export const routing = defineRouting({
     '/pages/contact': '/pages/contact',
     '/pages/faqs': '/pages/faqs',
     '/pages/store-location': '/pages/store-location',
-    '/pages/service': '/pages/service'
+    '/pages/service': '/pages/service',
+    '/pages/insurance': '/pages/insurance'
   }
 });
 

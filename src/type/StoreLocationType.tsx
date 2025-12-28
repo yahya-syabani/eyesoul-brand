@@ -13,6 +13,7 @@ export interface StoreLocationType {
     id: string
     name: string
     address: string
+    province: string
     phone: string
     email?: string | null
     imageUrl?: string | null

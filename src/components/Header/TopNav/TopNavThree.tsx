@@ -199,9 +199,15 @@ const TopNavThree: React.FC<Props> = ({ props }) => {
                             <Link href={'https://www.facebook.com/'} target='_blank'>
                                 <i className="icon-facebook text-black"></i>
                             </Link>
-                            <Link href={'https://www.instagram.com/'} target='_blank'>
+                            <a 
+                                href="https://www.instagram.com/eyesoul.eyewear/" 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center"
+                                aria-label="Follow us on Instagram"
+                            >
                                 <i className="icon-instagram text-black"></i>
-                            </Link>
+                            </a>
                             <Link href={'https://www.youtube.com/'} target='_blank'>
                                 <i className="icon-youtube text-black"></i>
                             </Link>

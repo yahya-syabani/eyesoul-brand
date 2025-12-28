@@ -96,7 +96,7 @@ export type LayoutColumn = typeof LAYOUT_COLUMNS[number]
 export const COLOR_CODES: Record<ProductColor, string> = {
   pink: '#F4C5BF',
   red: '#DB4444',
-  green: '#D2EF9A',
+  green: '#2196F3',
   yellow: '#ECB018',
   purple: '#8684D4',
   black: '#1F1F1F',

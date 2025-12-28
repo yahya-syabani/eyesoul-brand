@@ -20,7 +20,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ 
-  topNavProps = 'style-two bg-purple', 
+  topNavProps = 'style-two bg-green', 
   slogan 
 }) => {
   const t = useTranslations()
@@ -89,6 +89,7 @@ const Header: React.FC<HeaderProps> = ({
     if (href === '/shop/default') return pathname.startsWith('/shop')
     if (href === '/blog/default') return pathname.startsWith('/blog')
     if (href === '/pages/service') return pathname === '/pages/service'
+    if (href === '/pages/insurance') return pathname === '/pages/insurance'
     return pathname === href
   }
 
@@ -96,6 +97,7 @@ const Header: React.FC<HeaderProps> = ({
     { href: '/shop/default', label: t('nav.shop') },
     { href: '/pages/about', label: t('nav.about') },
     { href: '/pages/service', label: t('nav.service') },
+    { href: '/pages/insurance', label: t('nav.insurance') },
     { href: '/pages/contact', label: t('nav.contact') },
     { href: '/blog/default', label: t('nav.blog') },
   ]
@@ -123,9 +125,8 @@ const Header: React.FC<HeaderProps> = ({
                   }}
                   onKeyDown={handleKeyDown}
                 >
-                  <Icon.Globe size={18} className="text-white flex-shrink-0" />
                   <div className="select relative">
-                    <p className="selected caption2 text-white">{currentLanguage}</p>
+                    <p className="selected caption2 text-black">{currentLanguage}</p>
                     {isOpenLanguage && (
                       <ul
                         className="list-option bg-white open"
@@ -159,20 +160,26 @@ const Header: React.FC<HeaderProps> = ({
                     )}
                   </div>
                   <div className="flex-shrink-0">
-                    <Icon.CaretDown size={14} className={`text-white transition-transform ${isOpenLanguage ? 'rotate-180' : ''}`} />
+                    <Icon.CaretDown size={14} className={`text-black transition-transform ${isOpenLanguage ? 'rotate-180' : ''}`} />
                   </div>
                 </div>
-                <Link href={'/pages/store-location'} className='caption2 text-white hover:underline'>
+                <Link href={'/pages/store-location'} className='caption2 text-black'>
                   {t('nav.storeLocation')}
                 </Link>
               </div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-button-uppercase text-white max-md:hidden whitespace-nowrap">
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-button-uppercase text-black max-md:hidden whitespace-nowrap">
                 {displaySlogan}
               </div>
               <div className="right-content flex items-center gap-5 max-md:hidden">
-                <Link href={'https://www.instagram.com/'} target='_blank'>
-                  <i className="icon-instagram text-white"></i>
-                </Link>
+                <a 
+                  href="https://www.instagram.com/eyesoul.eyewear/" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center"
+                  aria-label="Follow us on Instagram"
+                >
+                  <i className="icon-instagram text-black"></i>
+                </a>
               </div>
             </div>
           </div>

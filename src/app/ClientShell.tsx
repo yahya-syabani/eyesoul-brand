@@ -26,7 +26,7 @@ export default function ClientShell({ children, serverTimeLeft }: Props) {
 
   return (
     <>
-      {!isAdminPage && <Header topNavProps="style-two bg-purple" slogan='Limited Offer: Free shipping on orders over $50' />}
+      {!isAdminPage && <Header topNavProps="style-two bg-green" />}
       {children}
       <ToastContainer />
       {!isAdminPage && (

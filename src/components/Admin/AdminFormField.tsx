@@ -43,7 +43,7 @@ export const AdminInput: React.FC<AdminInputProps> = ({
   return (
     <AdminFormField label={label} error={error} required={required}>
       <input
-        className={`w-full border ${error ? 'border-red' : 'border-line'} rounded px-3 py-2 ${className || ''}`}
+        className={`w-full border ${error ? 'border-red' : 'border-line'} rounded px-3 py-2 bg-white dark:bg-surface ${className || ''}`}
         {...props}
       />
     </AdminFormField>
@@ -66,7 +66,7 @@ export const AdminTextarea: React.FC<AdminTextareaProps> = ({
   return (
     <AdminFormField label={label} error={error} required={required}>
       <textarea
-        className={`w-full border ${error ? 'border-red' : 'border-line'} rounded px-3 py-2 ${className || ''}`}
+        className={`w-full border ${error ? 'border-red' : 'border-line'} rounded px-3 py-2 bg-white dark:bg-surface ${className || ''}`}
         {...props}
       />
     </AdminFormField>
@@ -91,7 +91,7 @@ export const AdminSelect: React.FC<AdminSelectProps> = ({
   return (
     <AdminFormField label={label} error={error} required={required}>
       <select
-        className={`w-full border ${error ? 'border-red' : 'border-line'} rounded px-3 py-2 ${className || ''}`}
+        className={`w-full border ${error ? 'border-red' : 'border-line'} rounded px-3 py-2 bg-white dark:bg-surface ${className || ''}`}
         {...props}
       >
         {options.map((option) => (

@@ -8,6 +8,7 @@ import { rateLimitApi, createRateLimitResponse } from '@/lib/rate-limit'
 const updateStoreLocationSchema = z.object({
   name: z.string().min(1).optional(),
   address: z.string().min(1).optional(),
+  province: z.string().min(1).optional(),
   phone: z.string().min(1).optional(),
   email: z.string().email().optional().nullable(),
   imageUrl: z.string().url().optional().nullable(),
@@ -82,6 +83,7 @@ export async function PUT(
       data: {
         ...(payload.name && { name: payload.name }),
         ...(payload.address && { address: payload.address }),
+        ...(payload.province && { province: payload.province }),
         ...(payload.phone && { phone: payload.phone }),
         ...(payload.email !== undefined && { email: payload.email }),
         ...(payload.imageUrl !== undefined && { imageUrl: payload.imageUrl }),

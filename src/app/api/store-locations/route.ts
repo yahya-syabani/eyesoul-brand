@@ -8,9 +8,10 @@ import { rateLimitApi, createRateLimitResponse } from '@/lib/rate-limit'
 const storeLocationSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   address: z.string().min(1, 'Address is required'),
+  province: z.string().min(1, 'Province is required'),
   phone: z.string().min(1, 'Phone is required'),
   email: z.string().email().optional().nullable(),
-  imageUrl: z.string().url().optional().nullable(),
+  imageUrl: z.string().optional().nullable(),
   hoursWeekdays: z.string().min(1, 'Weekdays hours are required'),
   hoursSaturday: z.string().min(1, 'Saturday hours are required'),
   hoursSunday: z.string().min(1, 'Sunday hours are required'),
@@ -30,10 +31,7 @@ export async function GET(request: Request) {
 
     const locations = await prisma.storeLocation.findMany({
       where,
-      orderBy: [
-        { displayOrder: 'asc' },
-        { name: 'asc' },
-      ],
+      orderBy: [{ displayOrder: 'asc' }, { name: 'asc' }],
     })
 
     // Transform to include hours object and coordinates as numbers for frontend compatibility
@@ -82,6 +80,7 @@ export async function POST(request: Request) {
       data: {
         name: payload.name,
         address: payload.address,
+        province: payload.province,
         phone: payload.phone,
         email: payload.email ?? null,
         imageUrl: payload.imageUrl ?? null,
@@ -116,4 +115,3 @@ export async function POST(request: Request) {
     return handleApiError(error)
   }
 }
-

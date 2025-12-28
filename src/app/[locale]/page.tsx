@@ -30,6 +30,7 @@ const PopularProduct = dynamic(() => import('@/components/Home6/PopularProduct')
 const TrendingProduct = dynamic(() => import('@/components/Home3/TrendingProduct'))
 const Banner = dynamic(() => import('@/components/Home7/Banner'))
 const Testimonial = dynamic(() => import('@/components/Home7/Testimonial'))
+const InsuranceSection = dynamic(() => import('@/components/Insurance/InsuranceSection'))
 const Benefit = dynamic(() => import('@/components/Home1/Benefit'))
 const Instagram = dynamic(() => import('@/components/Home6/Instagram'))
 const Brand = dynamic(() => import('@/components/Home1/Brand'))
@@ -158,6 +159,7 @@ export default async function Home({
       <TrendingProduct data={productData} start={12} limit={20} />
       <Banner />
       <Testimonial data={testimonialData} limit={5} />
+      <InsuranceSection props="md:pt-20 pt-10" limit={6} />
       <Benefit props="md:pt-20 pt-10" />
       <Instagram />
       <Brand />

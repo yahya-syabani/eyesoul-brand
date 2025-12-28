@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { AdminInput } from '@/components/Admin/AdminFormField'
+import { ImageUploadField } from '@/components/Admin/ImageUploadField'
 
 const NewHeroSlidePage = () => {
   const router = useRouter()
@@ -137,27 +137,13 @@ const NewHeroSlidePage = () => {
           placeholder={activeLanguage === 'en' ? 'Summer Sale Collections' : 'Enter title in Indonesian (optional)'}
         />
 
-        <div className="space-y-2">
-          <AdminInput
-            label="Image URL"
-            type="text"
-            required
-            value={form.imageUrl}
-            onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-            placeholder="/images/slider/bg7-1.png"
-          />
-          {form.imageUrl && (
-            <div className="w-full h-48 relative border border-line rounded overflow-hidden">
-              <Image
-                src={form.imageUrl}
-                alt="Preview"
-                fill
-                className="object-contain"
-                onError={() => setError('Invalid image URL')}
-              />
-            </div>
-          )}
-        </div>
+        <ImageUploadField
+          label="Hero Image"
+          value={form.imageUrl}
+          onChange={(value) => setForm({ ...form, imageUrl: Array.isArray(value) ? value[0] : value })}
+          entityType="hero-slides"
+          required
+        />
 
         <AdminInput
           label={`CTA Text (${activeLanguage === 'en' ? 'English' : 'Indonesian'})`}

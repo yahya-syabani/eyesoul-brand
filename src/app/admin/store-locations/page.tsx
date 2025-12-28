@@ -9,6 +9,7 @@ interface StoreLocation {
   id: string
   name: string
   address: string
+  province: string
   phone: string
   email: string | null
   hours: {
@@ -95,6 +96,11 @@ const AdminStoreLocationsPage = () => {
           {value}
         </span>
       ),
+    },
+    {
+      key: 'province',
+      label: 'Province',
+      sortable: true,
     },
     {
       key: 'phone',

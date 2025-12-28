@@ -1,12 +1,16 @@
 'use client'
 
 import React, { useMemo } from 'react'
+import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import Footer from '@/components/Footer/Footer'
 import ServiceCard from '@/components/Service/ServiceCard'
 import servicesData from '@/data/Services.json'
+
+// Service hero image - can be configured via environment variable
+const SERVICE_HERO_IMAGE = process.env.NEXT_PUBLIC_SERVICE_HERO_IMAGE || '/images/banner/1.png'
 
 const Services = () => {
   const t = useTranslations()
@@ -37,12 +41,16 @@ const Services = () => {
             className="hero-image-wrapper rounded-[30px] overflow-hidden"
           >
             <div className="relative w-full h-[400px] md:h-[500px]">
-              {/* Placeholder */}
-              <div className="absolute inset-0 bg-line flex items-center justify-center z-0">
-                <div className="text-center">
-                  <div className="caption1 text-secondary mb-2">1200 × 500</div>
-                  <div className="caption2 text-secondary2">Image Placeholder</div>
-                </div>
+              {/* Hero Image */}
+              <div className="absolute inset-0 z-0">
+                <Image
+                  src={SERVICE_HERO_IMAGE}
+                  alt={t('pages.service.heading')}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="100vw"
+                />
               </div>
               {/* Text overlay - always on top */}
               <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-20">

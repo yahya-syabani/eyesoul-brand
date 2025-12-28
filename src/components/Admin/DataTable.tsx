@@ -68,7 +68,7 @@ function DataTable<T extends { id: string }>({
     <div className="border border-line rounded-lg overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-surface">
+          <thead className="bg-surface dark:bg-surface">
             <tr>
               {columns.map((column) => (
                 <th
@@ -104,7 +104,7 @@ function DataTable<T extends { id: string }>({
               <tr
                 key={row.id}
                 className={`border-t border-line ${
-                  onRowClick ? 'cursor-pointer hover:bg-surface' : ''
+                  onRowClick ? 'cursor-pointer hover:bg-surface dark:hover:bg-surface1' : ''
                 }`}
                 onClick={() => onRowClick?.(row)}
               >

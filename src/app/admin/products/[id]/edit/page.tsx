@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { AdminInput, AdminTextarea, AdminSelect } from '@/components/Admin/AdminFormField'
+import { ImageUploadField } from '@/components/Admin/ImageUploadField'
 import { PRODUCT_CATEGORIES, LENS_TYPES, FRAME_MATERIALS, LENS_COATINGS, PRODUCT_SIZES, PRODUCT_COLORS } from '@/lib/constants'
 import { ProductType } from '@/type/ProductType'
 
@@ -36,8 +37,8 @@ const EditProductPage = () => {
     sold: 0,
     isNew: false,
     isSale: false,
-    images: [''],
-    thumbImages: [''],
+    images: [] as string[],
+    thumbImages: [] as string[],
   })
   const [variations, setVariations] = useState<Variation[]>([])
   const [attributes, setAttributes] = useState<{
@@ -99,8 +100,8 @@ const EditProductPage = () => {
             sold: product.sold || 0,
             isNew: product.new || false,
             isSale: product.sale || false,
-            images: product.images && product.images.length > 0 ? product.images : [''],
-            thumbImages: product.thumbImage && product.thumbImage.length > 0 ? product.thumbImage : [''],
+            images: product.images && product.images.length > 0 ? product.images : [],
+            thumbImages: product.thumbImage && product.thumbImage.length > 0 ? product.thumbImage : [],
           })
           setVariations(
             product.variation && product.variation.length > 0
@@ -206,8 +207,8 @@ const EditProductPage = () => {
         sold: Number(form.sold) || 0,
         isNew: form.isNew,
         isSale: form.isSale,
-        images: form.images.filter((img) => img.trim()),
-        thumbImages: form.thumbImages.filter((img) => img.trim()),
+        images: form.images.filter((img) => img && img.trim()),
+        thumbImages: form.thumbImages.filter((img) => img && img.trim()),
         variations: variations.filter((v) => v.color && v.image),
         sizes: sizes.filter((s) => s.trim()),
         lensType: attributes.lensType || undefined,
@@ -404,17 +405,23 @@ const EditProductPage = () => {
         {/* Images */}
         <div className="border border-line rounded-lg p-6 space-y-4">
           <h2 className="heading6 mb-4">Images</h2>
-          <AdminInput
-            label="Main Image URL"
-            value={form.images[0] || ''}
-            onChange={(e) => setForm({ ...form, images: [e.target.value] })}
-            placeholder="/images/product/1000x1000.png"
+          <ImageUploadField
+            label="Main Images"
+            value={form.images}
+            onChange={(value) => setForm({ ...form, images: Array.isArray(value) ? value : [value] })}
+            entityType="products"
+            multiple
+            required
+            maxImages={10}
           />
-          <AdminInput
-            label="Thumbnail Image URL"
-            value={form.thumbImages[0] || ''}
-            onChange={(e) => setForm({ ...form, thumbImages: [e.target.value] })}
-            placeholder="/images/product/1000x1000.png"
+          <ImageUploadField
+            label="Thumbnail Images"
+            value={form.thumbImages}
+            onChange={(value) => setForm({ ...form, thumbImages: Array.isArray(value) ? value : [value] })}
+            entityType="products"
+            multiple
+            required
+            maxImages={10}
           />
         </div>
 
@@ -469,16 +476,21 @@ const EditProductPage = () => {
                   />
                 </div>
               </div>
-              <div>
-                <label className="text-title text-sm mb-1 block">Image URL</label>
-                <input
-                  type="text"
-                  className="w-full border border-line rounded px-3 py-2"
-                  value={variation.image}
-                  onChange={(e) => updateVariation(index, 'image', e.target.value)}
-                  placeholder="/images/product/1000x1000.png"
+              <ImageUploadField
+                label="Variation Image"
+                value={variation.image}
+                onChange={(value) => updateVariation(index, 'image', Array.isArray(value) ? value[0] : value)}
+                entityType="products"
+                required
+              />
+              {variation.colorCode && (
+                <ImageUploadField
+                  label="Color Swatch Image (Optional)"
+                  value={variation.colorImage || ''}
+                  onChange={(value) => updateVariation(index, 'colorImage', Array.isArray(value) ? value[0] : value)}
+                  entityType="products"
                 />
-              </div>
+              )}
             </div>
           ))}
         </div>

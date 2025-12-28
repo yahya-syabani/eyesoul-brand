@@ -6,7 +6,7 @@
   --color-line: #E9E9E9;
   --color-outline: rgba(0, 0, 0, 0.15);
   
-  --green: #D2EF9A;
+  --green: #2196F3;
   --black: #1F1F1F;
   --secondary: #696C70;
   --secondary2: #A0A0A0;
@@ -40,6 +40,12 @@
   --surface2: rgba(0, 0, 0, 0.3);
   --secondary: #A0A0A0;
   --secondary2: #696C70;
+  --green: #64B5F6;
+  --red: #f87171; /* Lighter red for better contrast in dark mode */
+  --purple: #a78bfa; /* Lighter purple for better contrast in dark mode */
+  --yellow: #fbbf24; /* Lighter yellow for better contrast in dark mode */
+  --pink: #f472b6; /* Lighter pink for better contrast in dark mode */
+  --success: #4ade80; /* Lighter green for better contrast in dark mode */
 }
 
 /* System preference dark mode */
@@ -60,6 +66,12 @@
     --surface2: rgba(0, 0, 0, 0.3);
     --secondary: #A0A0A0;
     --secondary2: #696C70;
+    --green: #64B5F6;
+    --red: #f87171; /* Lighter red for better contrast in dark mode */
+    --purple: #a78bfa; /* Lighter purple for better contrast in dark mode */
+    --yellow: #fbbf24; /* Lighter yellow for better contrast in dark mode */
+    --pink: #f472b6; /* Lighter pink for better contrast in dark mode */
+    --success: #4ade80; /* Lighter green for better contrast in dark mode */
   }
 }
 
@@ -214,6 +226,7 @@ textarea:focus-visible {
   line-height: 68px;
   font-weight: 500;
   text-transform: capitalize;
+  color: var(--color-text);
 }
 
 .heading2 {
@@ -221,6 +234,7 @@ textarea:focus-visible {
   line-height: 50px;
   font-weight: 600;
   text-transform: capitalize;
+  color: var(--color-text);
 }
 
 .heading3 {
@@ -228,6 +242,7 @@ textarea:focus-visible {
   line-height: 40px;
   font-weight: 600;
   text-transform: capitalize;
+  color: var(--color-text);
 }
 
 .heading4 {
@@ -235,6 +250,7 @@ textarea:focus-visible {
   line-height: 42px;
   font-weight: 600;
   text-transform: capitalize;
+  color: var(--color-text);
 }
 
 .heading5 {
@@ -242,6 +258,7 @@ textarea:focus-visible {
   line-height: 30px;
   font-weight: 600;
   text-transform: capitalize;
+  color: var(--color-text);
 }
 
 .heading6 {
@@ -249,6 +266,7 @@ textarea:focus-visible {
   line-height: 28px;
   font-weight: 600;
   text-transform: capitalize;
+  color: var(--color-text);
 }
 
 .text-title {
@@ -256,6 +274,7 @@ textarea:focus-visible {
   line-height: 24px;
   font-weight: 500;
   text-transform: capitalize;
+  color: var(--color-text);
 }
 
 .body1 {
@@ -452,5 +471,120 @@ textarea:focus-visible {
     line-height: 16px;
     padding: 10px 16px;
     border-radius: 8px;
+  }
+}
+
+/* Admin dark mode text color fixes */
+[data-theme="dark"] {
+  /* Accent colors - ensure good contrast in dark mode */
+  /* Note: These use the CSS variables defined above, but we keep explicit rules for clarity */
+  .text-blue {
+    color: #60a5fa; /* Lighter blue for dark mode */
+  }
+  
+  .text-red {
+    color: var(--red); /* Uses CSS variable which is lighter in dark mode */
+  }
+  
+  .text-green {
+    color: var(--green); /* Already lighter in dark mode (#64B5F6) */
+  }
+  
+  .text-yellow {
+    color: var(--yellow); /* Lighter yellow for dark mode */
+  }
+  
+  .text-purple {
+    color: var(--purple); /* Lighter purple for dark mode */
+  }
+  
+  .text-pink {
+    color: var(--pink); /* Lighter pink for dark mode */
+  }
+  
+  .text-success {
+    color: var(--success); /* Lighter green for dark mode */
+  }
+  
+  /* Secondary text colors use CSS variables which already adapt */
+  .text-secondary {
+    color: var(--secondary); /* #A0A0A0 in dark mode - good contrast */
+  }
+  
+  .text-secondary2 {
+    color: var(--secondary2); /* #696C70 in dark mode */
+  }
+  
+  /* Hover states - ensure text-black hover works in dark mode */
+  /* Since text-black uses var(--black) which becomes #E5E5E5 in dark mode, */
+  /* hover:text-black should work automatically, but we add explicit support */
+  .hover\:text-black:hover {
+    color: var(--black);
+  }
+  
+  /* Tab navigation support - border and text colors for active tabs */
+  /* Note: Since Tailwind maps colors to CSS variables, border-black and text-black */
+  /* automatically adapt, but we ensure explicit support for tab patterns */
+  .border-black {
+    border-color: var(--black);
+  }
+  
+  /* Ensure tab navigation patterns work correctly */
+  /* Active tab: border-black text-black becomes light in dark mode */
+  /* Inactive tab: hover:text-black becomes light on hover in dark mode */
+  button.border-black,
+  button.text-black {
+    border-color: var(--black);
+    color: var(--black);
+  }
+  
+  button.text-secondary:hover {
+    color: var(--black);
+  }
+  
+  /* Ensure all text in admin main area is visible */
+  main[class*="ml-64"] {
+    color: var(--color-text);
+  }
+  
+  /* Table cells - inherit text color */
+  main[class*="ml-64"] table td {
+    color: var(--color-text);
+  }
+  
+  /* Form inputs and selects */
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    color: var(--color-text);
+  }
+  
+  /* Select options */
+  select option {
+    color: var(--color-text);
+    background-color: var(--color-surface);
+  }
+  
+  /* Links */
+  a {
+    color: inherit;
+  }
+  
+  a.text-blue {
+    color: #60a5fa;
+  }
+  
+  a.text-red {
+    color: var(--red);
+  }
+  
+  a.text-green {
+    color: var(--green);
+  }
+  
+  /* Button text - ensure buttons with text colors work */
+  button.text-black,
+  button.text-white {
+    color: inherit;
   }
 }

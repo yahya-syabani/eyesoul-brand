@@ -29,6 +29,7 @@
     "shop": "Toko",
     "about": "Tentang",
     "service": "Layanan",
+    "insurance": "Asuransi",
     "contact": "Kontak",
     "blog": "Blog",
     "storeLocation": "Lokasi Toko",
@@ -48,6 +49,7 @@
     "information": "Informasi",
     "contactUs": "Hubungi Kami",
     "services": "Layanan",
+    "insurance": "Asuransi",
     "myAccount": "Akun Saya",
     "quickShop": "Belanja Cepat",
     "shopAll": "Semua Produk",
@@ -65,8 +67,10 @@
   "home": {
     "trendingRightNow": "Sedang Tren Sekarang",
     "shopNow": "Beli Sekarang",
-    "limitedOffer": "Penawaran Terbatas: Gratis ongkir untuk pesanan di atas $50",
-    "slogan": "Penawaran Terbatas: Gratis ongkir untuk pesanan di atas $50"
+    "limitedOffer": "Promo Spesial: Diskon Hingga 30% untuk Kacamata Premium",
+    "slogan": "Promo Spesial: Diskon Hingga 30% untuk Kacamata Premium",
+    "popularProducts": "Produk Populer",
+    "whyChooseUs": "Mengapa Pilih Kami"
   },
   "categories": {
     "sunglasses": "Kacamata Hitam",
@@ -218,7 +222,7 @@
       "call": "Telepon",
       "closeModal": "Tutup lokasi toko",
       "searchPlaceholder": "Cari berdasarkan nama toko, kota, atau alamat",
-      "searchResults": "{{count}} toko ditemukan",
+      "searchResults": "{count} toko ditemukan",
       "openNow": "Buka Sekarang",
       "closed": "Tutup",
       "noResults": "Tidak ada toko yang sesuai dengan pencarian Anda",
@@ -256,6 +260,19 @@
           "description": "Lensa khusus yang dirancang untuk melindungi mata Anda dari sinar biru berbahaya yang dipancarkan oleh layar digital. Sempurna untuk mereka yang menghabiskan waktu lama di depan komputer dan perangkat."
         }
       }
+    },
+    "insurance": {
+      "title": "Asuransi yang Diterima",
+      "heading": "Asuransi yang Diterima",
+      "heroDescription": "Kami menerima berbagai rencana asuransi penglihatan untuk membuat perawatan mata berkualitas dapat diakses dan terjangkau. Periksa apakah penyedia asuransi Anda ada dalam jaringan kami.",
+      "sectionHeading": "Penyedia Asuransi yang Kami Terima",
+      "sectionDescription": "Kami bekerja dengan penyedia asuransi penglihatan terkemuka untuk memastikan Anda menerima cakupan terbaik untuk kebutuhan kacamata Anda. Semua penyedia yang terdaftar menerima klaim online untuk kenyamanan Anda.",
+      "viewAll": "Lihat Semua Penyedia Asuransi",
+      "infoHeading": "Menggunakan Asuransi Anda",
+      "infoText1": "Saat Anda mengunjungi toko kami atau berbelanja online, cukup berikan informasi asuransi Anda saat checkout. Tim kami akan memverifikasi cakupan Anda dan menerapkan manfaat yang berlaku untuk pembelian Anda.",
+      "infoText2": "Sebagian besar rencana asuransi mencakup pemeriksaan mata, bingkai, lensa, dan lensa kontak. Jumlah cakupan dan manfaat bervariasi menurut rencana, jadi kami merekomendasikan untuk menghubungi penyedia asuransi Anda langsung untuk mengonfirmasi manfaat spesifik Anda.",
+      "infoText3": "Jika Anda tidak melihat penyedia asuransi Anda terdaftar, silakan hubungi kami. Kami mungkin masih dapat menerima asuransi Anda atau membantu Anda menemukan opsi pembayaran alternatif.",
+      "acceptsOnlineClaims": "Menerima Klaim Online"
     }
   },
   "blog": {

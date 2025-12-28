@@ -81,7 +81,7 @@ const copyToClipboard = async (text: string): Promise<boolean> => {
 
 const ModalStoreLocation = () => {
     const t = useTranslations()
-    const { isModalOpen, stores, expandedStoreIds, toggleStoreExpand, closeModalStoreLocation } = useModalStoreLocationContext();
+    const { isModalOpen, stores, expandedStoreIds, toggleStoreExpand, closeModalStoreLocation, selectedProvince, setSelectedProvince } = useModalStoreLocationContext();
     const dialogRef = useRef<HTMLDivElement | null>(null)
     const contentRef = useRef<HTMLDivElement | null>(null)
     const searchInputRef = useRef<HTMLInputElement | null>(null)
@@ -115,7 +115,7 @@ const ModalStoreLocation = () => {
         setDebouncedSearchQuery(searchQuery)
     }, [searchQuery], 300)
 
-    // Filter stores based on search query
+    // Filter stores based on search query (including province)
     const filteredStores = useMemo(() => {
         if (!debouncedSearchQuery.trim()) {
             return stores
@@ -125,9 +125,48 @@ const ModalStoreLocation = () => {
         return stores.filter(store => 
             store.name.toLowerCase().includes(query) ||
             store.address.toLowerCase().includes(query) ||
+            (store.province && store.province.toLowerCase().includes(query)) ||
             (store.email && store.email.toLowerCase().includes(query))
         )
     }, [stores, debouncedSearchQuery])
+
+    // Group stores by province (filter out stores with empty province)
+    const storesByProvince = useMemo(() => {
+        const grouped: Record<string, StoreLocationType[]> = {}
+        filteredStores.forEach(store => {
+            const province = store.province?.trim() || ''
+            // Only group stores with valid province names
+            if (province) {
+                if (!grouped[province]) {
+                    grouped[province] = []
+                }
+                grouped[province].push(store)
+            }
+        })
+        // Sort provinces alphabetically
+        return Object.keys(grouped).sort().reduce((acc, key) => {
+            acc[key] = grouped[key]
+            return acc
+        }, {} as Record<string, StoreLocationType[]>)
+    }, [filteredStores])
+
+    // Get list of provinces
+    const provinces = useMemo(() => Object.keys(storesByProvince), [storesByProvince])
+
+    // Determine active province (use selectedProvince if valid, otherwise first province)
+    const activeProvince = useMemo(() => {
+        if (selectedProvince && provinces.includes(selectedProvince)) {
+            return selectedProvince
+        }
+        return provinces.length > 0 ? provinces[0] : null
+    }, [selectedProvince, provinces])
+
+    // Initialize selectedProvince to first province when modal opens and no province is selected
+    useEffect(() => {
+        if (isModalOpen && provinces.length > 0 && !selectedProvince) {
+            setSelectedProvince(provinces[0])
+        }
+    }, [isModalOpen, provinces, selectedProvince, setSelectedProvince])
 
     // Clear search when modal closes
     useEffect(() => {
@@ -230,7 +269,7 @@ const ModalStoreLocation = () => {
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder={t('pages.storeLocation.searchPlaceholder') || 'Search by store name, city, or address'}
+                                    placeholder={t('pages.storeLocation.searchPlaceholder') || 'Search by store name, province, or address'}
                                     className="w-full pl-12 pr-10 py-3 rounded-xl border border-line bg-white focus:outline-2 focus:outline-black focus:outline-offset-0 focus:border-black transition-all duration-200"
                                     aria-label={t('pages.storeLocation.searchPlaceholder') || 'Search stores'}
                                 />
@@ -253,7 +292,34 @@ const ModalStoreLocation = () => {
                         </div>
                     </div>
 
-                    {/* Scrollable Content with Collapsible List */}
+                    {/* Province Tabs */}
+                    {provinces.length > 0 && (
+                        <div className="province-tabs border-b border-line overflow-x-auto">
+                            <div className="flex gap-1 min-w-max">
+                                {provinces.map((province) => (
+                                    <button
+                                        key={province}
+                                        type="button"
+                                        onClick={() => setSelectedProvince(province)}
+                                        className={`province-tab px-4 py-3 text-sm font-medium whitespace-nowrap transition-all duration-200 border-b-2 focus:outline-2 focus:outline-black focus:outline-offset-0 ${
+                                            activeProvince === province
+                                                ? 'border-black text-black'
+                                                : 'border-transparent text-secondary2 hover:text-black hover:border-line'
+                                        }`}
+                                        aria-selected={activeProvince === province}
+                                        aria-controls={`province-panel-${province}`}
+                                    >
+                                        {province}
+                                        <span className="ml-2 text-xs opacity-60">
+                                            ({storesByProvince[province].length})
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Scrollable Content with Province-Grouped Stores */}
                     <div 
                         ref={contentRef}
                         className="modal-store-location-content py-4 overflow-y-auto flex-1"
@@ -265,7 +331,7 @@ const ModalStoreLocation = () => {
                             </div>
                         ) : (
                             <div className="store-location-list space-y-4">
-                                {filteredStores.map((store) => {
+                                {activeProvince && storesByProvince[activeProvince]?.map((store) => {
                                     const isExpanded = expandedStoreIds.has(store.id)
                                     const storeStatus = getStoreStatus(store.hours)
                                     
@@ -294,7 +360,7 @@ const ModalStoreLocation = () => {
                                                         {/* Status Badge */}
                                                         <span className={`status-badge px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${
                                                             storeStatus.isOpen 
-                                                                ? 'bg-green-100 text-green-700' 
+                                                                ? 'bg-green/10 text-green' 
                                                                 : 'bg-gray-100 text-gray-600'
                                                         }`}>
                                                             {storeStatus.isOpen 

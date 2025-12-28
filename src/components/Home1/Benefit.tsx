@@ -43,9 +43,12 @@ const Benefit: React.FC<Props> = ({ props }) => {
         <>
             <div className="container">
                 <div className={`benefit-block ${props}`}>
+                    <div className="heading3 text-center">
+                        {t('home.whyChooseUs')}
+                    </div>
                     <motion.div
                         ref={ref}
-                        className="list-benefit grid items-start lg:grid-cols-4 grid-cols-2 gap-[30px]"
+                        className="list-benefit grid items-start lg:grid-cols-4 grid-cols-2 gap-[30px] md:mt-10 mt-6"
                         variants={benefitContainerVariants}
                         initial="hidden"
                         animate={isInView ? 'visible' : 'hidden'}

@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { AdminInput, AdminTextarea, AdminSelect } from '@/components/Admin/AdminFormField'
+import { ImageUploadField } from '@/components/Admin/ImageUploadField'
 
 const NewTestimonialPage = () => {
   const router = useRouter()
@@ -20,20 +21,8 @@ const NewTestimonialPage = () => {
     address: '',
     category: 'eyewear',
   })
-  const [imageInput, setImageInput] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-
-  const addImage = () => {
-    if (imageInput.trim()) {
-      setForm({ ...form, images: [...form.images, imageInput.trim()] })
-      setImageInput('')
-    }
-  }
-
-  const removeImage = (index: number) => {
-    setForm({ ...form, images: form.images.filter((_, i) => i !== index) })
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -149,52 +138,22 @@ const NewTestimonialPage = () => {
           placeholder={activeLanguage === 'en' ? 'Enter testimonial description in English' : 'Enter testimonial description in Indonesian (optional)'}
         />
 
-        <AdminInput
-          label="Avatar URL"
-          type="text"
+        <ImageUploadField
+          label="Avatar Image"
           value={form.avatar}
-          onChange={(e) => setForm({ ...form, avatar: e.target.value })}
+          onChange={(value) => setForm({ ...form, avatar: Array.isArray(value) ? value[0] : value })}
+          entityType="testimonials"
+          aspectRatio="1/1"
         />
 
-        <div>
-          <label className="text-title block mb-2">Images</label>
-          <div className="flex gap-2 mb-2">
-            <input
-              type="text"
-              value={imageInput}
-              onChange={(e) => setImageInput(e.target.value)}
-              placeholder="Image URL"
-              className="flex-1 border border-line rounded px-3 py-2"
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault()
-                  addImage()
-                }
-              }}
-            />
-            <button
-              type="button"
-              onClick={addImage}
-              className="px-4 py-2 border border-line rounded-lg hover:bg-surface"
-            >
-              Add
-            </button>
-          </div>
-          <div className="space-y-1">
-            {form.images.map((img, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <span className="text-sm text-secondary flex-1 truncate">{img}</span>
-                <button
-                  type="button"
-                  onClick={() => removeImage(index)}
-                  className="text-red text-sm hover:underline"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ImageUploadField
+          label="Testimonial Images"
+          value={form.images}
+          onChange={(value) => setForm({ ...form, images: Array.isArray(value) ? value : [value] })}
+          entityType="testimonials"
+          multiple
+          maxImages={10}
+        />
 
         <AdminSelect
           label="Star Rating"

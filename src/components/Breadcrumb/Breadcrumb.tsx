@@ -5,9 +5,10 @@ import * as Icon from "@phosphor-icons/react/dist/ssr";
 interface Pros {
     heading: string
     subHeading: string
+    description?: string
 }
 
-const Breadcrumb: React.FC<Pros> = ({ heading, subHeading }) => {
+const Breadcrumb: React.FC<Pros> = ({ heading, subHeading, description }) => {
     return (
         <>
             <div className="breadcrumb-block style-shared">
@@ -19,7 +20,7 @@ const Breadcrumb: React.FC<Pros> = ({ heading, subHeading }) => {
                                 <div className="link flex items-center justify-center gap-1 caption1 mt-3">
                                     <Link href={'/'}>Homepage</Link>
                                     <Icon.CaretRight size={14} className='text-secondary2' />
-                                    <div className='text-secondary2 capitalize'>{subHeading}</div>
+                                    <div className='caption1 text-secondary2 capitalize'>{subHeading}</div>
                                 </div>
                             </div>
                         </div>

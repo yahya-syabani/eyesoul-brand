@@ -2,14 +2,15 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { AdminInput } from '@/components/Admin/AdminFormField'
+import { ImageUploadField } from '@/components/Admin/ImageUploadField'
 
 const NewStoreLocationPage = () => {
   const router = useRouter()
   const [form, setForm] = useState({
     name: '',
     address: '',
+    province: '',
     phone: '',
     email: '',
     imageUrl: '',
@@ -55,6 +56,7 @@ const NewStoreLocationPage = () => {
       const payload = {
         name: form.name,
         address: form.address,
+        province: form.province,
         phone: form.phone,
         email: form.email || null,
         imageUrl: form.imageUrl || null,
@@ -111,6 +113,15 @@ const NewStoreLocationPage = () => {
         />
 
         <AdminInput
+          label="Province"
+          type="text"
+          required
+          value={form.province}
+          onChange={(e) => setForm({ ...form, province: e.target.value })}
+          placeholder="Jakarta"
+        />
+
+        <AdminInput
           label="Phone"
           type="text"
           required
@@ -127,26 +138,13 @@ const NewStoreLocationPage = () => {
           placeholder="store@eyesoul.com"
         />
 
-        <div className="space-y-2">
-          <AdminInput
-            label="Image URL"
-            type="text"
-            value={form.imageUrl}
-            onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-            placeholder="/images/store-location/store1.png"
-          />
-          {form.imageUrl && (
-            <div className="w-full h-48 relative border border-line rounded overflow-hidden">
-              <Image
-                src={form.imageUrl}
-                alt="Preview"
-                fill
-                className="object-contain"
-                onError={() => setError('Invalid image URL')}
-              />
-            </div>
-          )}
-        </div>
+        <ImageUploadField
+          label="Store Image"
+          value={form.imageUrl}
+          onChange={(value) => setForm({ ...form, imageUrl: Array.isArray(value) ? value[0] : value })}
+          entityType="store-locations"
+          aspectRatio="16/9"
+        />
 
         <AdminInput
           label="Hours (Weekdays)"
