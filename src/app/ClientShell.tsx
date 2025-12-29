@@ -14,6 +14,7 @@ const ModalQuickview = dynamic(() => import('@/components/Modal/ModalQuickview')
 const ModalCompare = dynamic(() => import('@/components/Modal/ModalCompare'), { ssr: false })
 const ModalNewsletter = dynamic(() => import('@/components/Modal/ModalNewsletter'), { ssr: false })
 const ModalStoreLocation = dynamic(() => import('@/components/Modal/ModalStoreLocation'), { ssr: false })
+const ModalPromotion = dynamic(() => import('@/components/Modal/ModalPromotion'), { ssr: false })
 
 type Props = {
   children: React.ReactNode
@@ -38,6 +39,7 @@ export default function ClientShell({ children, serverTimeLeft }: Props) {
           <ModalCompare />
           <ModalNewsletter />
           <ModalStoreLocation />
+          <ModalPromotion />
         </>
       )}
     </>

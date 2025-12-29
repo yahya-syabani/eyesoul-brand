@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState, useRef } from 'react'
+import Image from 'next/image'
 import { Link, usePathname } from '@/i18n/routing'
 import * as Icon from '@phosphor-icons/react/dist/ssr'
 import useLoginPopup from '@/store/useLoginPopup'
@@ -81,7 +82,6 @@ const MenuTwo = () => {
   const navItems = [
     { href: '/shop/default', label: 'Shop' },
     { href: '/pages/about', label: 'About' },
-    { href: '/pages/contact', label: 'Contact' },
     { href: '/blog/default', label: 'Blog' },
   ]
 
@@ -102,7 +102,14 @@ const MenuTwo = () => {
             </button>
 
             <Link href="/" className="flex items-center" aria-label="Eyesoul Eyewear home">
-              <div className="heading4">Eyesoul Eyewear</div>
+              <Image
+                src="/images/brand/logo.webp"
+                width={180}
+                height={60}
+                alt="Eyesoul Eyewear"
+                className="h-auto w-auto max-h-[50px] md:max-h-[60px]"
+                priority
+              />
             </Link>
 
             <nav className="menu-main h-full max-lg:hidden" aria-label="Main navigation">
@@ -163,10 +170,6 @@ const MenuTwo = () => {
                         Register
                       </Link>
                     </div>
-                    <div className="bottom pt-4 border-t border-line" aria-hidden="true"></div>
-                    <Link href="/pages/contact" className="body1 hover:underline">
-                      Support
-                    </Link>
                   </div>
                 </div>
 
@@ -214,8 +217,15 @@ const MenuTwo = () => {
                 >
                   <Icon.X size={14} aria-hidden="true" />
                 </button>
-                <Link href="/" className="heading5" onClick={handleMenuMobile} aria-label="Eyesoul Eyewear home">
-                  Eyesoul Eyewear
+                <Link href="/" className="flex items-center" onClick={handleMenuMobile} aria-label="Eyesoul Eyewear home">
+                  <Image
+                    src="/images/brand/logo.webp"
+                    width={150}
+                    height={50}
+                    alt="Eyesoul Eyewear"
+                    className="h-auto w-auto max-h-[40px]"
+                    priority
+                  />
                 </Link>
               </div>
 

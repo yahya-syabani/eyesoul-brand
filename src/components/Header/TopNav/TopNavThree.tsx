@@ -79,16 +79,6 @@ const TopNavThree: React.FC<Props> = ({ props }) => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href={'/pages/contact'} className='caption2 hover:underline'>
-                                        {t('nav.contact')}
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href={'/pages/contact'} className='caption2 hover:underline'>
-                                        {t('nav.support')}
-                                    </Link>
-                                </li>
-                                <li>
                                     <Link href={'/pages/faqs'} className='caption2 hover:underline'>
                                         {t('nav.help')}
                                     </Link>

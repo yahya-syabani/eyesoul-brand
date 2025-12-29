@@ -28,6 +28,8 @@
   "nav": {
     "shop": "Shop",
     "about": "About",
+    "services": "Services",
+    "promotion": "Promotion",
     "service": "Service",
     "insurance": "Insurance",
     "contact": "Contact",
@@ -61,6 +63,7 @@
     "shipping": "Shipping",
     "privacyPolicy": "Privacy Policy",
     "returnRefund": "Return & Refund",
+    "promotion": "Promotion",
     "copyright": "©{year} Eyesoul Eyewear. All Rights Reserved.",
     "admin": "Admin"
   },
@@ -273,6 +276,13 @@
       "infoText2": "Most insurance plans cover eye exams, frames, lenses, and contact lenses. Coverage amounts and benefits vary by plan, so we recommend contacting your insurance provider directly to confirm your specific benefits.",
       "infoText3": "If you don't see your insurance provider listed, please contact us. We may still be able to accept your insurance or help you find alternative payment options.",
       "acceptsOnlineClaims": "Accepts Online Claims"
+    },
+    "promotion": {
+      "title": "Promotions",
+      "heading": "Promotions",
+      "heroDescription": "Discover our latest promotions and special offers on premium eyewear. Limited time deals you won't want to miss!",
+      "noPromotions": "No promotional content available at this time.",
+      "loading": "Loading promotions..."
     }
   },
   "blog": {
@@ -324,21 +334,21 @@
     "indonesia": "Indonesia"
   },
   "benefit": {
-    "customerService": {
-      "title": "24/7 Customer Service",
-      "description": "We're here to help you with any questions or concerns you have, 24/7."
+    "frameGuarantee": {
+      "title": "Frame Guarantee 18 Months",
+      "description": "Comprehensive 18-month warranty on all frames, ensuring quality and durability for your eyewear investment."
     },
-    "moneyBack": {
-      "title": "14-Day Money Back",
-      "description": "If you're not satisfied with your purchase, simply return it within 14 days for a refund."
+    "eyeExamination": {
+      "title": "Advance Technology Eye Examination",
+      "description": "State-of-the-art eye examination equipment and techniques for accurate vision assessment and eye health evaluation."
     },
-    "guarantee": {
-      "title": "Our Guarantee",
-      "description": "We stand behind our products and services and guarantee your satisfaction."
+    "tradeIn": {
+      "title": "Lifetime Trade In",
+      "description": "Trade in your old frames anytime for credit toward new eyewear purchases, valid for the lifetime of your relationship with us."
     },
-    "shipping": {
-      "title": "Shipping worldwide",
-      "description": "We ship our products worldwide, making them accessible to customers everywhere."
+    "freeService": {
+      "title": "Free Service Lifetime",
+      "description": "Lifetime free adjustments, cleaning, and basic maintenance services to keep your eyewear in perfect condition."
     }
   },
   "wishlist": {

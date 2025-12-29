@@ -81,6 +81,7 @@ async function main() {
     existingStoreLocationCount,
     existingHeroSlideCount,
     existingTagCount,
+    existingPromotionalPageCount,
   ] = await Promise.all([
     prisma.product.count(),
     prisma.blog.count(),
@@ -88,6 +89,7 @@ async function main() {
     prisma.storeLocation.count(),
     prisma.heroSlide.count(),
     prisma.tag.count(),
+    prisma.promotionalPage.count(),
   ])
 
   console.log(`📊 Current database state:`)
@@ -95,7 +97,8 @@ async function main() {
   console.log(`  - Blogs: ${existingBlogCount}`)
   console.log(`  - Testimonials: ${existingTestimonialCount}`)
   console.log(`  - Hero Slides: ${existingHeroSlideCount}`)
-  console.log(`  - Tags: ${existingTagCount}\n`)
+  console.log(`  - Tags: ${existingTagCount}`)
+  console.log(`  - Promotional Pages: ${existingPromotionalPageCount}\n`)
 
   // 1. Seed Admin User
   console.log('👤 Seeding admin user...')
@@ -166,7 +169,7 @@ async function main() {
           'Summer Sale Collections',
           'Koleksi Diskon Musim Panas',
         ),
-        imageUrl: 'https://picsum.photos/1920/1080?random=20',
+        imageUrl: 'https://images.pexels.com/photos/1300550/pexels-photo-1300550.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
         ctaText: 'Shop Now',
         ctaTextTranslations: stringToTranslation('Shop Now', 'Belanja Sekarang'),
         ctaLink: '/shop/default',
@@ -183,7 +186,7 @@ async function main() {
           'Discover the Latest Trends in Eyewear',
           'Temukan Tren Terbaru dalam Kacamata',
         ),
-        imageUrl: 'https://picsum.photos/1920/1080?random=21',
+        imageUrl: 'https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
         ctaText: 'Shop Now',
         ctaTextTranslations: stringToTranslation('Shop Now', 'Belanja Sekarang'),
         ctaLink: '/shop/default',
@@ -200,7 +203,7 @@ async function main() {
           'New season, new wardrobe!',
           'Musim baru, lemari baru!',
         ),
-        imageUrl: 'https://picsum.photos/1920/1080?random=22',
+        imageUrl: 'https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
         ctaText: 'Shop Now',
         ctaTextTranslations: stringToTranslation('Shop Now', 'Belanja Sekarang'),
         ctaLink: '/shop/default',
@@ -241,7 +244,138 @@ async function main() {
     )
   }
 
-  // 4. Seed Products
+  // 4. Seed Promotional Pages
+  if (existingPromotionalPageCount > 0) {
+    console.log(
+      `⚠️  Database already has ${existingPromotionalPageCount} promotional pages. Skipping promotional page seeding to prevent duplicates.\n`,
+    )
+  } else {
+    console.log('🎯 Seeding promotional pages...')
+    const defaultPromotionalPages = [
+      {
+        title: 'Summer Collection Sale',
+        titleTranslations: stringToTranslation(
+          'Summer Collection Sale',
+          'Diskon Koleksi Musim Panas',
+        ),
+        description:
+          'Get up to 50% off on our latest summer eyewear collection. Discover trendy sunglasses and stylish frames perfect for the sunny season. Limited time offer!',
+        descriptionTranslations: stringToTranslation(
+          'Get up to 50% off on our latest summer eyewear collection. Discover trendy sunglasses and stylish frames perfect for the sunny season. Limited time offer!',
+          'Dapatkan diskon hingga 50% untuk koleksi kacamata musim panas terbaru kami. Temukan kacamata hitam trendy dan frame yang stylish untuk musim panas. Penawaran terbatas!',
+        ),
+        imageUrl: 'https://images.pexels.com/photos/1300550/pexels-photo-1300550.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        isActive: true,
+        displayOrder: 0,
+      },
+      {
+        title: 'New Arrivals - Premium Frames',
+        titleTranslations: stringToTranslation(
+          'New Arrivals - Premium Frames',
+          'Baru Tiba - Frame Premium',
+        ),
+        description:
+          'Explore our newest collection of premium eyewear frames. Handcrafted with attention to detail, featuring the latest designs and premium materials for unparalleled comfort and style.',
+        descriptionTranslations: stringToTranslation(
+          'Explore our newest collection of premium eyewear frames. Handcrafted with attention to detail, featuring the latest designs and premium materials for unparalleled comfort and style.',
+          'Jelajahi koleksi terbaru frame kacamata premium kami. Dibuat dengan tangan dengan perhatian terhadap detail, menampilkan desain terbaru dan material premium untuk kenyamanan dan gaya yang tak tertandingi.',
+        ),
+        imageUrl: 'https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        isActive: true,
+        displayOrder: 1,
+      },
+      {
+        title: 'Blue Light Protection Special',
+        titleTranslations: stringToTranslation(
+          'Blue Light Protection Special',
+          'Spesial Perlindungan Sinar Biru',
+        ),
+        description:
+          'Protect your eyes from digital screen glare with our specialized blue light blocking glasses. Perfect for professionals who spend long hours in front of computers. Free eye exam included!',
+        descriptionTranslations: stringToTranslation(
+          'Protect your eyes from digital screen glare with our specialized blue light blocking glasses. Perfect for professionals who spend long hours in front of computers. Free eye exam included!',
+          'Lindungi mata Anda dari silau layar digital dengan kacamata anti sinar biru khusus kami. Sempurna untuk profesional yang menghabiskan waktu lama di depan komputer. Pemeriksaan mata gratis disertakan!',
+        ),
+        imageUrl: 'https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        isActive: true,
+        displayOrder: 2,
+      },
+      {
+        title: 'Student Discount Program',
+        titleTranslations: stringToTranslation(
+          'Student Discount Program',
+          'Program Diskon Pelajar',
+        ),
+        description:
+          'Special discount for students! Get 30% off on all eyewear with valid student ID. We believe in making quality vision accessible to everyone. Visit our stores or shop online.',
+        descriptionTranslations: stringToTranslation(
+          'Special discount for students! Get 30% off on all eyewear with valid student ID. We believe in making quality vision accessible to everyone. Visit our stores or shop online.',
+          'Diskon khusus untuk pelajar! Dapatkan diskon 30% untuk semua kacamata dengan ID pelajar yang valid. Kami percaya dalam membuat penglihatan berkualitas dapat diakses oleh semua orang. Kunjungi toko kami atau belanja online.',
+        ),
+        imageUrl: 'https://images.pexels.com/photos/699466/pexels-photo-699466.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        isActive: true,
+        displayOrder: 3,
+      },
+      {
+        title: 'Luxury Designer Collection',
+        titleTranslations: stringToTranslation(
+          'Luxury Designer Collection',
+          'Koleksi Desainer Mewah',
+        ),
+        description:
+          'Indulge in our exclusive luxury designer eyewear collection. Featuring renowned brands and limited edition pieces that combine sophisticated style with exceptional craftsmanship.',
+        descriptionTranslations: stringToTranslation(
+          'Indulge in our exclusive luxury designer eyewear collection. Featuring renowned brands and limited edition pieces that combine sophisticated style with exceptional craftsmanship.',
+          'Nikmati koleksi kacamata desainer mewah eksklusif kami. Menampilkan merek terkenal dan potongan edisi terbatas yang menggabungkan gaya canggih dengan kerajinan yang luar biasa.',
+        ),
+        imageUrl: 'https://images.pexels.com/photos/1619722/pexels-photo-1619722.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        isActive: true,
+        displayOrder: 4,
+      },
+      {
+        title: 'Free Eye Exam This Month',
+        titleTranslations: stringToTranslation(
+          'Free Eye Exam This Month',
+          'Pemeriksaan Mata Gratis Bulan Ini',
+        ),
+        description:
+          'Book your free comprehensive eye examination this month. Our certified optometrists will assess your vision and eye health. Perfect time to update your prescription or get new glasses!',
+        descriptionTranslations: stringToTranslation(
+          'Book your free comprehensive eye examination this month. Our certified optometrists will assess your vision and eye health. Perfect time to update your prescription or get new glasses!',
+          'Pesan pemeriksaan mata komprehensif gratis Anda bulan ini. Optometris bersertifikat kami akan menilai penglihatan dan kesehatan mata Anda. Waktu yang sempurna untuk memperbarui resep atau mendapatkan kacamata baru!',
+        ),
+        imageUrl: 'https://images.pexels.com/photos/157675/fashion-men-s-individuality-black-and-white-157675.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        isActive: true,
+        displayOrder: 5,
+      },
+    ]
+
+    let promotionalPageCount = 0
+    for (const page of defaultPromotionalPages) {
+      try {
+        await prisma.promotionalPage.create({
+          data: {
+            title: page.title,
+            titleTranslations: page.titleTranslations,
+            description: page.description,
+            descriptionTranslations: page.descriptionTranslations,
+            imageUrl: page.imageUrl,
+            isActive: page.isActive,
+            displayOrder: page.displayOrder,
+          },
+        })
+        console.log(`  ✓ Created promotional page: "${page.title}" (order: ${page.displayOrder})`)
+        promotionalPageCount++
+      } catch (error) {
+        console.error(`  ❌ Error seeding promotional page ${page.title}:`, error)
+      }
+    }
+    console.log(
+      `✅ Seeded ${promotionalPageCount}/${defaultPromotionalPages.length} promotional pages successfully\n`,
+    )
+  }
+
+  // 5. Seed Products
   if (existingProductCount > 0) {
     console.log(
       `⚠️  Database already has ${existingProductCount} products. Skipping product seeding to prevent duplicates.`,
@@ -329,7 +463,7 @@ async function main() {
     }
   }
 
-  // 5. Seed Promotions
+  // 6. Seed Promotions
   console.log(`🎫 Seeding ${DISCOUNT_CODES.length} promotions...`)
   let promotionCount = 0
   for (const promo of DISCOUNT_CODES) {
@@ -354,7 +488,7 @@ async function main() {
   }
   console.log(`✅ Seeded ${promotionCount} promotions successfully\n`)
 
-  // 6. Seed Blogs
+  // 7. Seed Blogs
   if (existingBlogCount > 0) {
     console.log(
       `⚠️  Database already has ${existingBlogCount} blogs. Skipping blog seeding to prevent duplicates.`,
@@ -466,7 +600,7 @@ async function main() {
     }
   }
 
-  // 7. Seed Testimonials
+  // 8. Seed Testimonials
   if (existingTestimonialCount > 0) {
     console.log(
       `⚠️  Database already has ${existingTestimonialCount} testimonials. Skipping testimonial seeding to prevent duplicates.`,
@@ -524,21 +658,21 @@ async function main() {
     }
   }
 
-  // 8. Seed Store Locations
+  // 9. Seed Store Locations
   if (existingStoreLocationCount > 0) {
     console.log(
       `⚠️  Database already has ${existingStoreLocationCount} store locations. Skipping store location seeding to prevent duplicates.\n`,
     )
   } else {
     console.log('📍 Seeding store locations...')
-    // Helper to get placeholder image based on index (uses Unsplash retail store images)
+    // Helper to get placeholder image based on index (uses Pexels eyewear/retail store images)
     // NOTE: Store locations should have real images uploaded via admin interface
-    // This provides example images from Unsplash for seeding
+    // This provides example images from Pexels for seeding
     const getPlaceholderImage = (index: number) => {
-      const keywords = ['optometry-store', 'retail-shop', 'eyewear-store', 'store-interior', 'shop-front', 'retail-interior', 'optical-shop', 'boutique-store', 'mall-shop', 'retail-space']
-      const keyword = keywords[index % keywords.length]
-      const seed = 30 + (index % 10)
-      return `https://picsum.photos/1920/1080?random=${seed}`
+      // Use Pexels images for eyewear stores
+      const photoIds = [1005638, 1269968, 157675, 1300550, 1639729, 1040945, 699466, 1619722, 157675, 1300550]
+      const photoId = photoIds[index % photoIds.length]
+      return `https://images.pexels.com/photos/${photoId}/pexels-photo-${photoId}.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop`
     }
     const storeLocations = [
       {
@@ -548,7 +682,7 @@ async function main() {
         province: 'Banten',
         phone: '+62 817 110 558',
         email: 'cs@eyesouleyewear.co.id',
-        imageUrl: 'https://picsum.photos/1920/1080?random=30',
+        imageUrl: 'https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
         hoursSaturday: 'Saturday: 10:00am - 10:00pm',
         hoursSunday: 'Sunday: 10:00am - 10:00pm',
@@ -564,7 +698,7 @@ async function main() {
         province: 'Jawa Timur',
         phone: '+62 817 110 572',
         email: 'cs@eyesouleyewear.co.id',
-        imageUrl: 'https://picsum.photos/1920/1080?random=31',
+        imageUrl: 'https://images.pexels.com/photos/1269968/pexels-photo-1269968.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
         hoursSaturday: 'Saturday: 10:00am - 10:00pm',
         hoursSunday: 'Sunday: 10:00am - 10:00pm',
@@ -993,6 +1127,7 @@ async function main() {
     finalStoreLocationCount,
     finalHeroSlideCount,
     finalTagCount,
+    finalPromotionalPageCount,
   ] = await Promise.all([
     prisma.product.count(),
     prisma.blog.count(),
@@ -1000,6 +1135,7 @@ async function main() {
     prisma.storeLocation.count(),
     prisma.heroSlide.count(),
     prisma.tag.count(),
+    prisma.promotionalPage.count(),
   ])
 
   const endTime = Date.now()
@@ -1016,6 +1152,7 @@ async function main() {
   console.log(`  - Store Locations: ${finalStoreLocationCount}`)
   console.log(`  - Hero Slides: ${finalHeroSlideCount}`)
   console.log(`  - Tags: ${finalTagCount}`)
+  console.log(`  - Promotional Pages: ${finalPromotionalPageCount}`)
   console.log(`\n✨ All seeding operations completed!`)
 }
 

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef } from 'react'
+import Image from 'next/image'
 import { useTranslations, useLocale } from 'next-intl'
 import { Link, useRouter, usePathname } from '@/i18n/routing'
 import * as Icon from "@phosphor-icons/react/dist/ssr";
@@ -64,17 +65,23 @@ const Footer = () => {
                     <div className="container">
                         <div className="content-footer py-[60px] flex justify-between flex-wrap gap-y-8">
                             <div className="company-infor basis-1/4 max-lg:basis-full pr-7">
-                                <Link href={'/'} className="logo" aria-label="Eyesoul Eyewear home">
-                                    <div className="heading4">Eyesoul Eyewear</div>
+                                <Link href={'/'} className="logo flex items-center" aria-label="Eyesoul Eyewear home">
+                                    <Image
+                                        src="/images/brand/logo.webp"
+                                        width={150}
+                                        height={50}
+                                        alt="Eyesoul Eyewear"
+                                        className="h-auto w-auto max-h-[45px]"
+                                    />
                                 </Link>
                             </div>
                             <div className="right-content flex flex-wrap gap-y-8 basis-3/4 max-lg:basis-full">
                                 <nav className="list-nav flex justify-between basis-full gap-4" aria-label="Footer navigation">
                                     <div className="item flex flex-col basis-1/3 ">
                                         <h3 className="text-button-uppercase pb-3">{t('footer.information')}</h3>
-                                        <Link className='caption1 has-line-before duration-300 w-fit' href={'/pages/contact'}>{t('footer.contactUs')}</Link>
-                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/service'}>{t('footer.services')}</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit' href={'/pages/service'}>{t('footer.services')}</Link>
                                         <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/insurance'}>{t('footer.insurance')}</Link>
+                                        <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/pages/promotion'}>{t('footer.promotion')}</Link>
                                         <Link className='caption1 has-line-before duration-300 w-fit pt-2' href={'/my-account'}>{t('footer.myAccount')}</Link>
                                     </div>
                                     <div className="item flex flex-col basis-1/3 ">

@@ -32,11 +32,11 @@ export const routing = defineRouting({
     '/compare': '/compare',
     '/forgot-password': '/forgot-password',
     '/pages/about': '/pages/about',
-    '/pages/contact': '/pages/contact',
     '/pages/faqs': '/pages/faqs',
     '/pages/store-location': '/pages/store-location',
     '/pages/service': '/pages/service',
-    '/pages/insurance': '/pages/insurance'
+    '/pages/insurance': '/pages/insurance',
+    '/pages/promotion': '/pages/promotion'
   }
 });
 

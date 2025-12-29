@@ -8,8 +8,8 @@
     "price": 120,
     "originPrice": 150,
     "brand": "eyesoul",
-    "images": ["https://picsum.photos/1000/1000?random=1"],
-    "thumbImage": ["https://picsum.photos/1000/1000?random=1"],
+    "images": ["https://images.pexels.com/photos/1300550/pexels-photo-1300550.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
+    "thumbImage": ["https://images.pexels.com/photos/1300550/pexels-photo-1300550.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
     "rate": 5,
     "sold": 10,
     "quantity": 50,
@@ -19,8 +19,8 @@
       {
         "color": "black",
         "colorCode": "#1F1F1F",
-        "colorImage": "https://picsum.photos/48/48?random=8",
-        "image": "https://picsum.photos/1000/1000?random=7"
+        "colorImage": "/images/product/color/48x48.png",
+        "image": "https://images.pexels.com/photos/1300550/pexels-photo-1300550.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"
       }
     ],
     "sizes": ["medium"]
@@ -34,8 +34,8 @@
     "price": 90,
     "originPrice": 120,
     "brand": "clarity",
-    "images": ["https://picsum.photos/1000/1000?random=3"],
-    "thumbImage": ["https://picsum.photos/1000/1000?random=3"],
+    "images": ["https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
+    "thumbImage": ["https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
     "rate": 4,
     "sold": 5,
     "quantity": 80,
@@ -45,8 +45,8 @@
       {
         "color": "red",
         "colorCode": "#DB4444",
-        "colorImage": "https://picsum.photos/48/48?random=8",
-        "image": "https://picsum.photos/1000/1000?random=7"
+        "colorImage": "/images/product/color/48x48.png",
+        "image": "https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"
       }
     ],
     "sizes": ["small"]
@@ -60,8 +60,8 @@
     "price": 180,
     "originPrice": 220,
     "brand": "eyesoul",
-    "images": ["https://picsum.photos/1000/1000?random=4"],
-    "thumbImage": ["https://picsum.photos/1000/1000?random=4"],
+    "images": ["https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
+    "thumbImage": ["https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
     "rate": 5,
     "sold": 25,
     "quantity": 60,
@@ -71,14 +71,14 @@
       {
         "color": "black",
         "colorCode": "#1F1F1F",
-        "colorImage": "https://picsum.photos/48/48?random=8",
-        "image": "https://picsum.photos/1000/1000?random=7"
+        "colorImage": "/images/product/color/48x48.png",
+        "image": "https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"
       },
       {
         "color": "brown",
         "colorCode": "#8B4513",
-        "colorImage": "https://picsum.photos/48/48?random=8",
-        "image": "https://picsum.photos/1000/1000?random=7"
+        "colorImage": "/images/product/color/48x48.png",
+        "image": "https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"
       }
     ],
     "sizes": ["medium", "large"]
@@ -92,8 +92,8 @@
     "price": 45,
     "originPrice": 60,
     "brand": "eyesoul",
-    "images": ["https://picsum.photos/1000/1000?random=5"],
-    "thumbImage": ["https://picsum.photos/1000/1000?random=5"],
+    "images": ["https://images.pexels.com/photos/699466/pexels-photo-699466.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
+    "thumbImage": ["https://images.pexels.com/photos/699466/pexels-photo-699466.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
     "rate": 4,
     "sold": 30,
     "quantity": 100,
@@ -103,8 +103,8 @@
       {
         "color": "purple",
         "colorCode": "#8684D4",
-        "colorImage": "https://picsum.photos/48/48?random=8",
-        "image": "https://picsum.photos/1000/1000?random=7"
+        "colorImage": "/images/product/color/48x48.png",
+        "image": "https://images.pexels.com/photos/699466/pexels-photo-699466.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"
       }
     ],
     "sizes": ["medium"]
@@ -118,8 +118,8 @@
     "price": 35,
     "originPrice": 45,
     "brand": "eyesoul",
-    "images": ["https://picsum.photos/1000/1000?random=6"],
-    "thumbImage": ["https://picsum.photos/1000/1000?random=6"],
+    "images": ["https://images.pexels.com/photos/1619722/pexels-photo-1619722.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
+    "thumbImage": ["https://images.pexels.com/photos/1619722/pexels-photo-1619722.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
     "rate": 5,
     "sold": 50,
     "quantity": 200,
@@ -129,8 +129,8 @@
       {
         "color": "clear",
         "colorCode": "#FFFFFF",
-        "colorImage": "https://picsum.photos/48/48?random=8",
-        "image": "https://picsum.photos/1000/1000?random=7"
+        "colorImage": "/images/product/color/48x48.png",
+        "image": "https://images.pexels.com/photos/1619722/pexels-photo-1619722.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"
       }
     ],
     "sizes": ["30-pack"]

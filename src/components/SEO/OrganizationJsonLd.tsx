@@ -14,7 +14,7 @@ export default function OrganizationJsonLd({
   sameAs = [],
 }: Props) {
   const resolvedLogoUrl =
-    logoUrl || `${siteUrl}/images/brand/1.png`
+    logoUrl || `${siteUrl}/images/brand/logo.webp`
 
   const jsonLd = {
     '@context': 'https://schema.org',

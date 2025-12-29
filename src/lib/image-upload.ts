@@ -2,7 +2,7 @@ import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
 
-export type EntityType = 'products' | 'store-locations' | 'hero-slides' | 'blogs' | 'testimonials' | 'services'
+export type EntityType = 'products' | 'store-locations' | 'hero-slides' | 'blogs' | 'testimonials' | 'services' | 'promotional-pages'
 
 export interface ImageUploadResult {
   url: string

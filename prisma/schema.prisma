@@ -239,3 +239,19 @@ model HeroSlide {
   @@index([isActive])
   @@index([displayOrder])
 }
+
+model PromotionalPage {
+  id                    String   @id @default(cuid())
+  title                 String
+  titleTranslations     Json?    // Translation: { "en": "...", "id": "..." }
+  description           String   @db.Text
+  descriptionTranslations Json?  // Translation: { "en": "...", "id": "..." }
+  imageUrl              String
+  isActive              Boolean  @default(true)
+  displayOrder          Int      @default(0)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([displayOrder])
+}

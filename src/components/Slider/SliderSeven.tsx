@@ -98,13 +98,16 @@ const SliderSeven: React.FC<SliderSevenProps> = ({ slides }) => {
                                                 <div className="text-display text-center md:mt-4 mt-2">{slide.title}</div>
                                                 <Link href={ctaLink} className="button-main md:mt-8 mt-3">{ctaText}</Link>
                                             </div>
-                                            <div className={`sub-img absolute ${imageWidthClass} ${imagePositionClass}`}>
+                                            <div 
+                                                className={`sub-img absolute h-full flex items-end overflow-hidden ${imageWidthClass} ${imagePositionClass}`}
+                                            >
                                                 <Image
                                                     src={slide.imageUrl}
                                                     width={670}
                                                     height={936}
                                                     alt={slide.title}
                                                     priority={index === 0}
+                                                    className="w-full h-full object-cover"
                                                 />
                                             </div>
                                         </div>

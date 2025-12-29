@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import React, { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import * as Icon from "@phosphor-icons/react/dist/ssr"
 
 interface Props {
     props: string;
@@ -62,9 +63,9 @@ const Benefit: React.FC<Props> = ({ props }) => {
                                 transition: { duration: 0.3 },
                             }}
                         >
-                            <i className="icon-phone-call lg:text-7xl text-5xl"></i>
-                            <div className="heading6 text-center mt-5">{t('benefit.customerService.title')}</div>
-                            <div className="caption1 text-secondary text-center mt-3">{t('benefit.customerService.description')}</div>
+                            <Icon.ShieldCheck className="w-12 h-12 lg:w-[72px] lg:h-[72px]" weight="fill" />
+                            <div className="heading6 text-center mt-5">{t('benefit.frameGuarantee.title')}</div>
+                            <div className="caption1 text-secondary text-center mt-3">{t('benefit.frameGuarantee.description')}</div>
                         </motion.div>
                         <motion.div
                             className="benefit-item flex flex-col items-center justify-center"
@@ -75,9 +76,9 @@ const Benefit: React.FC<Props> = ({ props }) => {
                                 transition: { duration: 0.3 },
                             }}
                         >
-                            <i className="icon-return lg:text-7xl text-5xl"></i>
-                            <div className="heading6 text-center mt-5">{t('benefit.moneyBack.title')}</div>
-                            <div className="caption1 text-secondary text-center mt-3">{t('benefit.moneyBack.description')}</div>
+                            <Icon.Eye className="w-12 h-12 lg:w-[72px] lg:h-[72px]" weight="fill" />
+                            <div className="heading6 text-center mt-5">{t('benefit.eyeExamination.title')}</div>
+                            <div className="caption1 text-secondary text-center mt-3">{t('benefit.eyeExamination.description')}</div>
                         </motion.div>
                         <motion.div
                             className="benefit-item flex flex-col items-center justify-center"
@@ -88,9 +89,9 @@ const Benefit: React.FC<Props> = ({ props }) => {
                                 transition: { duration: 0.3 },
                             }}
                         >
-                            <i className="icon-guarantee lg:text-7xl text-5xl"></i>
-                            <div className="heading6 text-center mt-5">{t('benefit.guarantee.title')}</div>
-                            <div className="caption1 text-secondary text-center mt-3">{t('benefit.guarantee.description')}</div>
+                            <Icon.ArrowsClockwise className="w-12 h-12 lg:w-[72px] lg:h-[72px]" weight="fill" />
+                            <div className="heading6 text-center mt-5">{t('benefit.tradeIn.title')}</div>
+                            <div className="caption1 text-secondary text-center mt-3">{t('benefit.tradeIn.description')}</div>
                         </motion.div>
                         <motion.div
                             className="benefit-item flex flex-col items-center justify-center"
@@ -101,9 +102,9 @@ const Benefit: React.FC<Props> = ({ props }) => {
                                 transition: { duration: 0.3 },
                             }}
                         >
-                            <i className="icon-delivery-truck lg:text-7xl text-5xl"></i>
-                            <div className="heading6 text-center mt-5">{t('benefit.shipping.title')}</div>
-                            <div className="caption1 text-secondary text-center mt-3">{t('benefit.shipping.description')}</div>
+                            <Icon.Wrench className="w-12 h-12 lg:w-[72px] lg:h-[72px]" weight="fill" />
+                            <div className="heading6 text-center mt-5">{t('benefit.freeService.title')}</div>
+                            <div className="caption1 text-secondary text-center mt-3">{t('benefit.freeService.description')}</div>
                         </motion.div>
                     </motion.div>
                 </div>

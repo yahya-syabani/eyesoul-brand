@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef } from 'react'
+import Image from 'next/image'
 import * as Icon from '@phosphor-icons/react/dist/ssr'
 import { useTranslations, useLocale } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/routing'
@@ -13,10 +14,63 @@ import { useCart } from '@/context/CartContext'
 import ThemeToggle from '@/components/Theme/ThemeToggle'
 import { useTheme } from '@/context/ThemeContext'
 import { useClickOutside } from '@/hooks/useClickOutside'
+import NavDropdown from './NavDropdown'
+import { NavigationItem, isNavDropdown, isNavItem, NavDropdownItem } from '@/types/navigation'
 
 interface HeaderProps {
   topNavProps?: string
   slogan?: string
+}
+
+// Mobile dropdown component for accordion-style menu
+const MobileNavDropdown: React.FC<{ 
+  item: NavDropdownItem
+  isActive: (href: string) => boolean
+  onItemClick?: () => void
+}> = ({ item, isActive, onItemClick }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const hasActiveItem = item.items.some(subItem => isActive(subItem.href))
+
+  return (
+    <li className="mt-5">
+      <button
+        className={`text-xl font-semibold flex items-center justify-between w-full ${
+          hasActiveItem ? 'active' : ''
+        }`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-label={`${item.label} menu`}
+        type="button"
+      >
+        {item.label}
+        <Icon.CaretDown
+          size={20}
+          className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+          aria-hidden="true"
+        />
+      </button>
+      <ul
+        className={`sub-nav-mobile overflow-hidden transition-all duration-300 ${
+          isOpen ? 'max-h-96 opacity-100 mt-2' : 'max-h-0 opacity-0'
+        }`}
+      >
+        {item.items.map((subItem) => (
+          <li key={subItem.href} className="pl-4 mt-2">
+            <Link
+              href={subItem.href}
+              onClick={onItemClick}
+              className={`text-lg flex items-center ${
+                isActive(subItem.href) ? 'active font-semibold' : 'font-normal'
+              }`}
+              aria-current={isActive(subItem.href) ? 'page' : undefined}
+            >
+              {subItem.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </li>
+  )
 }
 
 const Header: React.FC<HeaderProps> = ({ 
@@ -90,15 +144,21 @@ const Header: React.FC<HeaderProps> = ({
     if (href === '/blog/default') return pathname.startsWith('/blog')
     if (href === '/pages/service') return pathname === '/pages/service'
     if (href === '/pages/insurance') return pathname === '/pages/insurance'
+    if (href === '/pages/promotion') return pathname === '/pages/promotion'
     return pathname === href
   }
 
-  const navItems = [
+  const navItems: NavigationItem[] = [
     { href: '/shop/default', label: t('nav.shop') },
     { href: '/pages/about', label: t('nav.about') },
-    { href: '/pages/service', label: t('nav.service') },
-    { href: '/pages/insurance', label: t('nav.insurance') },
-    { href: '/pages/contact', label: t('nav.contact') },
+    { 
+      label: t('nav.services'),
+      items: [
+        { href: '/pages/promotion', label: t('nav.promotion') },
+        { href: '/pages/service', label: t('nav.service') },
+        { href: '/pages/insurance', label: t('nav.insurance') },
+      ]
+    },
     { href: '/blog/default', label: t('nav.blog') },
   ]
 
@@ -199,24 +259,45 @@ const Header: React.FC<HeaderProps> = ({
               </button>
 
               <Link href="/" className="flex items-center" aria-label="Eyesoul Eyewear home">
-                <div className="heading4">Eyesoul Eyewear</div>
+                <Image
+                  src="/images/brand/logo.webp"
+                  width={180}
+                  height={60}
+                  alt="Eyesoul Eyewear"
+                  className="h-auto w-auto max-h-[50px] md:max-h-[60px]"
+                  priority
+                />
               </Link>
 
               <nav className="menu-main h-full max-lg:hidden" aria-label="Main navigation">
                 <ul className="flex items-center gap-8 h-full">
-                  {navItems.map((item) => (
-                    <li key={item.href} className="h-full">
-                      <Link
-                        href={item.href}
-                        className={`text-button-uppercase duration-300 h-full flex items-center justify-center ${
-                          isActive(item.href) ? 'active' : ''
-                        }`}
-                        aria-current={isActive(item.href) ? 'page' : undefined}
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
+                  {navItems.map((item, index) => {
+                    if (isNavDropdown(item)) {
+                      return (
+                        <NavDropdown
+                          key={`dropdown-${index}`}
+                          item={item}
+                          isActive={isActive}
+                        />
+                      )
+                    }
+                    if (isNavItem(item)) {
+                      return (
+                        <li key={item.href} className="h-full">
+                          <Link
+                            href={item.href}
+                            className={`text-button-uppercase duration-300 h-full flex items-center justify-center ${
+                              isActive(item.href) ? 'active' : ''
+                            }`}
+                            aria-current={isActive(item.href) ? 'page' : undefined}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      )
+                    }
+                    return null
+                  })}
                 </ul>
               </nav>
 
@@ -260,10 +341,6 @@ const Header: React.FC<HeaderProps> = ({
                           {t('nav.register')}
                         </Link>
                       </div>
-                      <div className="bottom pt-4 border-t border-line" aria-hidden="true"></div>
-                      <Link href="/pages/contact" className="body1 hover:underline">
-                        {t('nav.support')}
-                      </Link>
                     </div>
                   </div>
 
@@ -313,27 +390,42 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   <Icon.X size={14} aria-hidden="true" />
                 </button>
-                <Link href="/" className="heading5" onClick={handleMenuMobile} aria-label="Eyesoul Eyewear home">
-                  Eyesoul Eyewear
+                <Link href="/" className="flex items-center" onClick={handleMenuMobile} aria-label="Eyesoul Eyewear home">
+                  <Image
+                    src="/images/brand/logo.webp"
+                    width={150}
+                    height={50}
+                    alt="Eyesoul Eyewear"
+                    className="h-auto w-auto max-h-[40px]"
+                    priority
+                  />
                 </Link>
               </div>
 
               <div className="list-nav mt-6">
                 <ul>
-                  {navItems.map((item) => (
-                    <li key={item.href} className="mt-5">
-                      <Link
-                        href={item.href}
-                        onClick={handleMenuMobile}
-                        className={`text-xl font-semibold flex items-center justify-between ${
-                          isActive(item.href) ? 'active' : ''
-                        }`}
-                        aria-current={isActive(item.href) ? 'page' : undefined}
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
+                  {navItems.map((item, index) => {
+                    if (isNavDropdown(item)) {
+                      return <MobileNavDropdown key={`mobile-dropdown-${index}`} item={item} isActive={isActive} onItemClick={handleMenuMobile} />
+                    }
+                    if (isNavItem(item)) {
+                      return (
+                        <li key={item.href} className="mt-5">
+                          <Link
+                            href={item.href}
+                            onClick={handleMenuMobile}
+                            className={`text-xl font-semibold flex items-center justify-between ${
+                              isActive(item.href) ? 'active' : ''
+                            }`}
+                            aria-current={isActive(item.href) ? 'page' : undefined}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      )
+                    }
+                    return null
+                  })}
                 </ul>
               </div>
 

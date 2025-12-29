@@ -28,6 +28,8 @@
   "nav": {
     "shop": "Toko",
     "about": "Tentang",
+    "services": "Layanan",
+    "promotion": "Promosi",
     "service": "Layanan",
     "insurance": "Asuransi",
     "contact": "Kontak",
@@ -61,6 +63,7 @@
     "shipping": "Pengiriman",
     "privacyPolicy": "Kebijakan Privasi",
     "returnRefund": "Pengembalian & Penggantian",
+    "promotion": "Promosi",
     "copyright": "©{year} Eyesoul Eyewear. Hak Cipta Dilindungi.",
     "admin": "Admin"
   },
@@ -273,6 +276,13 @@
       "infoText2": "Sebagian besar rencana asuransi mencakup pemeriksaan mata, bingkai, lensa, dan lensa kontak. Jumlah cakupan dan manfaat bervariasi menurut rencana, jadi kami merekomendasikan untuk menghubungi penyedia asuransi Anda langsung untuk mengonfirmasi manfaat spesifik Anda.",
       "infoText3": "Jika Anda tidak melihat penyedia asuransi Anda terdaftar, silakan hubungi kami. Kami mungkin masih dapat menerima asuransi Anda atau membantu Anda menemukan opsi pembayaran alternatif.",
       "acceptsOnlineClaims": "Menerima Klaim Online"
+    },
+    "promotion": {
+      "title": "Promosi",
+      "heading": "Promosi",
+      "heroDescription": "Temukan promosi dan penawaran spesial terbaru kami untuk kacamata premium. Penawaran terbatas yang tidak ingin Anda lewatkan!",
+      "noPromotions": "Tidak ada konten promosi yang tersedia saat ini.",
+      "loading": "Memuat promosi..."
     }
   },
   "blog": {
@@ -324,21 +334,21 @@
     "indonesia": "Indonesia"
   },
   "benefit": {
-    "customerService": {
-      "title": "Layanan Pelanggan 24/7",
-      "description": "Kami siap membantu Anda dengan pertanyaan atau kekhawatiran apa pun yang Anda miliki, 24/7."
+    "frameGuarantee": {
+      "title": "Garansi Frame 18 Bulan",
+      "description": "Garansi komprehensif 18 bulan untuk semua frame, memastikan kualitas dan daya tahan untuk investasi kacamata Anda."
     },
-    "moneyBack": {
-      "title": "Garansi Uang Kembali 14 Hari",
-      "description": "Jika Anda tidak puas dengan pembelian Anda, cukup kembalikan dalam 14 hari untuk pengembalian dana."
+    "eyeExamination": {
+      "title": "Pemeriksaan Mata Teknologi Canggih",
+      "description": "Peralatan dan teknik pemeriksaan mata canggih untuk penilaian penglihatan yang akurat dan evaluasi kesehatan mata."
     },
-    "guarantee": {
-      "title": "Jaminan Kami",
-      "description": "Kami mendukung produk dan layanan kami dan menjamin kepuasan Anda."
+    "tradeIn": {
+      "title": "Tukar Tambah Seumur Hidup",
+      "description": "Tukar tambah frame lama Anda kapan saja untuk kredit pembelian kacamata baru, berlaku seumur hidup hubungan Anda dengan kami."
     },
-    "shipping": {
-      "title": "Pengiriman ke Seluruh Dunia",
-      "description": "Kami mengirimkan produk kami ke seluruh dunia, membuatnya dapat diakses oleh pelanggan di mana saja."
+    "freeService": {
+      "title": "Layanan Gratis Seumur Hidup",
+      "description": "Layanan penyesuaian, pembersihan, dan perawatan dasar gratis seumur hidup untuk menjaga kacamata Anda dalam kondisi sempurna."
     }
   },
   "wishlist": {
