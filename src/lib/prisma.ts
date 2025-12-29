@@ -3,6 +3,15 @@ import { PrismaClient } from '@prisma/client'
 // Prevent multiple PrismaClient instances in dev/hot reload.
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient }
 
+// Get database URL - support both DATABASE_URL and POSTGRES_PRISMA_URL (Neon convention)
+const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL
+
+if (!databaseUrl) {
+  throw new Error(
+    'Missing database URL. Please set DATABASE_URL or POSTGRES_PRISMA_URL in your environment variables.'
+  )
+}
+
 export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({
@@ -10,7 +19,7 @@ export const prisma =
     // Add connection timeout and retry configuration for Neon
     datasources: {
       db: {
-        url: process.env.DATABASE_URL,
+        url: databaseUrl,
       },
     },
   })
