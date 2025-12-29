@@ -19,7 +19,15 @@ const getJwtSecret = (): string => {
   return secret
 }
 
-const JWT_SECRET = getJwtSecret()
+// Lazy-load JWT_SECRET to avoid build-time errors
+// This prevents the module from throwing during Next.js build phase
+let JWT_SECRET: string | null = null
+const getJwtSecretLazy = (): string => {
+  if (!JWT_SECRET) {
+    JWT_SECRET = getJwtSecret()
+  }
+  return JWT_SECRET
+}
 const TOKEN_EXPIRY = '7d'
 
 export interface AuthTokenPayload {
@@ -38,12 +46,12 @@ export const verifyPassword = async (password: string, hashed: string) => {
 }
 
 export const signToken = (payload: AuthTokenPayload): string => {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: TOKEN_EXPIRY })
+  return jwt.sign(payload, getJwtSecretLazy(), { expiresIn: TOKEN_EXPIRY })
 }
 
 export const verifyToken = (token: string): AuthTokenPayload | null => {
   try {
-    return jwt.verify(token, JWT_SECRET) as AuthTokenPayload
+    return jwt.verify(token, getJwtSecretLazy()) as AuthTokenPayload
   } catch {
     return null
   }
