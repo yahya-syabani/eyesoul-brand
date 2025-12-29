@@ -78,7 +78,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   // Rate limiting
-  const rateLimit = rateLimitApi(request)
+  const rateLimit = await rateLimitApi(request)
   if (!rateLimit.allowed) {
     return createRateLimitResponse(rateLimit.resetAt)
   }

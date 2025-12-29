@@ -8,7 +8,7 @@ import { handleApiError } from '@/lib/api-error-handler'
 
 export async function POST(request: Request) {
   // Rate limiting
-  const rateLimit = rateLimitLogin(request)
+  const rateLimit = await rateLimitLogin(request)
   if (!rateLimit.allowed) {
     return createRateLimitResponse(rateLimit.resetAt)
   }

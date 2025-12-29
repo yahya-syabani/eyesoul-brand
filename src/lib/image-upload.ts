@@ -1,6 +1,4 @@
-import { writeFile, mkdir } from 'fs/promises'
-import { join } from 'path'
-import { existsSync } from 'fs'
+import { put } from '@vercel/blob'
 
 export type EntityType = 'products' | 'store-locations' | 'hero-slides' | 'blogs' | 'testimonials' | 'services' | 'promotional-pages'
 
@@ -58,21 +56,17 @@ export function sanitizeFilename(filename: string): string {
 }
 
 /**
- * Get upload directory path for entity type
- */
-export function getUploadDir(entityType: EntityType): string {
-  return join(process.cwd(), 'public', 'uploads', entityType)
-}
-
-/**
- * Get public URL path for uploaded image
+ * Get public URL path for uploaded image (for backward compatibility)
+ * Note: With Vercel Blob, URLs are returned directly from the blob service
  */
 export function getPublicImageUrl(entityType: EntityType, filename: string): string {
+  // This function is kept for backward compatibility but may not be used
+  // as Vercel Blob returns full URLs directly
   return `/uploads/${entityType}/${filename}`
 }
 
 /**
- * Save uploaded file to disk
+ * Save uploaded file to Vercel Blob Storage
  */
 export async function saveUploadedFile(
   file: File,
@@ -88,26 +82,13 @@ export async function saveUploadedFile(
   const sanitizedOriginal = sanitizeFilename(file.name)
   const filename = generateUniqueFilename(sanitizedOriginal)
 
-  // Get upload directory
-  const uploadDir = getUploadDir(entityType)
+  // Upload to Vercel Blob Storage
+  const blob = await put(`uploads/${entityType}/${filename}`, file, {
+    access: 'public',
+    token: process.env.BLOB_READ_WRITE_TOKEN,
+  })
 
-  // Create directory if it doesn't exist
-  if (!existsSync(uploadDir)) {
-    await mkdir(uploadDir, { recursive: true })
-  }
-
-  // Convert File to Buffer
-  const bytes = await file.arrayBuffer()
-  const buffer = Buffer.from(bytes)
-
-  // Save file
-  const filePath = join(uploadDir, filename)
-  await writeFile(filePath, buffer)
-
-  // Return public URL
-  const url = getPublicImageUrl(entityType, filename)
-
-  return { url, filename }
+  return { url: blob.url, filename }
 }
 
 /**
@@ -138,4 +119,3 @@ export function validateImageUrl(url: string): ImageValidationResult {
     }
   }
 }
-

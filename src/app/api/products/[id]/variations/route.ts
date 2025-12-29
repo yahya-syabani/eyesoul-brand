@@ -39,7 +39,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   // Rate limiting
-  const rateLimit = rateLimitApi(request)
+  const rateLimit = await rateLimitApi(request)
   if (!rateLimit.allowed) {
     return createRateLimitResponse(rateLimit.resetAt)
   }

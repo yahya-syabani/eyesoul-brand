@@ -9,7 +9,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string; sizeId: string }> }
 ) {
   // Rate limiting
-  const rateLimit = rateLimitApi(_)
+  const rateLimit = await rateLimitApi(_)
   if (!rateLimit.allowed) {
     return createRateLimitResponse(rateLimit.resetAt)
   }

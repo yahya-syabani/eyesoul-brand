@@ -19,7 +19,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string; variationId: string }> }
 ) {
   // Rate limiting
-  const rateLimit = rateLimitApi(request)
+  const rateLimit = await rateLimitApi(request)
   if (!rateLimit.allowed) {
     return createRateLimitResponse(rateLimit.resetAt)
   }
@@ -63,7 +63,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string; variationId: string }> }
 ) {
   // Rate limiting
-  const rateLimit = rateLimitApi(_)
+  const rateLimit = await rateLimitApi(_)
   if (!rateLimit.allowed) {
     return createRateLimitResponse(rateLimit.resetAt)
   }

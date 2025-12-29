@@ -6,7 +6,7 @@ import { rateLimitSearch, createRateLimitResponse } from '@/lib/rate-limit'
 
 export async function GET(request: Request) {
   // Rate limiting
-  const rateLimit = rateLimitSearch(request)
+  const rateLimit = await rateLimitSearch(request)
   if (!rateLimit.allowed) {
     return createRateLimitResponse(rateLimit.resetAt)
   }

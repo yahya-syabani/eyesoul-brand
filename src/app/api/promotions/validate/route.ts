@@ -11,7 +11,7 @@ const validateSchema = z.object({
 
 export async function POST(request: Request) {
   // Rate limiting
-  const rateLimit = rateLimitApi(request)
+  const rateLimit = await rateLimitApi(request)
   if (!rateLimit.allowed) {
     return createRateLimitResponse(rateLimit.resetAt)
   }

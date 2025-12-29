@@ -1,10 +1,33 @@
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
 import { RATE_LIMIT_CONFIG } from './api-constants'
 
 /**
- * Simple in-memory rate limiter for development/testing
- * For production, consider using @upstash/ratelimit with Redis
+ * Distributed rate limiter using Upstash Redis
+ * Falls back to a simple in-memory limiter if Upstash is not configured (development)
  */
 
+// Initialize Upstash Redis client
+const redis = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+  ? new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    })
+  : null
+
+// Initialize rate limiter instances
+const createRatelimit = (limit: number, window: number) => {
+  if (redis) {
+    return new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(limit, `${window} s`),
+      analytics: true,
+    })
+  }
+  return null
+}
+
+// Fallback in-memory rate limiter for development
 interface RateLimitEntry {
   count: number
   resetTime: number
@@ -15,14 +38,16 @@ const rateLimitStore = new Map<string, RateLimitEntry>()
 /**
  * Clean up expired entries periodically (every 5 minutes)
  */
-setInterval(() => {
-  const now = Date.now()
+if (!redis) {
+  setInterval(() => {
+    const now = Date.now()
     for (const [key, entry] of Array.from(rateLimitStore.entries())) {
-    if (now > entry.resetTime) {
-      rateLimitStore.delete(key)
+      if (now > entry.resetTime) {
+        rateLimitStore.delete(key)
+      }
     }
-  }
-}, 5 * 60 * 1000)
+  }, 5 * 60 * 1000)
+}
 
 /**
  * Get client identifier from request (IP address)
@@ -42,13 +67,9 @@ function getClientId(request: Request): string {
 }
 
 /**
- * Check rate limit for a request
- * @param request - The incoming request
- * @param limit - Maximum number of requests allowed
- * @param windowSeconds - Time window in seconds
- * @returns Object with allowed status and remaining requests
+ * Check rate limit for a request (fallback implementation for development)
  */
-export function checkRateLimit(
+function checkRateLimitFallback(
   request: Request,
   limit: number,
   windowSeconds: number
@@ -87,9 +108,42 @@ export function checkRateLimit(
 }
 
 /**
+ * Check rate limit for a request
+ * @param request - The incoming request
+ * @param limit - Maximum number of requests allowed
+ * @param windowSeconds - Time window in seconds
+ * @returns Object with allowed status and remaining requests
+ */
+export async function checkRateLimit(
+  request: Request,
+  limit: number,
+  windowSeconds: number
+): Promise<{ allowed: boolean; remaining: number; resetAt: number }> {
+  // Use Upstash Redis if configured, otherwise fallback to in-memory
+  if (redis) {
+    const ratelimit = createRatelimit(limit, windowSeconds)
+    if (ratelimit) {
+      const clientId = getClientId(request)
+      const result = await ratelimit.limit(clientId)
+      
+      // Convert Upstash result to our format
+      const resetAt = Date.now() + (windowSeconds * 1000)
+      return {
+        allowed: result.success,
+        remaining: result.remaining,
+        resetAt: resetAt,
+      }
+    }
+  }
+
+  // Fallback to in-memory rate limiting (development)
+  return checkRateLimitFallback(request, limit, windowSeconds)
+}
+
+/**
  * Rate limit middleware for login endpoint
  */
-export function rateLimitLogin(request: Request) {
+export async function rateLimitLogin(request: Request) {
   return checkRateLimit(
     request,
     RATE_LIMIT_CONFIG.LOGIN.LIMIT,
@@ -100,14 +154,14 @@ export function rateLimitLogin(request: Request) {
 /**
  * Rate limit middleware for general API endpoints
  */
-export function rateLimitApi(request: Request) {
+export async function rateLimitApi(request: Request) {
   return checkRateLimit(request, RATE_LIMIT_CONFIG.API.LIMIT, RATE_LIMIT_CONFIG.API.WINDOW)
 }
 
 /**
  * Rate limit middleware for search endpoint
  */
-export function rateLimitSearch(request: Request) {
+export async function rateLimitSearch(request: Request) {
   return checkRateLimit(
     request,
     RATE_LIMIT_CONFIG.SEARCH.LIMIT,
@@ -135,4 +189,3 @@ export function createRateLimitResponse(resetAt: number) {
     }
   )
 }
-
