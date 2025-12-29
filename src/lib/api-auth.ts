@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 import { authCookieName, verifyToken, type AuthTokenPayload } from './auth'
 import { ERROR_MESSAGES } from './api-constants'
 
@@ -21,7 +22,8 @@ export type AuthCheckResult = AuthResult | AuthError
  * Returns user payload if authenticated, or error response if not
  */
 export async function verifyApiAuth(request: Request): Promise<AuthCheckResult> {
-  const token = request.cookies.get(authCookieName)?.value
+  const cookieStore = await cookies()
+  const token = cookieStore.get(authCookieName)?.value
 
   if (!token) {
     return {

@@ -111,7 +111,6 @@ const TopNavThree: React.FC<Props> = ({ props }) => {
                                                 exit={{ opacity: 0, y: -8 }}
                                                 transition={{ 
                                                     duration: 0.2, 
-                                                    ease: [0.4, 0, 0.2, 1],
                                                     staggerChildren: 0.05
                                                 }}
                                                 className="list-option bg-white open"
@@ -161,7 +160,7 @@ const TopNavThree: React.FC<Props> = ({ props }) => {
                                 </div>
                                 <motion.div
                                     animate={{ rotate: isOpenLanguage ? 180 : 0 }}
-                                    transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                                    transition={{ duration: 0.2 }}
                                     className="flex-shrink-0"
                                 >
                                     <Icon.CaretDown size={14} className="text-secondary" />
@@ -186,9 +185,9 @@ const TopNavThree: React.FC<Props> = ({ props }) => {
                                 </div>
                                 <Icon.CaretDown size={12} />
                             </div>
-                            <Link href={'https://www.facebook.com/'} target='_blank'>
+                            <a href={'https://www.facebook.com/'} target='_blank' rel='noopener noreferrer'>
                                 <i className="icon-facebook text-black"></i>
-                            </Link>
+                            </a>
                             <a 
                                 href="https://www.instagram.com/eyesoul.eyewear/" 
                                 target="_blank"
@@ -198,15 +197,15 @@ const TopNavThree: React.FC<Props> = ({ props }) => {
                             >
                                 <i className="icon-instagram text-black"></i>
                             </a>
-                            <Link href={'https://www.youtube.com/'} target='_blank'>
+                            <a href={'https://www.youtube.com/'} target='_blank' rel='noopener noreferrer'>
                                 <i className="icon-youtube text-black"></i>
-                            </Link>
-                            <Link href={'https://twitter.com/'} target='_blank'>
+                            </a>
+                            <a href={'https://twitter.com/'} target='_blank' rel='noopener noreferrer'>
                                 <i className="icon-twitter text-black"></i>
-                            </Link>
-                            <Link href={'https://pinterest.com/'} target='_blank'>
+                            </a>
+                            <a href={'https://pinterest.com/'} target='_blank' rel='noopener noreferrer'>
                                 <i className="icon-pinterest text-black"></i>
-                            </Link>
+                            </a>
                         </div>
 
                     </div>

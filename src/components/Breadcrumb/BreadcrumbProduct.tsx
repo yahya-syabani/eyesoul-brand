@@ -17,8 +17,9 @@ const BreadcrumbProduct: React.FC<Props> = ({ data, productPage, productId }) =>
     const isNumericId = Number.isFinite(numericId)
 
     const handleDetailProduct = (productId: string | number | null) => {
-        // Chuyển hướng đến trang shop với category được chọn
-        router.push(`/product/${productPage}?id=${productId}`);
+        // Redirect to product page with selected product
+        // Always use /product/default as productPage is always 'default' in practice
+        router.push(`/product/default?id=${productId}` as '/product/default');
     };
 
     return (

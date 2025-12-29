@@ -65,7 +65,7 @@ const productSchema = z.object({
   sizes: z.array(z.enum(PRODUCT_SIZES).or(z.string())).optional(),
 })
 
-export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
     const product = await prisma.product.findUnique({

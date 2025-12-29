@@ -95,7 +95,7 @@ const TopNavOne: React.FC<Props> = ({ props, slogan }) => {
                                                 exit={{ opacity: 0, y: -8 }}
                                                 transition={{ 
                                                     duration: 0.2, 
-                                                    ease: [0.4, 0, 0.2, 1],
+                                                    
                                                     staggerChildren: 0.05
                                                 }}
                                                 className="list-option bg-white open"
@@ -145,7 +145,7 @@ const TopNavOne: React.FC<Props> = ({ props, slogan }) => {
                                 </div>
                                 <motion.div
                                     animate={{ rotate: isOpenLanguage ? 180 : 0 }}
-                                    transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                                    transition={{ duration: 0.2,  }}
                                     className="flex-shrink-0"
                                 >
                                     <Icon.CaretDown size={14} className="text-white" />

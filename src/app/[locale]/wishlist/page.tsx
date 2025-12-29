@@ -48,8 +48,8 @@ const Wishlist = () => {
     if (filteredData.length === 0) {
         filteredData = [{
             id: 'no-data',
-            category: 'no-data',
-            type: 'no-data',
+            category: 'sunglasses',
+            type: 'sunglasses' as const,
             name: 'no-data',
             gender: 'no-data',
             new: false,

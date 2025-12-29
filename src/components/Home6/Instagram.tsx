@@ -39,7 +39,7 @@ const Instagram = () => {
                         }}
                     >
                         <SwiperSlide>
-                            <Link href={'https://www.instagram.com/'} target='_blank' className="item relative block overflow-hidden">
+                            <a href={'https://www.instagram.com/'} target='_blank' rel='noopener noreferrer' className="item relative block overflow-hidden">
                                 <Image
                                     src={'/images/instagram/1.png'}
                                     width={500}
@@ -50,10 +50,10 @@ const Instagram = () => {
                                 <div className="icon w-12 h-12 bg-white hover:bg-black duration-500 flex items-center justify-center rounded-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1]">
                                     <div className="icon-instagram text-2xl text-black"></div>
                                 </div>
-                            </Link>
+                            </a>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <Link href={'https://www.instagram.com/'} target='_blank' className="item relative block overflow-hidden">
+                            <a href={'https://www.instagram.com/'} target='_blank' rel='noopener noreferrer' className="item relative block overflow-hidden">
                                 <Image
                                     src={'/images/instagram/2.png'}
                                     width={500}
@@ -64,10 +64,10 @@ const Instagram = () => {
                                 <div className="icon w-12 h-12 bg-white hover:bg-black duration-500 flex items-center justify-center rounded-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1]">
                                     <div className="icon-instagram text-2xl text-black"></div>
                                 </div>
-                            </Link>
+                            </a>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <Link href={'https://www.instagram.com/'} target='_blank' className="item relative block overflow-hidden">
+                            <a href={'https://www.instagram.com/'} target='_blank' rel='noopener noreferrer' className="item relative block overflow-hidden">
                                 <Image
                                     src={'/images/instagram/3.png'}
                                     width={500}
@@ -78,10 +78,10 @@ const Instagram = () => {
                                 <div className="icon w-12 h-12 bg-white hover:bg-black duration-500 flex items-center justify-center rounded-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1]">
                                     <div className="icon-instagram text-2xl text-black"></div>
                                 </div>
-                            </Link>
+                            </a>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <Link href={'https://www.instagram.com/'} target='_blank' className="item relative block overflow-hidden">
+                            <a href={'https://www.instagram.com/'} target='_blank' rel='noopener noreferrer' className="item relative block overflow-hidden">
                                 <Image
                                     src={'/images/instagram/4.png'}
                                     width={500}
@@ -92,10 +92,10 @@ const Instagram = () => {
                                 <div className="icon w-12 h-12 bg-white hover:bg-black duration-500 flex items-center justify-center rounded-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1]">
                                     <div className="icon-instagram text-2xl text-black"></div>
                                 </div>
-                            </Link>
+                            </a>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <Link href={'https://www.instagram.com/'} target='_blank' className="item relative block overflow-hidden">
+                            <a href={'https://www.instagram.com/'} target='_blank' rel='noopener noreferrer' className="item relative block overflow-hidden">
                                 <Image
                                     src={'/images/instagram/5.png'}
                                     width={500}
@@ -106,10 +106,10 @@ const Instagram = () => {
                                 <div className="icon w-12 h-12 bg-white hover:bg-black duration-500 flex items-center justify-center rounded-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1]">
                                     <div className="icon-instagram text-2xl text-black"></div>
                                 </div>
-                            </Link>
+                            </a>
                         </SwiperSlide>
                         <SwiperSlide>
-                            <Link href={'https://www.instagram.com/'} target='_blank' className="item relative block overflow-hidden">
+                            <a href={'https://www.instagram.com/'} target='_blank' rel='noopener noreferrer' className="item relative block overflow-hidden">
                                 <Image
                                     src={'/images/instagram/0.png'}
                                     width={500}
@@ -120,7 +120,7 @@ const Instagram = () => {
                                 <div className="icon w-12 h-12 bg-white hover:bg-black duration-500 flex items-center justify-center rounded-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1]">
                                     <div className="icon-instagram text-2xl text-black"></div>
                                 </div>
-                            </Link>
+                            </a>
                         </SwiperSlide>
                     </Swiper>
                 </div>

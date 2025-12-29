@@ -121,6 +121,8 @@ async function fetchHeroSlides(locale: string) {
     // Transform slides to include translated content
     return slides.map((slide) => ({
       ...slide,
+      createdAt: slide.createdAt.toISOString(),
+      updatedAt: slide.updatedAt.toISOString(),
       subtitle: slide.subtitleTranslations
         ? getTranslatedText(slide.subtitleTranslations as TranslationObject, locale)
         : slide.subtitle,

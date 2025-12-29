@@ -13,7 +13,7 @@ const DashboardPage = async () => {
       include: { variations: true, attributes: true, sizes: true },
       orderBy: { createdAt: 'desc' },
     })
-    products = dbProducts.map(transformProductForFrontend)
+    products = dbProducts.map((product) => transformProductForFrontend(product, 'en'))
   } catch (error) {
     console.error('Error fetching products:', error)
   }

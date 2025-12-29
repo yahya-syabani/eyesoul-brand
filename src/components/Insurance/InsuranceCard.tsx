@@ -27,7 +27,7 @@ const InsuranceCard: React.FC<InsuranceCardProps> = ({
       transition={{
         duration: 0.5,
         delay: index * 0.1,
-        ease: [0.22, 1, 0.36, 1],
+        
       }}
       whileHover={{
         scale: 1.05,

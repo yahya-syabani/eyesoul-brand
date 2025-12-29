@@ -42,14 +42,14 @@ const Register = () => {
                                         {...register('firstName')}
                                         type="text"
                                         placeholder="First Name *"
-                                        error={errors.firstName}
+                                        error={errors.firstName?.message}
                                         required
                                     />
                                     <FormField
                                         {...register('lastName')}
                                         type="text"
                                         placeholder="Last Name *"
-                                        error={errors.lastName}
+                                        error={errors.lastName?.message}
                                         required
                                     />
                                 </div>
@@ -58,7 +58,7 @@ const Register = () => {
                                         {...register('email')}
                                         type="email"
                                         placeholder="Email address *"
-                                        error={errors.email}
+                                        error={errors.email?.message}
                                         required
                                     />
                                 </div>
@@ -67,7 +67,7 @@ const Register = () => {
                                         {...register('password')}
                                         type="password"
                                         placeholder="Password *"
-                                        error={errors.password}
+                                        error={errors.password?.message}
                                         required
                                     />
                                 </div>
@@ -76,7 +76,7 @@ const Register = () => {
                                         {...register('confirmPassword')}
                                         type="password"
                                         placeholder="Confirm Password *"
-                                        error={errors.confirmPassword}
+                                        error={errors.confirmPassword?.message}
                                         required
                                     />
                                 </div>
@@ -90,7 +90,7 @@ const Register = () => {
                                         <Icon.CheckSquare size={20} weight='fill' className='icon-checkbox' />
                                     </div>
                                     <label htmlFor='acceptTerms' className="pl-2 cursor-pointer text-secondary2">I agree to the
-                                        <Link href={'#!'} className='text-black hover:underline pl-1'>Terms of User</Link>
+                                        <a href={'#!'} className='text-black hover:underline pl-1'>Terms of User</a>
                                     </label>
                                 </div>
                                 {errors.acceptTerms && (

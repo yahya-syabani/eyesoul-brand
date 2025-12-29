@@ -26,7 +26,7 @@ export function transformProductForFrontend(
   return {
     id: product.id,
     category: product.category || '',
-    type: product.type || product.category || '',
+    type: (product.type || product.category || 'sunglasses') as any,
     name,
     gender: 'unisex', // Default gender if not in database
     new: product.isNew ?? false,
@@ -38,20 +38,20 @@ export function transformProductForFrontend(
     sold: product.sold ?? 0,
     quantity: product.quantity ?? 0,
     quantityPurchase: 1, // Default value
-    sizes: product.sizes.map((s) => s.size),
+    sizes: product.sizes.map((s) => s.size) as any,
     variation: product.variations.map((v) => ({
       color: v.color || '',
       colorCode: v.colorCode || '',
       colorImage: v.colorImage || '',
       image: v.image || '',
-    })),
+    })) as any,
     thumbImage: product.thumbImages || [],
     images: product.images || [],
     description,
     action: 'quick shop', // Default value
     slug: product.slug || '',
-    lensType: product.attributes?.lensType,
-    frameMaterial: product.attributes?.frameMaterial,
+    lensType: product.attributes?.lensType || undefined,
+    frameMaterial: product.attributes?.frameMaterial || undefined,
     frameSize: product.attributes?.frameSize as { bridgeWidth?: number; templeLength?: number; lensWidth?: number } | undefined,
     lensCoating: product.attributes?.lensCoating || [],
   }

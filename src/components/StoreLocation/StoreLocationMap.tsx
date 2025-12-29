@@ -123,12 +123,6 @@ const StoreLocationMap: React.FC<StoreLocationMapProps> = ({ locations, selected
           style={{ height: '100%', width: '100%' }}
           scrollWheelZoom={true}
           className="z-0"
-          whenCreated={(mapInstance) => {
-            // Ensure map is properly initialized
-            if (mapInstance) {
-              mapInstance.invalidateSize()
-            }
-          }}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

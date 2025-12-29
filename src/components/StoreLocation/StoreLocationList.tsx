@@ -14,7 +14,7 @@ interface StoreLocationListProps {
 
 const StoreLocationList: React.FC<StoreLocationListProps> = ({ stores, onStoreClick }) => {
     const t = useTranslations()
-    const { openModalStoreLocation } = useModalStoreLocationContext()
+    const { openModalWithStore } = useModalStoreLocationContext()
     const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
 
     const toggleExpand = (storeId: string) => {
@@ -33,8 +33,9 @@ const StoreLocationList: React.FC<StoreLocationListProps> = ({ stores, onStoreCl
         // Toggle expand/collapse
         toggleExpand(store.id)
         
-        // Open modal
-        openModalStoreLocation(store)
+        // Open modal with the specific store
+        // Need to get all stores - for now, use the stores prop
+        openModalWithStore(stores, store.id)
         
         // Call parent callback if provided (for map integration)
         if (onStoreClick) {

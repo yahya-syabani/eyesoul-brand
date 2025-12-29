@@ -46,7 +46,7 @@ const SearchResultContent = () => {
     }, [query])
 
     const handleSearch = (value: string) => {
-        router.push(`/search-result?query=${value}`)
+        router.push(`/search-result?query=${value}` as '/search-result')
         setSearchKeyword('')
     }
 
@@ -54,8 +54,8 @@ const SearchResultContent = () => {
 
     const noDataProduct: ProductType = {
         id: 'no-data',
-        category: 'no-data',
-        type: 'no-data',
+        category: 'sunglasses',
+        type: 'sunglasses' as const,
         name: 'no-data',
         gender: 'no-data',
         new: false,

@@ -18,7 +18,6 @@ const textContainerVariants = {
             staggerChildren: 0.2,
             delayChildren: 0.1,
             duration: 0.6,
-            ease: [0.22, 1, 0.36, 1],
         },
     },
 }
@@ -30,7 +29,6 @@ const textItemVariants = {
         y: 0,
         transition: {
             duration: 0.5,
-            ease: [0.22, 1, 0.36, 1],
         },
     },
 }
@@ -43,7 +41,6 @@ const imageContainerVariants = {
         transition: {
             staggerChildren: 0.15,
             duration: 0.6,
-            ease: [0.22, 1, 0.36, 1],
         },
     },
 }
@@ -56,7 +53,6 @@ const imageItemVariants = {
         y: 0,
         transition: {
             duration: 0.5,
-            ease: [0.22, 1, 0.36, 1],
         },
     },
 }

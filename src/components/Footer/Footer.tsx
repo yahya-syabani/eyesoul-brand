@@ -168,14 +168,14 @@ const Footer = () => {
                                 >
                                     <i className="icon-instagram text-xl"></i>
                                 </a>
-                                <Link 
+                                <a 
                                     href="/admin/login" 
                                     className="flex items-center gap-2 text-secondary hover:text-black transition-colors duration-300"
                                     aria-label="Admin login"
                                 >
                                     <Icon.ShieldCheck size={18} />
                                     <span className="caption2 max-md:hidden">{t('footer.admin')}</span>
-                                </Link>
+                                </a>
                             </div>
                         </div>
                     </div>

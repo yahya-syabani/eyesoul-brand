@@ -77,11 +77,11 @@ const BlogDetailOneContent = () => {
     }
 
     const handleBlogClick = (tagSlug: string) => {
-        router.push(`/blog/default?tag=${tagSlug}`);
+        router.push(`/blog/default?tag=${tagSlug}` as '/blog/default');
     };
 
     const handleBlogDetail = (id: string) => {
-        router.push(`/blog/detail1?id=${id}`);
+        router.push(`/blog/detail1?id=${id}` as '/blog/detail1');
     };
 
     if (loading || !blogMain) {
@@ -186,21 +186,21 @@ const BlogDetailOneContent = () => {
                                 <div className="right flex items-center gap-3 flex-wrap">
                                     <p>Share:</p>
                                     <div className="list flex items-center gap-3 flex-wrap">
-                                        <Link href={'https://www.facebook.com/'} target='_blank' className='bg-surface w-10 h-10 flex items-center justify-center rounded-full duration-300 hover:bg-black hover:text-white'>
+                                        <a href={'https://www.facebook.com/'} target='_blank' rel='noopener noreferrer' className='bg-surface w-10 h-10 flex items-center justify-center rounded-full duration-300 hover:bg-black hover:text-white'>
                                             <div className="icon-facebook duration-100"></div>
-                                        </Link>
-                                        <Link href={'https://www.instagram.com/'} target='_blank' className='bg-surface w-10 h-10 flex items-center justify-center rounded-full duration-300 hover:bg-black hover:text-white'>
+                                        </a>
+                                        <a href={'https://www.instagram.com/'} target='_blank' rel='noopener noreferrer' className='bg-surface w-10 h-10 flex items-center justify-center rounded-full duration-300 hover:bg-black hover:text-white'>
                                             <div className="icon-instagram duration-100"></div>
-                                        </Link>
-                                        <Link href={'https://www.twitter.com/'} target='_blank' className='bg-surface w-10 h-10 flex items-center justify-center rounded-full duration-300 hover:bg-black hover:text-white'>
+                                        </a>
+                                        <a href={'https://www.twitter.com/'} target='_blank' rel='noopener noreferrer' className='bg-surface w-10 h-10 flex items-center justify-center rounded-full duration-300 hover:bg-black hover:text-white'>
                                             <div className="icon-twitter duration-100"></div>
-                                        </Link>
-                                        <Link href={'https://www.youtube.com/'} target='_blank' className='bg-surface w-10 h-10 flex items-center justify-center rounded-full duration-300 hover:bg-black hover:text-white'>
+                                        </a>
+                                        <a href={'https://www.youtube.com/'} target='_blank' rel='noopener noreferrer' className='bg-surface w-10 h-10 flex items-center justify-center rounded-full duration-300 hover:bg-black hover:text-white'>
                                             <div className="icon-youtube duration-100"></div>
-                                        </Link>
-                                        <Link href={'https://www.pinterest.com/'} target='_blank' className='bg-surface w-10 h-10 flex items-center justify-center rounded-full duration-300 hover:bg-black hover:text-white'>
+                                        </a>
+                                        <a href={'https://www.pinterest.com/'} target='_blank' rel='noopener noreferrer' className='bg-surface w-10 h-10 flex items-center justify-center rounded-full duration-300 hover:bg-black hover:text-white'>
                                             <div className="icon-pinterest duration-100"></div>
-                                        </Link>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

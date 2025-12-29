@@ -58,8 +58,8 @@ export const checkoutSchema = z.object({
   state: z.string().min(1, 'State is required'),
   postalCode: z.string().min(1, 'Postal code is required'),
   note: z.string().optional(),
-  paymentMethod: z.enum(['credit-card', 'cash-delivery', 'apple-pay', 'paypal'], {
-    required_error: 'Please select a payment method',
+  paymentMethod: z.enum(['credit-card', 'cash-delivery', 'apple-pay', 'paypal']).refine((val) => val !== undefined, {
+    message: 'Please select a payment method',
   }),
   cardNumber: z.string().optional(),
   cardDate: z.string().optional(),

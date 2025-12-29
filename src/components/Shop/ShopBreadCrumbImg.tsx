@@ -49,7 +49,7 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType, is
             }
         })
         
-        router.replace(`/shop/default?${params.toString()}`, { scroll: false })
+        router.replace(`/shop/default?${params.toString()}` as '/shop/default', { scroll: false })
     }, [router, searchParams])
 
     const handleLayoutCol = useCallback((col: number) => {
@@ -113,8 +113,8 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType, is
 
     const noDataProduct: ProductType = useMemo(() => ({
         id: 'no-data',
-        category: 'no-data',
-        type: 'no-data',
+        category: 'sunglasses',
+        type: 'sunglasses' as const,
         name: 'no-data',
         gender: 'no-data',
         new: false,
@@ -142,7 +142,7 @@ const ShopBreadCrumbImg: React.FC<Props> = ({ data, productPerPage, dataType, is
             // Remove hardcoded 'eyewear' category filter - data is already filtered by category from API
             if (showOnlySale && !product.sale) return false
             if (effectiveType && product.type !== effectiveType) return false
-            if (size && !product.sizes.includes(size)) return false
+            if (size && !product.sizes.includes(size as any)) return false
             if (color && !product.variation.some((item) => item.color === color)) return false
             if (brand && product.brand !== brand) return false
             if (priceRange.min !== 0 || priceRange.max !== 100) {

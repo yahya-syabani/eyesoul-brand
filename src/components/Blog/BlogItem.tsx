@@ -15,7 +15,7 @@ const BlogItem: React.FC<BlogProps> = ({ data, type }) => {
     const router = useRouter()
     const handleBlogClick = (blogId: string) => {
         // Go to blog detail with blogId selected
-        router.push(`/blog/detail1?id=${blogId}`);
+        router.push(`/blog/detail1?id=${blogId}` as '/blog/detail1');
     };
 
     return (

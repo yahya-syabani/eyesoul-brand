@@ -20,8 +20,12 @@ export const routing = defineRouting({
     // string can be provided instead of an object
     '/': '/',
     '/shop': '/shop',
+    '/shop/default': '/shop/default',
     '/blog': '/blog',
+    '/blog/default': '/blog/default',
+    '/blog/detail1': '/blog/detail1',
     '/product': '/product',
+    '/product/default': '/product/default',
     '/cart': '/cart',
     '/checkout': '/checkout',
     '/login': '/login',

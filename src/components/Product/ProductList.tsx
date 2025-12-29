@@ -78,7 +78,7 @@ const ProductList: React.FC<Props> = ({ data }) => {
   }
 
   const handleDetailProduct = () => {
-    router.push(`/product/default?id=${data.id}`)
+    router.push(`/product/default?id=${data.id}` as '/product/default')
   }
 
   return (

@@ -87,7 +87,7 @@ const SliderSeven: React.FC<SliderSevenProps> = ({ slides }) => {
                             const imageWidthClass = slide.imageWidth || 'sm:w-[48%] w-[54%]'
                             const imagePositionClass = slide.imagePosition || '2xl:-right-[60px] right-0 bottom-0'
                             const ctaText = slide.ctaText || t('home.shopNow')
-                            const ctaLink = slide.ctaLink || '/shop/default'
+                            const ctaLink = (slide.ctaLink || '/shop/default') as '/shop/default'
 
                             return (
                                 <SwiperSlide key={slide.id}>

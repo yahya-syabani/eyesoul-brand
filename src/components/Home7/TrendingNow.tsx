@@ -22,7 +22,7 @@ const TrendingNow: React.FC<TrendingNowProps> = ({ productCounts }) => {
     const t = useTranslations()
 
     const handleTypeClick = (type: string) => {
-        router.push(`/shop/default?type=${type}`);
+        router.push(`/shop/default?type=${type}` as '/shop/default');
     };
 
     // Eyewear-focused categories for trending navigation

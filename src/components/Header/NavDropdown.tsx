@@ -102,7 +102,7 @@ const NavDropdown: React.FC<NavDropdownProps> = ({ item, isActive }) => {
           {item.items.map((subItem, index) => (
             <li key={subItem.href} role="none">
               <Link
-                href={subItem.href}
+                 href={subItem.href as any}
                 className={`nav-dropdown-item ${isActive(subItem.href) ? 'active' : ''} ${
                   focusedIndex === index ? 'focused' : ''
                 }`}

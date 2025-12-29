@@ -56,7 +56,7 @@ const Deal: React.FC<Props> = ({ data, start, limit }) => {
                                 </div>
                             </div>
                         </div>
-                        <Link href={'/shop/breadcrumb-img'} className='text-button pb-1 border-b-2 border-black'>View All Deals</Link>
+                        <Link href={'/shop/breadcrumb-img' as any} className='text-button pb-1 border-b-2 border-black'>View All Deals</Link>
                     </div>
 
                     <div className="list-product show-product-sold grid lg:grid-cols-4 grid-cols-2 sm:gap-[30px] gap-[20px] md:mt-10 mt-6">

@@ -137,7 +137,7 @@ const CartContent = () => {
     const effectiveShipCart = cartIsEmpty ? 0 : shipCart === 0 && !eligibleFreeShipping ? 30 : shipCart
 
     const redirectToCheckout = () => {
-        router.push(`/checkout?discount=${effectiveDiscountCart}&ship=${effectiveShipCart}`)
+        router.push(`/checkout?discount=${effectiveDiscountCart}&ship=${effectiveShipCart}` as '/checkout')
     }
 
     return (

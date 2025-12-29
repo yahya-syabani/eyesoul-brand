@@ -116,7 +116,7 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                   {navItems.map((item) => (
                     <li key={item.href} className="h-full">
                       <Link
-                        href={item.href}
+                        href={item.href as any}
                         className={`text-button-uppercase duration-300 h-full flex items-center justify-center ${
                           isActive(item.href) ? 'active' : ''
                         }`}
@@ -199,7 +199,7 @@ const MenuOne: React.FC<Props> = ({ props }) => {
                   {navItems.map((item) => (
                     <li key={item.href} className="mt-5">
                       <Link
-                        href={item.href}
+                        href={item.href as any}
                         onClick={handleMenuMobile}
                         className={`text-xl font-semibold flex items-center justify-between ${
                           isActive(item.href) ? 'active' : ''

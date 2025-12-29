@@ -19,7 +19,6 @@ const cardVariants = {
         scale: 1,
         transition: {
             duration: 0.4,
-            ease: [0.22, 1, 0.36, 1],
         },
     },
 }
@@ -30,7 +29,6 @@ const hoverVariants = {
         y: 0,
         transition: {
             duration: 0.3,
-            ease: [0.22, 1, 0.36, 1],
         },
     },
     hover: {
@@ -38,7 +36,6 @@ const hoverVariants = {
         y: -4,
         transition: {
             duration: 0.3,
-            ease: [0.22, 1, 0.36, 1],
         },
     },
 }

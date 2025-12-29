@@ -41,7 +41,7 @@ const Login = () => {
                                     {...register('email')}
                                     type="email"
                                     placeholder="Username or email address *"
-                                    error={errors.email}
+                                    error={errors.email?.message}
                                     required
                                 />
                                 <div className="mt-5">
@@ -49,7 +49,7 @@ const Login = () => {
                                         {...register('password')}
                                         type="password"
                                         placeholder="Password *"
-                                        error={errors.password}
+                                        error={errors.password?.message}
                                         required
                                     />
                                 </div>

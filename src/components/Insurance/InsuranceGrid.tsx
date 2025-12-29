@@ -18,7 +18,7 @@ const containerVariants = {
     transition: {
       staggerChildren: 0.1,
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
+      
     },
   },
 }

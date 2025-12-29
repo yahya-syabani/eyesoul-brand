@@ -85,28 +85,28 @@ const CheckoutContent = () => {
                                                 {...register('firstName')}
                                                 type="text"
                                                 placeholder={t('checkout.firstName')}
-                                                error={errors.firstName?.message || errors.firstName}
+                                                error={errors.firstName?.message}
                                                 required
                                             />
                                             <FormField
                                                 {...register('lastName')}
                                                 type="text"
                                                 placeholder={t('checkout.lastName')}
-                                                error={errors.lastName}
+                                                error={errors.lastName?.message}
                                                 required
                                             />
                                             <FormField
                                                 {...register('email')}
                                                 type="email"
                                                 placeholder={t('checkout.emailAddress')}
-                                                error={errors.email}
+                                                error={errors.email?.message}
                                                 required
                                             />
                                             <FormField
                                                 {...register('phoneNumber')}
                                                 type="tel"
                                                 placeholder={t('checkout.phoneNumbers')}
-                                                error={errors.phoneNumber}
+                                                error={errors.phoneNumber?.message}
                                                 required
                                             />
                                             <div className="col-span-full select-block">
@@ -124,21 +124,21 @@ const CheckoutContent = () => {
                                                         <option value="Singapore">{t('myAccount.countries.singapore')}</option>
                                                     </select>
                                                     <Icon.CaretDown className='arrow-down' />
-                                                    <FormError error={errors.country} />
+                                                    <FormError error={errors.country?.message} />
                                                 </div>
                                             </div>
                                             <FormField
                                                 {...register('city')}
                                                 type="text"
                                                 placeholder={t('checkout.townCity')}
-                                                error={errors.city}
+                                                error={errors.city?.message}
                                                 required
                                             />
                                             <FormField
                                                 {...register('address')}
                                                 type="text"
                                                 placeholder={t('checkout.street')}
-                                                error={errors.address}
+                                                error={errors.address?.message}
                                                 required
                                             />
                                             <div className="select-block">
@@ -156,14 +156,14 @@ const CheckoutContent = () => {
                                                         <option value="Singapore">{t('myAccount.countries.singapore')}</option>
                                                     </select>
                                                     <Icon.CaretDown className='arrow-down' />
-                                                    <FormError error={errors.state} />
+                                                    <FormError error={errors.state?.message} />
                                                 </div>
                                             </div>
                                             <FormField
                                                 {...register('postalCode')}
                                                 type="text"
                                                 placeholder={t('checkout.postalCode')}
-                                                error={errors.postalCode}
+                                                error={errors.postalCode?.message}
                                                 required
                                             />
                                             <div className="col-span-full">
@@ -176,14 +176,16 @@ const CheckoutContent = () => {
                                                         placeholder={t('checkout.writeNote')}
                                                         rows={3}
                                                     />
-                                                    <FormError error={errors.note} />
+                                                    <FormError error={errors.note?.message} />
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="payment-block md:mt-10 mt-6">
                                             <div className="heading5">{t('checkout.choosePaymentOption')}</div>
                                             {errors.paymentMethod && (
-                                                <FormError error={errors.paymentMethod} className="mt-2" />
+                                                <div className="mt-2">
+                                                    <FormError error={errors.paymentMethod?.message} />
+                                                </div>
                                             )}
                                             <div className="list-payment mt-5">
                                                 <div className={`type bg-surface p-5 border border-line rounded-lg ${activePayment === 'credit-card' ? 'open' : ''}`}>
@@ -207,7 +209,7 @@ const CheckoutContent = () => {
                                                                             type="text"
                                                                             id="cardNumberCredit"
                                                                             placeholder={t('checkout.cardNumberPlaceholder')}
-                                                                            error={errors.cardNumber}
+                                                                            error={errors.cardNumber?.message}
                                                                         />
                                                                     </div>
                                                                     <div className="mt-3">
@@ -216,7 +218,7 @@ const CheckoutContent = () => {
                                                                             {...register('cardDate')}
                                                                             type="date"
                                                                             id="dateCredit"
-                                                                            error={errors.cardDate}
+                                                                            error={errors.cardDate?.message}
                                                                         />
                                                                     </div>
                                                                     <div className="mt-3">
@@ -226,7 +228,7 @@ const CheckoutContent = () => {
                                                                             type="text"
                                                                             id="ccvCredit"
                                                                             placeholder={t('checkout.ccvPlaceholder')}
-                                                                            error={errors.cardCCV}
+                                                                            error={errors.cardCCV?.message}
                                                                         />
                                                                     </div>
                                                                 </div>

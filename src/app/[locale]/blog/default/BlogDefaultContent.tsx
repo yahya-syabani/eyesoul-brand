@@ -134,7 +134,7 @@ const BlogDefaultContent = () => {
         if (newCategory) {
             params.set('category', newCategory)
         }
-        router.push(`/blog/default?${params.toString()}`)
+        router.push(`/blog/default?${params.toString()}` as '/blog/default')
     }
 
     const handleTag = (tagSlug: string) => {
@@ -147,11 +147,11 @@ const BlogDefaultContent = () => {
         if (newTag) {
             params.set('tag', newTag)
         }
-        router.push(`/blog/default?${params.toString()}`)
+        router.push(`/blog/default?${params.toString()}` as '/blog/default')
     }
 
     const handleBlogClick = (blogId: string) => {
-        router.push(`/blog/detail1?id=${blogId}`);
+        router.push(`/blog/detail1?id=${blogId}` as '/blog/detail1');
     };
 
     let filteredData = blogData.filter(blog => {

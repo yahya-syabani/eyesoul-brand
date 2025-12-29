@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
+import { Prisma } from '@prisma/client'
 import prisma from '@/lib/prisma'
 import { handleApiError } from '@/lib/api-error-handler'
 import { requireAdminAuth } from '@/lib/api-auth'
@@ -152,7 +153,20 @@ export async function PUT(
     const updated = await prisma.heroSlide.update({
       where: { id },
       data: {
-        ...updateData,
+        ...(updateData.subtitle !== undefined && { subtitle: updateData.subtitle }),
+        ...(updateData.subtitleTranslations !== undefined && {
+          subtitleTranslations: updateData.subtitleTranslations as Prisma.InputJsonValue,
+        }),
+        ...(updateData.title !== undefined && { title: updateData.title }),
+        ...(updateData.titleTranslations !== undefined && {
+          titleTranslations: updateData.titleTranslations as Prisma.InputJsonValue,
+        }),
+        ...(updateData.ctaText !== undefined && { ctaText: updateData.ctaText }),
+        ...(updateData.ctaTextTranslations !== undefined && {
+          ctaTextTranslations: updateData.ctaTextTranslations === null 
+            ? Prisma.JsonNull 
+            : (updateData.ctaTextTranslations as Prisma.InputJsonValue),
+        }),
         ...(payload.imageUrl && { imageUrl: payload.imageUrl }),
         ...(payload.ctaLink !== undefined && { ctaLink: payload.ctaLink }),
         ...(payload.isActive !== undefined && { isActive: payload.isActive }),

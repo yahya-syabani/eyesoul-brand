@@ -359,7 +359,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                     <div className="list-size flex items-center gap-2 flex-wrap mt-3">
                                         {productMain.sizes.map((item, index) => (
                                             <div
-                                                className={`size-item ${item === 'freesize' ? 'px-3 py-2' : 'w-12 h-12'} flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item ? 'active' : ''}`}
+                                                className={`size-item ${(item as string) === 'freesize' ? 'px-3 py-2' : 'w-12 h-12'} flex items-center justify-center text-button rounded-full bg-white border border-line ${activeSize === item ? 'active' : ''}`}
                                                 key={index}
                                                 onClick={() => handleActiveSize(item)}
                                             >
@@ -708,7 +708,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                     <div className="container">
                         <div className="heading flex items-center justify-between flex-wrap gap-4">
                             <div className="heading4">Customer Review</div>
-                            <Link href={'#form-review'} className='button-main bg-white text-black border border-black'>Write Reviews</Link>
+                            <a href={'#form-review'} className='button-main bg-white text-black border border-black'>Write Reviews</a>
                         </div>
                         <div className="top-overview flex justify-between py-6 max-md:flex-col gap-y-6">
                             <div className="rating lg:w-1/4 md:w-[30%] lg:pr-[75px] md:pr-[35px]">
@@ -843,7 +843,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                                 <Icon.HandsClapping size={18} />
                                                 <div className="text-button">20</div>
                                             </div>
-                                            <Link href={'#form-review'} className="reply-btn text-button text-secondary cursor-pointer hover:text-black">Reply</Link>
+                                            <a href={'#form-review'} className="reply-btn text-button text-secondary cursor-pointer hover:text-black">Reply</a>
                                         </div>
                                     </div>
                                 </div>
@@ -870,7 +870,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                                 <Icon.HandsClapping size={18} />
                                                 <div className="text-button">20</div>
                                             </div>
-                                            <Link href={'#form-review'} className="reply-btn text-button text-secondary cursor-pointer hover:text-black">Reply</Link>
+                                            <a href={'#form-review'} className="reply-btn text-button text-secondary cursor-pointer hover:text-black">Reply</a>
                                         </div>
                                     </div>
                                 </div>
@@ -897,7 +897,7 @@ const Default: React.FC<Props> = ({ data, productId }) => {
                                                 <Icon.HandsClapping size={18} />
                                                 <div className="text-button">20</div>
                                             </div>
-                                            <Link href={'#form-review'} className="reply-btn text-button text-secondary cursor-pointer hover:text-black">Reply</Link>
+                                            <a href={'#form-review'} className="reply-btn text-button text-secondary cursor-pointer hover:text-black">Reply</a>
                                         </div>
                                     </div>
                                 </div>

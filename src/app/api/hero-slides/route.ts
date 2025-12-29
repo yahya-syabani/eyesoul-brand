@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
+import { Prisma } from '@prisma/client'
 import prisma from '@/lib/prisma'
 import { handleApiError } from '@/lib/api-error-handler'
 import { requireAdminAuth } from '@/lib/api-auth'
@@ -172,12 +173,14 @@ export async function POST(request: Request) {
     const created = await prisma.heroSlide.create({
       data: {
         subtitle, // Keep String field for backward compatibility
-        subtitleTranslations, // Store JSON translations
+        subtitleTranslations: subtitleTranslations as Prisma.InputJsonValue, // Store JSON translations
         title, // Keep String field for backward compatibility
-        titleTranslations, // Store JSON translations
+        titleTranslations: titleTranslations as Prisma.InputJsonValue, // Store JSON translations
         imageUrl: payload.imageUrl,
         ctaText, // Keep String field for backward compatibility
-        ctaTextTranslations, // Store JSON translations
+        ctaTextTranslations: ctaTextTranslations === null 
+          ? Prisma.JsonNull 
+          : (ctaTextTranslations as Prisma.InputJsonValue), // Store JSON translations
         ctaLink: payload.ctaLink ?? '/shop/breadcrumb-img',
         isActive: payload.isActive ?? true,
         displayOrder,

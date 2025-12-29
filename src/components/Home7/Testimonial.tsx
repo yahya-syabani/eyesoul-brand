@@ -20,7 +20,7 @@ const containerVariants = {
         y: 0,
         transition: {
             duration: 0.6,
-            ease: [0.22, 1, 0.36, 1],
+            
             staggerChildren: 0.2,
         },
     },
@@ -33,7 +33,7 @@ const textVariants = {
         y: 0,
         transition: {
             duration: 0.5,
-            ease: [0.22, 1, 0.36, 1],
+            
         },
     },
 }

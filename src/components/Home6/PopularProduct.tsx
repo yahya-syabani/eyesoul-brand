@@ -31,7 +31,7 @@ const PopularProduct = () => {
 
     const handleDetailProduct = (productId: string) => {
         // redirect to shop with category selected
-        router.push(`/product/default?id=${productId}`);
+        router.push(`/product/default?id=${productId}` as '/product/default');
     };
 
     if (loading) {

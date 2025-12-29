@@ -39,7 +39,7 @@ const ModalSearch = () => {
     useModalA11y({ isOpen: isModalOpen, onClose: closeModalSearch, containerRef: dialogRef, initialFocusRef: inputRef })
 
     const handleSearch = (value: string) => {
-        router.push(`/search-result?query=${encodeURIComponent(value)}`)
+        router.push(`/search-result?query=${encodeURIComponent(value)}` as '/search-result')
         closeModalSearch()
         setSearchKeyword('')
     }

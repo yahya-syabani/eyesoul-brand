@@ -57,7 +57,7 @@ const MobileNavDropdown: React.FC<{
         {item.items.map((subItem) => (
           <li key={subItem.href} className="pl-4 mt-2">
             <Link
-              href={subItem.href}
+              href={subItem.href as any}
               onClick={onItemClick}
               className={`text-lg flex items-center ${
                 isActive(subItem.href) ? 'active font-semibold' : 'font-normal'
@@ -285,7 +285,7 @@ const Header: React.FC<HeaderProps> = ({
                       return (
                         <li key={item.href} className="h-full">
                           <Link
-                            href={item.href}
+                            href={item.href as any}
                             className={`text-button-uppercase duration-300 h-full flex items-center justify-center ${
                               isActive(item.href) ? 'active' : ''
                             }`}
@@ -412,7 +412,7 @@ const Header: React.FC<HeaderProps> = ({
                       return (
                         <li key={item.href} className="mt-5">
                           <Link
-                            href={item.href}
+                            href={item.href as any}
                             onClick={handleMenuMobile}
                             className={`text-xl font-semibold flex items-center justify-between ${
                               isActive(item.href) ? 'active' : ''
