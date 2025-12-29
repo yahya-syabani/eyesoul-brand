@@ -33,6 +33,14 @@ const nextConfig = {
     experimental: {
         optimizePackageImports: ['@phosphor-icons/react'],
     },
+    // Disable output file tracing for middleware to avoid .nft.json issues on Vercel
+    outputFileTracingExcludes: {
+        '*': [
+            'node_modules/@swc/core-linux-x64-gnu',
+            'node_modules/@swc/core-linux-x64-musl',
+            'node_modules/@esbuild/linux-x64',
+        ],
+    },
     async headers() {
         return [
             {
