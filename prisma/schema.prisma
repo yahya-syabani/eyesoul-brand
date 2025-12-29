@@ -7,27 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  CUSTOMER
-  ADMIN
-}
-
-enum EyewearCategory {
-  sunglasses
-  prescription_glasses
-  reading_glasses
-  contact_lenses
-  frames_only
-}
-
-enum OrderStatus {
-  PENDING
-  PROCESSING
-  SHIPPED
-  DELIVERED
-  CANCELLED
-}
-
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -39,30 +18,30 @@ model User {
 }
 
 model Product {
-  id                 String             @id @default(cuid())
-  name               String
-  nameTranslations   Json?              // Translation: { "en": "...", "id": "..." }
-  slug               String             @unique
-  category           EyewearCategory
-  type               String?
-  description        String
-  descriptionTranslations Json?         // Translation: { "en": "...", "id": "..." }
-  price              Decimal            @db.Decimal(10, 2)
-  originPrice        Decimal            @db.Decimal(10, 2)
-  brand              String?
-  images             String[]
-  thumbImages        String[]
-  rate               Int                @default(0)
-  sold               Int                @default(0)
-  quantity           Int                @default(0)
-  isNew              Boolean            @default(false)
-  isSale             Boolean            @default(false)
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  variations         ProductVariation[]
-  attributes         ProductAttribute?
-  sizes              ProductSize[]
-  orderItems         OrderItem[]
+  id                      String             @id @default(cuid())
+  name                    String
+  slug                    String             @unique
+  category                EyewearCategory
+  type                    String?
+  description             String
+  price                   Decimal            @db.Decimal(10, 2)
+  originPrice             Decimal            @db.Decimal(10, 2)
+  brand                   String?
+  images                  String[]
+  thumbImages             String[]
+  rate                    Int                @default(0)
+  sold                    Int                @default(0)
+  quantity                Int                @default(0)
+  isNew                   Boolean            @default(false)
+  isSale                  Boolean            @default(false)
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
+  descriptionTranslations Json?
+  nameTranslations        Json?
+  orderItems              OrderItem[]
+  attributes              ProductAttribute?
+  sizes                   ProductSize[]
+  variations              ProductVariation[]
 }
 
 model ProductVariation {
@@ -102,8 +81,8 @@ model Order {
   discountAmount  Decimal?    @db.Decimal(10, 2)
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
-  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
-  promotion       Promotion?  @relation(fields: [promotionId], references: [id], onDelete: SetNull)
+  promotion       Promotion?  @relation(fields: [promotionId], references: [id])
+  user            User?       @relation(fields: [userId], references: [id])
   items           OrderItem[]
 }
 
@@ -116,7 +95,7 @@ model OrderItem {
   selectedSize  String?
   selectedColor String?
   order         Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product       Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+  product       Product @relation(fields: [productId], references: [id])
 }
 
 model Promotion {
@@ -135,25 +114,25 @@ model Promotion {
 }
 
 model Blog {
-  id                    String    @id @default(cuid())
-  title                 String
-  titleTranslations     Json?     // Translation: { "en": "...", "id": "..." }
-  slug                  String    @unique
-  category              String
-  tag                   String?   // @deprecated - kept for migration compatibility, use tags relation instead
-  author                String
-  avatar                String?
-  thumbImg              String?
-  coverImg              String?
-  subImg                String[]
-  shortDesc             String
-  shortDescTranslations Json?     // Translation: { "en": "...", "id": "..." }
-  description           String    @db.Text
-  descriptionTranslations Json?  // Translation: { "en": "...", "id": "..." }
-  date                  String
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-  tags                  BlogTag[]
+  id                      String    @id @default(cuid())
+  title                   String
+  slug                    String    @unique
+  category                String
+  tag                     String?
+  author                  String
+  avatar                  String?
+  thumbImg                String?
+  coverImg                String?
+  subImg                  String[]
+  shortDesc               String
+  description             String
+  date                    String
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  descriptionTranslations Json?
+  shortDescTranslations   Json?
+  titleTranslations       Json?
+  tags                    BlogTag[]
 }
 
 model Tag {
@@ -169,9 +148,9 @@ model BlogTag {
   id        String   @id @default(cuid())
   blogId    String
   tagId     String
+  createdAt DateTime @default(now())
   blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
   tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
 
   @@unique([blogId, tagId])
   @@index([blogId])
@@ -179,30 +158,28 @@ model BlogTag {
 }
 
 model Testimonial {
-  id                    String   @id @default(cuid())
-  name                  String
-  title                 String
-  titleTranslations     Json?    // Translation: { "en": "...", "id": "..." }
-  description           String   @db.Text
-  descriptionTranslations Json? // Translation: { "en": "...", "id": "..." }
-  avatar                String?
-  images                String[]
-  star                  Int
-  date                  String
-  address               String?
-  category              String
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id                      String   @id @default(cuid())
+  name                    String
+  title                   String
+  description             String
+  avatar                  String?
+  images                  String[]
+  star                    Int
+  date                    String
+  address                 String?
+  category                String
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  descriptionTranslations Json?
+  titleTranslations       Json?
 }
 
 model StoreLocation {
   id            String   @id @default(cuid())
   name          String
   address       String
-  province      String
   phone         String
   email         String?
-  imageUrl      String?
   hoursWeekdays String
   hoursSaturday String
   hoursSunday   String
@@ -213,6 +190,8 @@ model StoreLocation {
   displayOrder  Int      @default(0)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  imageUrl      String?
+  province      String
 
   @@index([isActive])
   @@index([displayOrder])
@@ -220,38 +199,59 @@ model StoreLocation {
 }
 
 model HeroSlide {
-  id                  String   @id @default(cuid())
-  subtitle            String
-  subtitleTranslations Json?   // Translation: { "en": "...", "id": "..." }
-  title               String
-  titleTranslations   Json?    // Translation: { "en": "...", "id": "..." }
-  imageUrl            String
-  ctaText             String?  @default("Shop Now")
-  ctaTextTranslations Json?    // Translation: { "en": "...", "id": "..." }
-  ctaLink             String?  @default("/shop/breadcrumb-img")
-  isActive            Boolean  @default(true)
-  displayOrder        Int      @default(0)
-  imageWidth          String?  // Responsive width classes (e.g., "sm:w-[48%] w-[54%]")
-  imagePosition       String?  // Positioning classes (e.g., "2xl:-right-[60px] right-0 bottom-0")
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                   String   @id @default(cuid())
+  subtitle             String
+  title                String
+  imageUrl             String
+  ctaText              String?  @default("Shop Now")
+  ctaLink              String?  @default("/shop/breadcrumb-img")
+  isActive             Boolean  @default(true)
+  displayOrder         Int      @default(0)
+  imageWidth           String?
+  imagePosition        String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  ctaTextTranslations  Json?
+  subtitleTranslations Json?
+  titleTranslations    Json?
 
   @@index([isActive])
   @@index([displayOrder])
 }
 
 model PromotionalPage {
-  id                    String   @id @default(cuid())
-  title                 String
-  titleTranslations     Json?    // Translation: { "en": "...", "id": "..." }
-  description           String   @db.Text
-  descriptionTranslations Json?  // Translation: { "en": "...", "id": "..." }
-  imageUrl              String
-  isActive              Boolean  @default(true)
-  displayOrder          Int      @default(0)
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id                      String   @id @default(cuid())
+  title                   String
+  titleTranslations       Json?
+  description             String
+  descriptionTranslations Json?
+  imageUrl                String
+  isActive                Boolean  @default(true)
+  displayOrder            Int      @default(0)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
   @@index([isActive])
   @@index([displayOrder])
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum EyewearCategory {
+  sunglasses
+  prescription_glasses
+  reading_glasses
+  contact_lenses
+  frames_only
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }

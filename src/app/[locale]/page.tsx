@@ -36,107 +36,163 @@ const Instagram = dynamic(() => import('@/components/Home6/Instagram'))
 const Brand = dynamic(() => import('@/components/Home1/Brand'))
 
 async function fetchProducts(locale: string): Promise<ProductType[]> {
-  try {
-    // Directly use Prisma in server component for better performance
-    const products = await prisma.product.findMany({
-      take: 50,
-      include: { variations: true, attributes: true, sizes: true },
-      orderBy: { createdAt: 'desc' },
-    })
-    return products.map((product) => transformProductForFrontend(product, locale))
-  } catch (error) {
-    console.error('Error fetching products:', error)
-    return []
+  // Add retry logic for database connection
+  let retries = 3
+  const retryDelay = 2000
+
+  while (retries > 0) {
+    try {
+      // Directly use Prisma in server component for better performance
+      const products = await prisma.product.findMany({
+        take: 50,
+        include: { variations: true, attributes: true, sizes: true },
+        orderBy: { createdAt: 'desc' },
+      })
+      return products.map((product) => transformProductForFrontend(product, locale))
+    } catch (error) {
+      retries--
+      if (retries === 0) {
+        console.error('Error fetching products after retries:', error)
+        return []
+      }
+      console.warn(`Error fetching products, retrying in ${retryDelay}ms... (${3 - retries}/${3})`)
+      await new Promise((resolve) => setTimeout(resolve, retryDelay))
+    }
   }
+  return []
 }
 
 async function fetchTestimonials(locale: string) {
-  try {
-    const testimonials = await prisma.testimonial.findMany({
-      take: 20,
-      orderBy: { createdAt: 'desc' },
-    })
-    // Transform to match TestimonialType format with translations
-    return testimonials.map((t) => ({
-      id: t.id,
-      category: t.category,
-      title: t.titleTranslations
-        ? getTranslatedText(t.titleTranslations as TranslationObject, locale)
-        : t.title,
-      name: t.name,
-      avatar: t.avatar || '/images/avatar/1.png',
-      date: t.date,
-      address: t.address || '',
-      description: t.descriptionTranslations
-        ? getTranslatedText(t.descriptionTranslations as TranslationObject, locale)
-        : t.description,
-      images: t.images,
-      star: t.star,
-    }))
-  } catch (error) {
-    console.error('Error fetching testimonials:', error)
-    return []
+  // Add retry logic for database connection
+  let retries = 3
+  const retryDelay = 2000
+
+  while (retries > 0) {
+    try {
+      const testimonials = await prisma.testimonial.findMany({
+        take: 20,
+        orderBy: { createdAt: 'desc' },
+      })
+      // Transform to match TestimonialType format with translations
+      return testimonials.map((t) => ({
+        id: t.id,
+        category: t.category,
+        title: t.titleTranslations
+          ? getTranslatedText(t.titleTranslations as TranslationObject, locale)
+          : t.title,
+        name: t.name,
+        avatar: t.avatar || '/images/avatar/1.png',
+        date: t.date,
+        address: t.address || '',
+        description: t.descriptionTranslations
+          ? getTranslatedText(t.descriptionTranslations as TranslationObject, locale)
+          : t.description,
+        images: t.images,
+        star: t.star,
+      }))
+    } catch (error) {
+      retries--
+      if (retries === 0) {
+        console.error('Error fetching testimonials after retries:', error)
+        return []
+      }
+      console.warn(`Error fetching testimonials, retrying in ${retryDelay}ms... (${3 - retries}/${3})`)
+      await new Promise((resolve) => setTimeout(resolve, retryDelay))
+    }
   }
+  return []
 }
 
 async function fetchProductCountsByCategory() {
-  try {
-    const categories = ['sunglasses', 'prescription_glasses', 'reading_glasses', 'contact_lenses', 'frames_only'] as const
-    
-    const counts = await Promise.all(
-      categories.map(async (category) => {
-        const count = await prisma.product.count({
-          where: { category },
-        })
-        return { category, count }
-      })
-    )
+  // Add retry logic for database connection
+  let retries = 3
+  const retryDelay = 2000
 
-    // Map database categories (with underscores) to URL-friendly format (with hyphens)
-    return {
-      'sunglasses': counts.find(c => c.category === 'sunglasses')?.count || 0,
-      'prescription-glasses': counts.find(c => c.category === 'prescription_glasses')?.count || 0,
-      'reading-glasses': counts.find(c => c.category === 'reading_glasses')?.count || 0,
-      'contact-lenses': counts.find(c => c.category === 'contact_lenses')?.count || 0,
-      'frames-only': counts.find(c => c.category === 'frames_only')?.count || 0,
+  while (retries > 0) {
+    try {
+      const categories = ['sunglasses', 'prescription_glasses', 'reading_glasses', 'contact_lenses', 'frames_only'] as const
+      
+      const counts = await Promise.all(
+        categories.map(async (category) => {
+          const count = await prisma.product.count({
+            where: { category },
+          })
+          return { category, count }
+        })
+      )
+
+      // Map database categories (with underscores) to URL-friendly format (with hyphens)
+      return {
+        'sunglasses': counts.find(c => c.category === 'sunglasses')?.count || 0,
+        'prescription-glasses': counts.find(c => c.category === 'prescription_glasses')?.count || 0,
+        'reading-glasses': counts.find(c => c.category === 'reading_glasses')?.count || 0,
+        'contact-lenses': counts.find(c => c.category === 'contact_lenses')?.count || 0,
+        'frames-only': counts.find(c => c.category === 'frames_only')?.count || 0,
+      }
+    } catch (error) {
+      retries--
+      if (retries === 0) {
+        console.error('Error fetching product counts after retries:', error)
+        // Return default counts on error
+        return {
+          'sunglasses': 0,
+          'prescription-glasses': 0,
+          'reading-glasses': 0,
+          'contact-lenses': 0,
+          'frames-only': 0,
+        }
+      }
+      console.warn(`Error fetching product counts, retrying in ${retryDelay}ms... (${3 - retries}/${3})`)
+      await new Promise((resolve) => setTimeout(resolve, retryDelay))
     }
-  } catch (error) {
-    console.error('Error fetching product counts:', error)
-    return {
-      'sunglasses': 0,
-      'prescription-glasses': 0,
-      'reading-glasses': 0,
-      'contact-lenses': 0,
-      'frames-only': 0,
-    }
+  }
+  // Fallback return
+  return {
+    'sunglasses': 0,
+    'prescription-glasses': 0,
+    'reading-glasses': 0,
+    'contact-lenses': 0,
+    'frames-only': 0,
   }
 }
 
 async function fetchHeroSlides(locale: string) {
-  try {
-    const slides = await prisma.heroSlide.findMany({
-      where: { isActive: true },
-      orderBy: { displayOrder: 'asc' },
-    })
-    // Transform slides to include translated content
-    return slides.map((slide) => ({
-      ...slide,
-      createdAt: slide.createdAt.toISOString(),
-      updatedAt: slide.updatedAt.toISOString(),
-      subtitle: slide.subtitleTranslations
-        ? getTranslatedText(slide.subtitleTranslations as TranslationObject, locale)
-        : slide.subtitle,
-      title: slide.titleTranslations
-        ? getTranslatedText(slide.titleTranslations as TranslationObject, locale)
-        : slide.title,
-      ctaText: slide.ctaTextTranslations
-        ? getTranslatedText(slide.ctaTextTranslations as TranslationObject, locale)
-        : slide.ctaText,
-    }))
-  } catch (error) {
-    console.error('Error fetching hero slides:', error)
-    return []
+  // Add retry logic for database connection
+  let retries = 3
+  const retryDelay = 2000
+
+  while (retries > 0) {
+    try {
+      const slides = await prisma.heroSlide.findMany({
+        where: { isActive: true },
+        orderBy: { displayOrder: 'asc' },
+      })
+      // Transform slides to include translated content
+      return slides.map((slide) => ({
+        ...slide,
+        createdAt: slide.createdAt.toISOString(),
+        updatedAt: slide.updatedAt.toISOString(),
+        subtitle: slide.subtitleTranslations
+          ? getTranslatedText(slide.subtitleTranslations as TranslationObject, locale)
+          : slide.subtitle,
+        title: slide.titleTranslations
+          ? getTranslatedText(slide.titleTranslations as TranslationObject, locale)
+          : slide.title,
+        ctaText: slide.ctaTextTranslations
+          ? getTranslatedText(slide.ctaTextTranslations as TranslationObject, locale)
+          : slide.ctaText,
+      }))
+    } catch (error) {
+      retries--
+      if (retries === 0) {
+        console.error('Error fetching hero slides after retries:', error)
+        return []
+      }
+      console.warn(`Error fetching hero slides, retrying in ${retryDelay}ms... (${3 - retries}/${3})`)
+      await new Promise((resolve) => setTimeout(resolve, retryDelay))
+    }
   }
+  return []
 }
 
 export default async function Home({

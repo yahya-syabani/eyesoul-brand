@@ -8,8 +8,8 @@
     "price": 120,
     "originPrice": 150,
     "brand": "eyesoul",
-    "images": ["https://images.pexels.com/photos/1300550/pexels-photo-1300550.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
-    "thumbImage": ["https://images.pexels.com/photos/1300550/pexels-photo-1300550.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
+    "images": ["/images/slider/1.png"],
+    "thumbImage": ["/images/slider/1.png"],
     "rate": 5,
     "sold": 10,
     "quantity": 50,
@@ -20,7 +20,7 @@
         "color": "black",
         "colorCode": "#1F1F1F",
         "colorImage": "/images/product/color/48x48.png",
-        "image": "https://images.pexels.com/photos/1300550/pexels-photo-1300550.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"
+        "image": "/images/slider/1.png"
       }
     ],
     "sizes": ["medium"]
@@ -34,8 +34,8 @@
     "price": 90,
     "originPrice": 120,
     "brand": "clarity",
-    "images": ["https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
-    "thumbImage": ["https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
+    "images": ["/images/slider/2.png"],
+    "thumbImage": ["/images/slider/2.png"],
     "rate": 4,
     "sold": 5,
     "quantity": 80,
@@ -46,7 +46,7 @@
         "color": "red",
         "colorCode": "#DB4444",
         "colorImage": "/images/product/color/48x48.png",
-        "image": "https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"
+        "image": "/images/slider/2.png"
       }
     ],
     "sizes": ["small"]
@@ -60,8 +60,8 @@
     "price": 180,
     "originPrice": 220,
     "brand": "eyesoul",
-    "images": ["https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
-    "thumbImage": ["https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
+    "images": ["/images/slider/3.png"],
+    "thumbImage": ["/images/slider/3.png"],
     "rate": 5,
     "sold": 25,
     "quantity": 60,
@@ -72,13 +72,13 @@
         "color": "black",
         "colorCode": "#1F1F1F",
         "colorImage": "/images/product/color/48x48.png",
-        "image": "https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"
+        "image": "/images/slider/3.png"
       },
       {
         "color": "brown",
         "colorCode": "#8B4513",
         "colorImage": "/images/product/color/48x48.png",
-        "image": "https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"
+        "image": "/images/slider/3.png"
       }
     ],
     "sizes": ["medium", "large"]
@@ -92,8 +92,8 @@
     "price": 45,
     "originPrice": 60,
     "brand": "eyesoul",
-    "images": ["https://images.pexels.com/photos/699466/pexels-photo-699466.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
-    "thumbImage": ["https://images.pexels.com/photos/699466/pexels-photo-699466.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
+    "images": ["/images/slider/4.png"],
+    "thumbImage": ["/images/slider/4.png"],
     "rate": 4,
     "sold": 30,
     "quantity": 100,
@@ -104,7 +104,7 @@
         "color": "purple",
         "colorCode": "#8684D4",
         "colorImage": "/images/product/color/48x48.png",
-        "image": "https://images.pexels.com/photos/699466/pexels-photo-699466.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"
+        "image": "/images/slider/4.png"
       }
     ],
     "sizes": ["medium"]
@@ -118,8 +118,8 @@
     "price": 35,
     "originPrice": 45,
     "brand": "eyesoul",
-    "images": ["https://images.pexels.com/photos/1619722/pexels-photo-1619722.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
-    "thumbImage": ["https://images.pexels.com/photos/1619722/pexels-photo-1619722.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"],
+    "images": ["/images/slider/5.png"],
+    "thumbImage": ["/images/slider/5.png"],
     "rate": 5,
     "sold": 50,
     "quantity": 200,
@@ -130,7 +130,7 @@
         "color": "clear",
         "colorCode": "#FFFFFF",
         "colorImage": "/images/product/color/48x48.png",
-        "image": "https://images.pexels.com/photos/1619722/pexels-photo-1619722.jpeg?auto=compress&cs=tinysrgb&w=1000&h=1000&fit=crop"
+        "image": "/images/slider/5.png"
       }
     ],
     "sizes": ["30-pack"]

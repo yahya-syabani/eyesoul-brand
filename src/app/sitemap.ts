@@ -1,21 +1,19 @@
 import { MetadataRoute } from 'next'
+import prisma from '@/lib/prisma'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://eyesoul-eyewear.com'
 
 async function fetchProducts() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : 'http://localhost:3000'
-    const res = await fetch(`${baseUrl}/api/products?limit=1000`, { 
-      cache: 'no-store',
-      headers: {
-        'Content-Type': 'application/json',
-      }
+    // Query database directly instead of making HTTP request
+    const products = await prisma.product.findMany({
+      select: {
+        id: true,
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 1000, // Limit to 1000 products
     })
-    if (!res.ok) return []
-    const json = await res.json()
-    return json.data || []
+    return products
   } catch (error) {
     console.error('Error fetching products for sitemap:', error)
     return []

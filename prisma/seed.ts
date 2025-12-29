@@ -3,9 +3,32 @@ import bcrypt from 'bcryptjs'
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { DISCOUNT_CODES } from '../src/lib/constants'
+import { DISCOUNT_CODES, FRAME_MATERIALS, LENS_TYPES } from '../src/lib/constants'
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+  log: ['error', 'warn'],
+})
+
+// Helper function to test database connection with retry
+async function testConnection(retries = 3, delay = 2000): Promise<boolean> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      await prisma.$connect()
+      await prisma.$queryRaw`SELECT 1`
+      console.log('✅ Database connection established')
+      return true
+    } catch (error) {
+      if (i < retries - 1) {
+        console.log(`⚠️  Connection attempt ${i + 1} failed, retrying in ${delay}ms...`)
+        await new Promise((resolve) => setTimeout(resolve, delay))
+      } else {
+        console.error('❌ Failed to connect to database after', retries, 'attempts')
+        throw error
+      }
+    }
+  }
+  return false
+}
 
 // Translation helper type
 type TranslationObject = {
@@ -13,12 +36,30 @@ type TranslationObject = {
   id?: string
 }
 
+// Image path constants
+const IMAGE_PATHS = {
+  SLIDER: '/images/slider/',
+  BANNER: '/images/banner/',
+  BLOG: '/images/blog/',
+  AVATAR: '/images/avatar/',
+  PRODUCT: '/images/product/',
+} as const
+
 // Helper function to convert string to translation object
 function stringToTranslation(text: string, idTranslation?: string): TranslationObject {
   return {
     en: text || '',
     id: idTranslation || '',
   }
+}
+
+// Helper function to validate translation object
+function isValidTranslation(translations: unknown): translations is TranslationObject {
+  if (!translations || typeof translations !== 'object') {
+    return false
+  }
+  const t = translations as Record<string, unknown>
+  return typeof t.en === 'string' && (t.id === undefined || typeof t.id === 'string')
 }
 
 // Helper function to generate URL-friendly slug from text
@@ -31,27 +72,156 @@ function generateSlug(text: string): string {
     .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
 }
 
+// Helper function to get local image path
+function getLocalImagePath(type: keyof typeof IMAGE_PATHS, index: number): string {
+  const basePath = IMAGE_PATHS[type]
+  // Use 1-based indexing for file names (1.png, 2.png, etc.)
+  return `${basePath}${index + 1}.png`
+}
+
+// Helper function to get store location image path
+function getStoreLocationImagePath(index: number): string {
+  // Use banner images for store locations, cycling through available images
+  const bannerIndices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+  const imageIndex = bannerIndices[index % bannerIndices.length]
+  return `${IMAGE_PATHS.BANNER}${imageIndex}.png`
+}
+
+// Helper function to generate product attributes based on category
+function generateProductAttributes(category: string): {
+  lensType: string | null
+  frameMaterial: string
+  frameSize: { bridgeWidth: number; templeLength: number; lensWidth: number }
+  lensCoating: string[]
+} {
+  // Base frame size ranges (in mm)
+  const frameSizeRanges = {
+    bridgeWidth: { min: 16, max: 22 },
+    templeLength: { min: 135, max: 155 },
+    lensWidth: { min: 48, max: 60 },
+  }
+
+  // Generate random frame size within realistic ranges
+  const frameSize = {
+    bridgeWidth:
+      Math.floor(
+        Math.random() * (frameSizeRanges.bridgeWidth.max - frameSizeRanges.bridgeWidth.min + 1),
+      ) + frameSizeRanges.bridgeWidth.min,
+    templeLength:
+      Math.floor(
+        Math.random() * (frameSizeRanges.templeLength.max - frameSizeRanges.templeLength.min + 1),
+      ) + frameSizeRanges.templeLength.min,
+    lensWidth:
+      Math.floor(
+        Math.random() * (frameSizeRanges.lensWidth.max - frameSizeRanges.lensWidth.min + 1),
+      ) + frameSizeRanges.lensWidth.min,
+  }
+
+  // Category-specific attributes
+  switch (category) {
+    case 'sunglasses':
+      return {
+        lensType: null, // Sunglasses don't typically have prescription lens types
+        frameMaterial: FRAME_MATERIALS[Math.floor(Math.random() * FRAME_MATERIALS.length)],
+        frameSize,
+        lensCoating: ['uv-protection', 'anti-reflective'],
+      }
+    case 'prescription_glasses':
+      return {
+        lensType: LENS_TYPES[Math.floor(Math.random() * LENS_TYPES.length)],
+        frameMaterial: FRAME_MATERIALS[Math.floor(Math.random() * FRAME_MATERIALS.length)],
+        frameSize,
+        lensCoating: ['anti-reflective', 'blue-light', 'scratch-resistant'],
+      }
+    case 'reading_glasses':
+      return {
+        lensType: 'single-vision',
+        frameMaterial: FRAME_MATERIALS[Math.floor(Math.random() * FRAME_MATERIALS.length)],
+        frameSize,
+        lensCoating: ['blue-light', 'scratch-resistant'],
+      }
+    case 'contact_lenses':
+      return {
+        lensType: null,
+        frameMaterial: 'n/a',
+        frameSize,
+        lensCoating: [],
+      }
+    case 'frames_only':
+      return {
+        lensType: null,
+        frameMaterial: FRAME_MATERIALS[Math.floor(Math.random() * FRAME_MATERIALS.length)],
+        frameSize,
+        lensCoating: [],
+      }
+    default:
+      return {
+        lensType: 'single-vision',
+        frameMaterial: 'acetate',
+        frameSize,
+        lensCoating: ['uv-protection'],
+      }
+  }
+}
+
 // Conditionally load JSON files if they exist (for initial seeding only)
-function loadJsonFile(filePath: string): any[] | null {
+function loadJsonFile(filePath: string): { data: any[] | null; error: string | null } {
   try {
     const fullPath = path.join(__dirname, '..', filePath)
     if (fs.existsSync(fullPath)) {
       const fileContent = fs.readFileSync(fullPath, 'utf-8')
       const data = JSON.parse(fileContent)
+      if (!Array.isArray(data)) {
+        return {
+          data: null,
+          error: `Invalid JSON format: ${filePath} - expected array, got ${typeof data}`,
+        }
+      }
       console.log(`📄 Loaded ${data.length} items from ${filePath}`)
-      return data
+      return { data, error: null }
     }
-    return null
+    return {
+      data: null,
+      error: `File not found: ${filePath}`,
+    }
   } catch (error) {
-    console.warn(`⚠️  JSON file not found: ${filePath} (this is OK if data is already in database)`)
-    return null
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    return {
+      data: null,
+      error: `Failed to load ${filePath}: ${errorMessage}`,
+    }
   }
 }
 
+// Validate that local image path exists
+function validateImagePath(imagePath: string): boolean {
+  if (!imagePath || !imagePath.startsWith('/images/')) {
+    return false
+  }
+  // Remove leading slash and check if file exists in public directory
+  const relativePath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath
+  const fullPath = path.join(__dirname, '..', 'public', relativePath)
+  return fs.existsSync(fullPath)
+}
+
 console.log('📂 Loading JSON data files...')
-const productData = loadJsonFile('src/data/Product.json') || []
-const blogData = loadJsonFile('src/data/Blog.json') || []
-const testimonialData = loadJsonFile('src/data/Testimonial.json') || []
+const productResult = loadJsonFile('src/data/Product.json')
+const blogResult = loadJsonFile('src/data/Blog.json')
+const testimonialResult = loadJsonFile('src/data/Testimonial.json')
+
+if (productResult.error) {
+  console.warn(`⚠️  ${productResult.error}`)
+}
+if (blogResult.error) {
+  console.warn(`⚠️  ${blogResult.error}`)
+}
+if (testimonialResult.error) {
+  console.warn(`⚠️  ${testimonialResult.error}`)
+}
+
+const productData = productResult.data || []
+const blogData = blogResult.data || []
+const testimonialData = testimonialResult.data || []
 console.log('')
 
 const mapCategory = (
@@ -72,6 +242,20 @@ async function main() {
   const startTime = Date.now()
   console.log('🌱 Starting database seed...')
   console.log(`⏰ Started at: ${new Date().toISOString()}\n`)
+
+  // Test database connection first
+  console.log('🔌 Testing database connection...')
+  try {
+    await testConnection()
+  } catch (error) {
+    console.error('\n❌ Database connection failed. Please check:')
+    console.error('  1. Is your Neon database active? (Check Neon dashboard)')
+    console.error('  2. Is your DATABASE_URL correct in .env file?')
+    console.error('  3. Do you have internet connectivity?')
+    console.error('\nError details:', error instanceof Error ? error.message : error)
+    process.exit(1)
+  }
+  console.log('')
 
   // Check if data already exists
   const [
@@ -169,7 +353,7 @@ async function main() {
           'Summer Sale Collections',
           'Koleksi Diskon Musim Panas',
         ),
-        imageUrl: 'https://images.pexels.com/photos/1300550/pexels-photo-1300550.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        imageUrl: getLocalImagePath('SLIDER', 0),
         ctaText: 'Shop Now',
         ctaTextTranslations: stringToTranslation('Shop Now', 'Belanja Sekarang'),
         ctaLink: '/shop/default',
@@ -186,7 +370,7 @@ async function main() {
           'Discover the Latest Trends in Eyewear',
           'Temukan Tren Terbaru dalam Kacamata',
         ),
-        imageUrl: 'https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        imageUrl: getLocalImagePath('SLIDER', 1),
         ctaText: 'Shop Now',
         ctaTextTranslations: stringToTranslation('Shop Now', 'Belanja Sekarang'),
         ctaLink: '/shop/default',
@@ -203,7 +387,7 @@ async function main() {
           'New season, new wardrobe!',
           'Musim baru, lemari baru!',
         ),
-        imageUrl: 'https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        imageUrl: getLocalImagePath('SLIDER', 2),
         ctaText: 'Shop Now',
         ctaTextTranslations: stringToTranslation('Shop Now', 'Belanja Sekarang'),
         ctaLink: '/shop/default',
@@ -264,7 +448,7 @@ async function main() {
           'Get up to 50% off on our latest summer eyewear collection. Discover trendy sunglasses and stylish frames perfect for the sunny season. Limited time offer!',
           'Dapatkan diskon hingga 50% untuk koleksi kacamata musim panas terbaru kami. Temukan kacamata hitam trendy dan frame yang stylish untuk musim panas. Penawaran terbatas!',
         ),
-        imageUrl: 'https://images.pexels.com/photos/1300550/pexels-photo-1300550.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        imageUrl: getLocalImagePath('BANNER', 0),
         isActive: true,
         displayOrder: 0,
       },
@@ -280,7 +464,7 @@ async function main() {
           'Explore our newest collection of premium eyewear frames. Handcrafted with attention to detail, featuring the latest designs and premium materials for unparalleled comfort and style.',
           'Jelajahi koleksi terbaru frame kacamata premium kami. Dibuat dengan tangan dengan perhatian terhadap detail, menampilkan desain terbaru dan material premium untuk kenyamanan dan gaya yang tak tertandingi.',
         ),
-        imageUrl: 'https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        imageUrl: getLocalImagePath('BANNER', 1),
         isActive: true,
         displayOrder: 1,
       },
@@ -296,7 +480,7 @@ async function main() {
           'Protect your eyes from digital screen glare with our specialized blue light blocking glasses. Perfect for professionals who spend long hours in front of computers. Free eye exam included!',
           'Lindungi mata Anda dari silau layar digital dengan kacamata anti sinar biru khusus kami. Sempurna untuk profesional yang menghabiskan waktu lama di depan komputer. Pemeriksaan mata gratis disertakan!',
         ),
-        imageUrl: 'https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        imageUrl: getLocalImagePath('BANNER', 2),
         isActive: true,
         displayOrder: 2,
       },
@@ -312,7 +496,7 @@ async function main() {
           'Special discount for students! Get 30% off on all eyewear with valid student ID. We believe in making quality vision accessible to everyone. Visit our stores or shop online.',
           'Diskon khusus untuk pelajar! Dapatkan diskon 30% untuk semua kacamata dengan ID pelajar yang valid. Kami percaya dalam membuat penglihatan berkualitas dapat diakses oleh semua orang. Kunjungi toko kami atau belanja online.',
         ),
-        imageUrl: 'https://images.pexels.com/photos/699466/pexels-photo-699466.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        imageUrl: getLocalImagePath('BANNER', 3),
         isActive: true,
         displayOrder: 3,
       },
@@ -328,7 +512,7 @@ async function main() {
           'Indulge in our exclusive luxury designer eyewear collection. Featuring renowned brands and limited edition pieces that combine sophisticated style with exceptional craftsmanship.',
           'Nikmati koleksi kacamata desainer mewah eksklusif kami. Menampilkan merek terkenal dan potongan edisi terbatas yang menggabungkan gaya canggih dengan kerajinan yang luar biasa.',
         ),
-        imageUrl: 'https://images.pexels.com/photos/1619722/pexels-photo-1619722.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        imageUrl: getLocalImagePath('BANNER', 4),
         isActive: true,
         displayOrder: 4,
       },
@@ -344,7 +528,7 @@ async function main() {
           'Book your free comprehensive eye examination this month. Our certified optometrists will assess your vision and eye health. Perfect time to update your prescription or get new glasses!',
           'Pesan pemeriksaan mata komprehensif gratis Anda bulan ini. Optometris bersertifikat kami akan menilai penglihatan dan kesehatan mata Anda. Waktu yang sempurna untuk memperbarui resep atau mendapatkan kacamata baru!',
         ),
-        imageUrl: 'https://images.pexels.com/photos/157675/fashion-men-s-individuality-black-and-white-157675.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        imageUrl: getLocalImagePath('BANNER', 5),
         isActive: true,
         displayOrder: 5,
       },
@@ -418,14 +602,8 @@ async function main() {
               quantity: item.quantity || 0,
               isNew: Boolean(item.new),
               isSale: Boolean(item.sale),
-              images:
-                item.images && item.images.length > 0
-                  ? item.images
-                  : [], // Images should be uploaded via admin interface
-              thumbImages:
-                item.thumbImage && item.thumbImage.length > 0
-                  ? item.thumbImage
-                  : [], // Images should be uploaded via admin interface
+              images: item.images && item.images.length > 0 ? item.images : [], // Images should be uploaded via admin interface
+              thumbImages: item.thumbImage && item.thumbImage.length > 0 ? item.thumbImage : [], // Images should be uploaded via admin interface
               variations:
                 item.variation && item.variation.length
                   ? {
@@ -438,12 +616,7 @@ async function main() {
                     }
                   : undefined,
               attributes: {
-                create: {
-                  lensType: 'single-vision',
-                  frameMaterial: 'acetate',
-                  frameSize: { bridgeWidth: 18, templeLength: 145, lensWidth: 54 },
-                  lensCoating: ['uv-protection'],
-                },
+                create: generateProductAttributes(mapCategory(item.category)),
               },
               sizes:
                 item.sizes && item.sizes.length
@@ -507,6 +680,44 @@ async function main() {
           const blogShortDesc = blog.shortDesc || ''
           const blogDescription = blog.description || ''
 
+          // Validate required fields
+          if (!blogTitle || !blogDescription) {
+            console.warn(
+              `  ⚠️  Skipping blog ${blog.id}: missing required fields (title or description)`,
+            )
+            continue
+          }
+
+          // Validate translations
+          const titleTranslations = stringToTranslation(
+            blogTitle,
+            blog.titleTranslations?.id || blog.titleId || '',
+          )
+          const shortDescTranslations = stringToTranslation(
+            blogShortDesc,
+            blog.shortDescTranslations?.id || blog.shortDescId || '',
+          )
+          const descriptionTranslations = stringToTranslation(
+            blogDescription,
+            blog.descriptionTranslations?.id || blog.descriptionId || '',
+          )
+
+          if (!isValidTranslation(titleTranslations)) {
+            console.warn(`  ⚠️  Invalid title translation for blog ${blog.id}`)
+          }
+          if (!isValidTranslation(shortDescTranslations)) {
+            console.warn(`  ⚠️  Invalid shortDesc translation for blog ${blog.id}`)
+          }
+          if (!isValidTranslation(descriptionTranslations)) {
+            console.warn(`  ⚠️  Invalid description translation for blog ${blog.id}`)
+          }
+          if (!titleTranslations.id) {
+            console.warn(`  ⚠️  Missing Indonesian translation for blog ${blog.id} title`)
+          }
+          if (!descriptionTranslations.id) {
+            console.warn(`  ⚠️  Missing Indonesian translation for blog ${blog.id} description`)
+          }
+
           // Handle tags: support both old 'tag' field and new 'tags' array
           let tagSlugs: string[] = []
 
@@ -554,10 +765,7 @@ async function main() {
             update: {},
             create: {
               title: blogTitle,
-              titleTranslations: stringToTranslation(
-                blogTitle,
-                blog.titleTranslations?.id || blog.titleId || '',
-              ),
+              titleTranslations: titleTranslations,
               slug: blog.slug,
               category: blog.category,
               tag: blog.tag || null, // Keep for backward compatibility
@@ -567,15 +775,9 @@ async function main() {
               coverImg: blog.coverImg || null,
               subImg: blog.subImg || [],
               shortDesc: blogShortDesc,
-              shortDescTranslations: stringToTranslation(
-                blogShortDesc,
-                blog.shortDescTranslations?.id || blog.shortDescId || '',
-              ),
+              shortDescTranslations: shortDescTranslations,
               description: blogDescription,
-              descriptionTranslations: stringToTranslation(
-                blogDescription,
-                blog.descriptionTranslations?.id || blog.descriptionId || '',
-              ),
+              descriptionTranslations: descriptionTranslations,
               date: blog.date,
               tags:
                 tagIds.length > 0
@@ -618,6 +820,39 @@ async function main() {
           const testimonialTitle = testimonial.title || ''
           const testimonialDescription = testimonial.description || ''
 
+          // Validate required fields
+          if (!testimonialTitle || !testimonialDescription || !testimonial.name) {
+            console.warn(`  ⚠️  Skipping testimonial ${testimonial.id}: missing required fields`)
+            continue
+          }
+
+          // Validate translations
+          const titleTranslations = stringToTranslation(
+            testimonialTitle,
+            testimonial.titleTranslations?.id || testimonial.titleId || '',
+          )
+          const descriptionTranslations = stringToTranslation(
+            testimonialDescription,
+            testimonial.descriptionTranslations?.id || testimonial.descriptionId || '',
+          )
+
+          if (!isValidTranslation(titleTranslations)) {
+            console.warn(`  ⚠️  Invalid title translation for testimonial ${testimonial.id}`)
+          }
+          if (!isValidTranslation(descriptionTranslations)) {
+            console.warn(`  ⚠️  Invalid description translation for testimonial ${testimonial.id}`)
+          }
+          if (!titleTranslations.id) {
+            console.warn(
+              `  ⚠️  Missing Indonesian translation for testimonial ${testimonial.id} title`,
+            )
+          }
+          if (!descriptionTranslations.id) {
+            console.warn(
+              `  ⚠️  Missing Indonesian translation for testimonial ${testimonial.id} description`,
+            )
+          }
+
           await prisma.testimonial.upsert({
             where: { id: testimonial.id },
             update: {},
@@ -625,15 +860,9 @@ async function main() {
               id: testimonial.id,
               name: testimonial.name,
               title: testimonialTitle,
-              titleTranslations: stringToTranslation(
-                testimonialTitle,
-                testimonial.titleTranslations?.id || testimonial.titleId || '',
-              ),
+              titleTranslations: titleTranslations,
               description: testimonialDescription,
-              descriptionTranslations: stringToTranslation(
-                testimonialDescription,
-                testimonial.descriptionTranslations?.id || testimonial.descriptionId || '',
-              ),
+              descriptionTranslations: descriptionTranslations,
               avatar: testimonial.avatar || null,
               images: testimonial.images || [],
               star: testimonial.star,
@@ -665,15 +894,6 @@ async function main() {
     )
   } else {
     console.log('📍 Seeding store locations...')
-    // Helper to get placeholder image based on index (uses Pexels eyewear/retail store images)
-    // NOTE: Store locations should have real images uploaded via admin interface
-    // This provides example images from Pexels for seeding
-    const getPlaceholderImage = (index: number) => {
-      // Use Pexels images for eyewear stores
-      const photoIds = [1005638, 1269968, 157675, 1300550, 1639729, 1040945, 699466, 1619722, 157675, 1300550]
-      const photoId = photoIds[index % photoIds.length]
-      return `https://images.pexels.com/photos/${photoId}/pexels-photo-${photoId}.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop`
-    }
     const storeLocations = [
       {
         name: 'Eyesoul Living World Alam Sutera',
@@ -682,7 +902,7 @@ async function main() {
         province: 'Banten',
         phone: '+62 817 110 558',
         email: 'cs@eyesouleyewear.co.id',
-        imageUrl: 'https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        imageUrl: getStoreLocationImagePath(0),
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
         hoursSaturday: 'Saturday: 10:00am - 10:00pm',
         hoursSunday: 'Sunday: 10:00am - 10:00pm',
@@ -698,7 +918,7 @@ async function main() {
         province: 'Jawa Timur',
         phone: '+62 817 110 572',
         email: 'cs@eyesouleyewear.co.id',
-        imageUrl: 'https://images.pexels.com/photos/1269968/pexels-photo-1269968.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+        imageUrl: getStoreLocationImagePath(1),
         hoursWeekdays: 'Mon - Fri: 10:00am - 10:00pm',
         hoursSaturday: 'Saturday: 10:00am - 10:00pm',
         hoursSunday: 'Sunday: 10:00am - 10:00pm',
@@ -1105,7 +1325,7 @@ async function main() {
         await prisma.storeLocation.create({
           data: {
             ...location,
-            imageUrl: location.imageUrl || getPlaceholderImage(i),
+            imageUrl: location.imageUrl || getStoreLocationImagePath(i),
           },
         })
         console.log(`  ✓ Created store location: ${location.name}`)

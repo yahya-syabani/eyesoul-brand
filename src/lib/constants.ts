@@ -52,17 +52,17 @@ export const SHIPPING_COSTS = {
 // Discount Codes
 export const DISCOUNT_CODES = [
   {
-    code: 'AN6810',
+    code: 'WELCOME10',
     minOrder: 200,
     discountPercent: 10,
   },
   {
-    code: 'AN6810',
+    code: 'SAVE15',
     minOrder: 300,
     discountPercent: 15,
   },
   {
-    code: 'AN6810',
+    code: 'BIG20',
     minOrder: 400,
     discountPercent: 20,
   },
