@@ -306,3 +306,81 @@
         }
     }
 }
+
+// View mode toggle styles
+.view-mode-toggle {
+    flex-shrink: 0;
+    background: var(--white);
+    
+    button {
+        transition: all 0.2s ease-out;
+        
+        &:focus-visible {
+            outline: 2px solid var(--black);
+            outline-offset: 2px;
+        }
+        
+        &[aria-pressed="true"] {
+            font-weight: 600;
+        }
+        
+        &:not([aria-pressed="true"]) {
+            &:hover {
+                transform: translateY(-1px);
+            }
+            
+            &:active {
+                transform: translateY(0);
+            }
+        }
+    }
+    
+    @media (max-width: 767.98px) {
+        padding-left: clamp(0.75rem, 2vw, 1rem);
+        padding-right: clamp(0.75rem, 2vw, 1rem);
+        padding-top: clamp(0.5rem, 1.5vw, 0.75rem);
+        padding-bottom: clamp(0.5rem, 1.5vw, 0.75rem);
+        
+        button {
+            padding: clamp(0.5rem, 1.5vw, 0.625rem) clamp(0.75rem, 2vw, 1rem);
+            font-size: 0.875rem;
+        }
+    }
+}
+
+// Loading indicator styles
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+// Filtering overlay styles
+.modal-store-location-content {
+    position: relative;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(2px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
+        z-index: 9;
+        pointer-events: none;
+    }
+    
+    &.filtering::before {
+        opacity: 1;
+        visibility: visible;
+    }
+}

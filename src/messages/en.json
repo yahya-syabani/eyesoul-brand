@@ -229,7 +229,11 @@
       "openNow": "Open Now",
       "closed": "Closed",
       "noResults": "No stores found matching your search",
-      "copy": "Copy"
+      "copy": "Copy",
+      "allStores": "All Stores",
+      "byProvince": "By Province",
+      "viewByProvince": "View by province",
+      "filtering": "Filtering..."
     },
     "service": {
       "title": "Our Services",

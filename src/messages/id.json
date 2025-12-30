@@ -229,7 +229,11 @@
       "openNow": "Buka Sekarang",
       "closed": "Tutup",
       "noResults": "Tidak ada toko yang sesuai dengan pencarian Anda",
-      "copy": "Salin"
+      "copy": "Salin",
+      "allStores": "Semua Toko",
+      "byProvince": "Berdasarkan Provinsi",
+      "viewByProvince": "Lihat berdasarkan provinsi",
+      "filtering": "Memfilter..."
     },
     "service": {
       "title": "Layanan Kami",

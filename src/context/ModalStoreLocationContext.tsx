@@ -12,10 +12,12 @@ interface ModalStoreLocationContextValue {
     stores: StoreLocationType[];
     expandedStoreIds: Set<string>;
     selectedProvince: string | null;
+    isLoadingStores: boolean;
     openModalWithAllStores: (stores: StoreLocationType[]) => void;
     openModalWithStore: (stores: StoreLocationType[], storeId: string) => void;
     toggleStoreExpand: (storeId: string) => void;
     setSelectedProvince: (province: string | null) => void;
+    setIsLoadingStores: (loading: boolean) => void;
     closeModalStoreLocation: () => void;
 }
 
@@ -34,6 +36,7 @@ export const ModalStoreLocationProvider: React.FC<ModalStoreLocationContextProps
     const [stores, setStores] = useState<StoreLocationType[]>([]);
     const [expandedStoreIds, setExpandedStoreIds] = useState<Set<string>>(new Set());
     const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
+    const [isLoadingStores, setIsLoadingStores] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const openModalWithAllStores = useCallback((storeList: StoreLocationType[]) => {
@@ -99,13 +102,15 @@ export const ModalStoreLocationProvider: React.FC<ModalStoreLocationContextProps
             stores, 
             expandedStoreIds,
             selectedProvince,
+            isLoadingStores,
             openModalWithAllStores, 
             openModalWithStore, 
             toggleStoreExpand,
             setSelectedProvince,
+            setIsLoadingStores,
             closeModalStoreLocation 
         };
-    }, [closeModalStoreLocation, isModalOpen, openModalWithAllStores, openModalWithStore, stores, expandedStoreIds, selectedProvince, toggleStoreExpand]);
+    }, [closeModalStoreLocation, isModalOpen, openModalWithAllStores, openModalWithStore, stores, expandedStoreIds, selectedProvince, isLoadingStores, toggleStoreExpand]);
 
     return (
         <ModalStoreLocationContext.Provider value={contextValue}>
