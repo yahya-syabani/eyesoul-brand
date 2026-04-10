@@ -1,0 +1,582 @@
+# Eyewear Brand — Website Implementation Plan & Task Tracker
+> **Project:** Upgrade from standard Next.js template to a comprehensive branding website powered by Payload CMS.
+> **Scope:** Phase 1 branding site only — public pages, product catalog, stores, SEO, integrations. No cart, login, or payment flows.
+> **Last updated:** 2026-04-10
+> **Status:** 🟡 Planning — awaiting execution approval
+
+---
+
+## Quick Navigation
+- [Decision Gates](#decision-gates)
+- [Milestone Overview](#milestone-overview)
+- [Phase Plans](#phase-plans)
+  - [EP-0 Bootstrap](#ep-0--bootstrap-and-platform-readiness)
+  - [EP-1 CMS Schemas](#ep-1--cms-schema-delivery)
+  - [EP-2 Data Layer](#ep-2--data-access-layer)
+  - [EP-3 UI System](#ep-3--shared-ui-system)
+  - [EP-4 Pages](#ep-4--public-pages-buildout)
+  - [EP-5 SEO](#ep-5--seo-and-discoverability)
+  - [EP-6 Integrations](#ep-6--integrations)
+  - [EP-7 QA](#ep-7--qa-and-hardening)
+  - [EP-8 Release](#ep-8--pre-launch-and-release)
+- [Task Tracker](#master-task-tracker)
+- [Risk Register](#risk-register)
+- [Handoff Checklist](#handoff-checklist)
+
+---
+
+## Decision Gates
+
+These must be resolved and locked **before** the dependent build phase begins. Unresolved gates block execution.
+
+| Gate | Decision | Options | Status | Owner | Blocks |
+|------|----------|---------|--------|-------|--------|
+| `DG-1` | Runtime & framework version alignment | Next.js 16 App Router (`^16.2.2`), Payload 3.82.1, Node >=20.9.0 | ✅ Locked | Eng | EP-0 |
+| `DG-2` | Map provider | Google Maps Embed / Mapbox | ⬜ Open | — | EP-6 |
+| `DG-3` | Analytics provider | Plausible / PostHog | ⬜ Open | — | EP-6 |
+| `DG-4` | Newsletter backend | Resend Audiences / Mailchimp | ⬜ Open | — | EP-6 |
+| `DG-5` | Deployment topology | Single-app (Next + Payload) / Split (Payload on separate server) | ⬜ Open | — | EP-8 |
+
+> **Rule:** No phase execution begins until all gates blocking that phase are locked with a documented decision record.
+
+---
+
+## Milestone Overview
+
+```
+M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch Ready
+        │                              │                              │
+   EP-0 + EP-1                EP-2 + EP-3 + EP-4           EP-5 + EP-6 + EP-7 + EP-8
+  Bootstrap + CMS          Data Layer + UI + Pages         SEO + Integrations + QA + Deploy
+```
+
+| Milestone | Phases | Exit Condition | Status |
+|-----------|--------|----------------|--------|
+| `M1` — Foundation Ready | EP-0, EP-1 | Admin running, schemas operational, types generated, seed data verified | ⬜ Not started |
+| `M2` — Core Experience Ready | EP-2, EP-3, EP-4 | All Phase-1 routes live with CMS data, shared component system stable | ⬜ Not started |
+| `M3` — Launch Ready | EP-5, EP-6, EP-7, EP-8 | Production smoke test passes, monitoring active, sitemap submitted | ⬜ Not started |
+
+---
+
+## Phase Plans
+
+### EP-0 — Bootstrap and Platform Readiness
+
+**Objective:** Establish project baseline for Payload + database + environment before any feature work begins.
+
+**Dependency Gate:** `DG-1` must be resolved before EP-0 can start.
+
+**Entry Criteria:** Repository cloned, team access confirmed, local development environment available.
+
+**Deliverables:**
+- Platform decision record (versions locked for Next.js, Payload, Node.js, TypeScript)
+- Environment variable runbook (per-environment, per-owner)
+- Bootstrap readiness checklist signed off
+
+**Exit Criteria:**
+- All required environment variables documented and validated locally
+- Local Postgres connection verified
+- Type generation + migration process approved and first run completed
+- Admin creation flow documented and tested
+- Phase 1 handoff checklist approved
+
+**Tasks:**
+
+| ID | Task | Description | Status |
+|----|------|-------------|--------|
+| `EP-0-1` | Lock DG-1 runtime policy | Decide and document Next.js version, Payload version, Node.js minimum, TypeScript config target | ✅ Done |
+| `EP-0-2` | Finalize CMS integration baseline | Confirm Payload installation approach, adapter (PostgreSQL), and dependency policy for monorepo or standalone | ✅ Done |
+| `EP-0-3` | Environment variable runbook | Document all env vars by environment (`local`, `staging`, `production`), owner, and secret vs. public classification | ✅ Done |
+| `EP-0-4` | Configure local Postgres | Standardize connection string format, confirm local DB provisioning method (Docker / native), validate connectivity | ✅ Done |
+| `EP-0-5` | Path alias and import conventions | Define `@/` aliases, import boundary rules, module resolution config in tsconfig and Next.js | ✅ Done |
+| `EP-0-6` | Typegen and migration scripts | Add `payload generate:types` and migration lifecycle scripts; run first type generation and commit output | ✅ Done |
+| `EP-0-7` | Admin route and initial user flow | Validate `/admin` route works, document initial admin creation steps, confirm role assignment | ✅ Done |
+
+---
+
+### EP-1 — CMS Schema Delivery
+
+**Objective:** Ship all required Payload collections, access control, and seed data for Phase-1 brand content.
+
+**Dependency:** EP-0 must be complete (admin operational, DB connected, types working).
+
+**Deliverables:**
+- Finalized schema matrix (all collections, all fields)
+- Access control matrix (per collection, per role, per operation)
+- Seed data specification and working seed script
+
+**Exit Criteria:**
+- All collections operational in Payload admin
+- Draft/publish workflow verified on at least one collection
+- Generated TypeScript types reflect final schema and are committed
+- Seed script runs deterministically from a clean database
+
+**Tasks:**
+
+| ID | Task | Description | Status |
+|----|------|-------------|--------|
+| `EP-1-1` | `Media` collection | Image sizes config, alt text requirement enforcement, content type constraints | ⬜ Pending |
+| `EP-1-2` | `Users` collection | Role field, admin vs. public role controls, access policy | ⬜ Pending |
+| `EP-1-3` | `Products` schema | All fields (`name`, `slug`, `description`, `price`, `images`, `collection`, `status`), validations, slug normalization | ⬜ Pending |
+| `EP-1-4` | `ProductCollections` schema | Relationship to Products, slug, display ordering, featured flag | ⬜ Pending |
+| `EP-1-5` | `Stores` schema | Location fields, contact normalization (phone, WhatsApp, maps link), operating hours, coordinates | ⬜ Pending |
+| `EP-1-6` | `Services` schema | Service name, description, icon/image, display order | ⬜ Pending |
+| `EP-1-7` | `Pages` schema | Block-based content strategy for editable pages (About, Contact, etc.), reusable block types | ⬜ Pending |
+| `EP-1-8` | Access control helpers | Centralized helpers for `read`, `create`, `update`, `delete` per collection; enforce published-only reads on public-facing collections | ⬜ Pending |
+| `EP-1-9` | SEO plugin mapping | Wire Payload SEO plugin per collection; define title/description fallback chain; avoid duplicate meta field definitions | ⬜ Pending |
+| `EP-1-10` | Deterministic seed script | Build seed that populates all collections with baseline content; idempotent on clean DB | ⬜ Pending |
+| `EP-1-11` | Regenerate and commit Payload types | Final `payload generate:types` run after all schemas locked; commit generated types to repo | ⬜ Pending |
+
+---
+
+### EP-2 — Data Access Layer
+
+**Objective:** Centralize all CMS read operations behind a typed, published-only query layer. No component or page should query Payload directly.
+
+**Dependency:** EP-1 complete (schemas finalized, types generated).
+
+**Deliverables:**
+- Query contract sheet per route (inputs, outputs, empty-state behavior)
+- Utility ruleset (slug, links, URL normalization)
+- Data-access guardrails document (published-only policy, singleton rules)
+
+**Exit Criteria:**
+- Every Phase-1 page data need is mapped to a typed query function
+- Published-only filtering is enforced at the query layer, not in components
+- Payload singleton instantiation is validated (no duplicate clients)
+
+**Tasks:**
+
+| ID | Task | Description | Status |
+|----|------|-------------|--------|
+| `EP-2-1` | Cached Payload singleton | Single Payload client instance with caching; prevent multiple DB connections in dev hot-reload and production | ⬜ Pending |
+| `EP-2-2` | Product queries | `getProductBySlug`, `getProducts`, `getRelatedProducts` — all with `_status: published` guard | ⬜ Pending |
+| `EP-2-3` | Collection queries | `getCollectionBySlug`, `getCollections` with populated product relationships | ⬜ Pending |
+| `EP-2-4` | Store / Service / Page queries | `getStores`, `getServices`, `getPageBySlug` — cover all remaining Phase-1 data needs | ⬜ Pending |
+| `EP-2-5` | Utility functions | `buildSlug`, `buildProductUrl`, `buildCollectionUrl`, `cn` classname helper, external link normalizer | ⬜ Pending |
+| `EP-2-6` | Published-only query guards | Shared `withPublishedFilter` wrapper; document bypass policy for preview mode; add tests or assertions | ⬜ Pending |
+
+---
+
+### EP-3 — Shared UI System
+
+**Objective:** Deliver a reusable, typed, accessible component library covering layout, product display, and forms. Pages assemble from these components only.
+
+**Dependency:** EP-2 complete (data contracts defined so components can be typed to query outputs).
+
+**Deliverables:**
+- Component contract catalog (name, props interface, server/client boundary, states)
+- UI state matrix (default / hover / focus / disabled / error / empty / loading per component)
+- Accessibility baseline checklist
+
+**Exit Criteria:**
+- All shared component APIs are stable and documented
+- Server/client boundaries are justified and enforced
+- Empty, loading, and error states exist for every data-dependent component
+- Accessibility constraints are part of component acceptance
+
+**Tasks:**
+
+| ID | Task | Description | Status |
+|----|------|-------------|--------|
+| `EP-3-1` | Layout components | Navbar (desktop + mobile drawer), Footer, page layout wrapper, skip-to-content link | ⬜ Pending |
+| `EP-3-2` | UI primitives and rich text | Button, Badge, Divider, Typography scale, RichText renderer for Payload lexical/slate output | ⬜ Pending |
+| `EP-3-3` | Product card / grid / gallery / filters | ProductCard, ProductGrid, ProductImageGallery, FilterBar (client component), ActiveFilters display | ⬜ Pending |
+| `EP-3-4` | Store card and map wrapper | StoreCard, MapEmbed wrapper (provider-agnostic interface for DG-2 choice) | ⬜ Pending |
+| `EP-3-5` | Contact and newsletter forms | ContactForm (server action), NewsletterCapture (server action), validation, success/error states | ⬜ Pending |
+| `EP-3-6` | Design tokens and responsive typography | CSS variables or Tailwind config for brand colors, spacing scale, font families, responsive type scale, motion preferences | ⬜ Pending |
+
+---
+
+### EP-4 — Public Pages Buildout
+
+**Objective:** Implement all Phase-1 public routes end-to-end, wired to CMS data via the query layer.
+
+**Dependency:** EP-3 complete (all shared components stable and typed).
+
+**Route Rollout Order (by business priority):**
+1. `/` — Homepage
+2. `/catalog` — Product listing with filters
+3. `/catalog/[slug]` — Product detail
+4. `/collections/[slug]` — Collection detail
+5. `/stores` — Store finder
+6. `/services` — Services overview
+7. `/about` — Brand story
+8. `/contact` — Contact page
+9. `not-found` / `error` — Brand fallback pages
+
+**Deliverables:**
+- Route rollout sequence with per-route composition checklist
+- Legacy route decommission checklist
+- CTA and navigation consistency audit
+
+**Exit Criteria:**
+- All Phase-1 routes return correct CMS-driven content
+- Dynamic routes return 404 for invalid slugs
+- No ecommerce/account flow dependencies exist on any public page
+- Legacy template routes identified and decommission plan approved
+
+**Tasks:**
+
+| ID | Task | Description | Status |
+|----|------|-------------|--------|
+| `EP-4-1` | Homepage | Hero section, featured collections, featured products, services summary, CTA blocks — all CMS-wired | ⬜ Pending |
+| `EP-4-2` | Catalog page | Product grid with client-side filtering by collection/tag, URL-synced filter state, empty state | ⬜ Pending |
+| `EP-4-3` | Product detail page | Image gallery, product info, specs, related products section, breadcrumb | ⬜ Pending |
+| `EP-4-4` | Collection detail page | Collection hero, filtered product grid, collection description | ⬜ Pending |
+| `EP-4-5` | Stores / Services / About / Contact | Individual page implementations using `Pages` CMS blocks + dedicated section components | ⬜ Pending |
+| `EP-4-6` | 404 / 500 brand fallback pages | On-brand not-found and error pages; consistent nav and footer; no broken layout on error boundary | ⬜ Pending |
+
+---
+
+### EP-5 — SEO and Discoverability
+
+**Objective:** Make all public pages fully indexable, shareable, and metadata-complete before launch.
+
+**Dependency:** EP-4 complete (routes exist and render correctly).
+
+**Deliverables:**
+- Metadata map by route type (static, dynamic product, dynamic collection)
+- Crawl policy document (sitemap coverage + robots rules)
+- Structured data checklist (Product JSON-LD scope)
+
+**Exit Criteria:**
+- Every public route has a `generateMetadata` function with full title, description, and OG tags
+- Sitemap covers all public routes; excludes admin, API, and internal paths
+- Robots.txt blocks non-public paths per environment
+- Product JSON-LD approved and rendering on product detail pages
+- No empty OG preview — fallback image hierarchy defined
+
+**Tasks:**
+
+| ID | Task | Description | Status |
+|----|------|-------------|--------|
+| `EP-5-1` | Metadata functions on all routes | `generateMetadata` per route using CMS SEO fields; define title template, fallback descriptions | ⬜ Pending |
+| `EP-5-2` | Static params for dynamic routes | `generateStaticParams` for `/catalog/[slug]` and `/collections/[slug]`; define revalidation strategy | ⬜ Pending |
+| `EP-5-3` | Sitemap and robots | `sitemap.ts` (public routes only), `robots.ts` (block admin + API, environment-aware) | ⬜ Pending |
+| `EP-5-4` | Product JSON-LD and OG fallback | JSON-LD schema for product pages; OG image fallback chain (CMS image → product image → brand default) | ⬜ Pending |
+| `EP-5-5` | Image and LCP conventions | Confirm `priority` on above-fold images, correct `sizes` attributes, no layout shift on hero images | ⬜ Pending |
+
+---
+
+### EP-6 — Integrations
+
+**Objective:** Connect all operational third-party services required for a functional launch.
+
+**Dependency Gates:** `DG-2`, `DG-3`, `DG-4` must be resolved before EP-6 begins.
+**Dependency:** EP-4 complete (forms and pages exist to wire integrations into).
+
+**Deliverables:**
+- Integration decision log (one record per DG resolved)
+- Integration validation checklist (tested outside local environment)
+- Operational fallback policy per integration
+
+**Exit Criteria:**
+- All integrations have documented behavior, error handling, and fallback
+- End-to-end validation passes in staging (not just local)
+- Contact form submits and sends email in staging
+- Newsletter capture creates/updates list record in staging
+- Map renders and links correctly with chosen provider
+
+**Tasks:**
+
+| ID | Task | Description | Status |
+|----|------|-------------|--------|
+| `EP-6-1` | Resend account and domain setup | Configure Resend account, verify sending domain, add API key env var, confirm DNS records | ⬜ Pending |
+| `EP-6-2` | Contact form server action | Zod/Valibot validation, Resend send on submission, success/failure response messages, rate limit / honeypot abuse control | ⬜ Pending |
+| `EP-6-3` | Newsletter capture flow | Server action for subscription, list/audience management per DG-4 choice, double opt-in consideration, error handling | ⬜ Pending |
+| `EP-6-4` | Map provider integration | Embed component per DG-2 choice, marker/interaction behavior, direction link generation, fallback if provider unavailable | ⬜ Pending |
+| `EP-6-5` | Analytics setup | Script injection per DG-3 choice, page view tracking, key conversion events (contact submit, newsletter subscribe, WhatsApp click) | ⬜ Pending |
+| `EP-6-6` | Outbound link normalization | Validate and normalize all WhatsApp links (`wa.me`), Google Maps links, and social profile links; encode parameters correctly | ⬜ Pending |
+
+---
+
+### EP-7 — QA and Hardening
+
+**Objective:** Pass launch-quality standards across responsiveness, accessibility, performance, and critical user flows.
+
+**Dependency:** EP-5 and EP-6 complete (full feature set available for testing).
+
+**Deliverables:**
+- QA matrix (breakpoints × browsers × routes)
+- Accessibility audit report with remediation log
+- Lighthouse performance review report
+
+**Exit Criteria:**
+- All critical and high-severity defects resolved
+- Accessibility: passes WCAG 2.1 AA on all public routes
+- Performance: Lighthouse scores meet agreed budgets (define before EP-7 starts)
+- ISR revalidation verified after CMS publish action
+- Contact form and newsletter end-to-end flows verified in staging
+
+**Tasks:**
+
+| ID | Task | Description | Status |
+|----|------|-------------|--------|
+| `EP-7-1` | Responsive matrix test | Test all routes at: 375px, 390px, 768px, 1024px, 1280px, 1440px breakpoints; document any layout failures | ⬜ Pending |
+| `EP-7-2` | Browser compatibility pass | Chrome latest, Safari latest, Firefox latest, iOS Safari, Android Chrome; flag any rendering issues | ⬜ Pending |
+| `EP-7-3` | Accessibility audit and remediation | Keyboard navigation flow, focus indicators, color contrast (4.5:1 minimum), semantic HTML, alt text completeness, form labels | ⬜ Pending |
+| `EP-7-4` | Lighthouse performance budget | Run Lighthouse on homepage, catalog, product detail; set score floors before run; address LCP, CLS, FID blockers | ⬜ Pending |
+| `EP-7-5` | E2E contact and newsletter tests | Full submission flow in staging: fill → submit → confirm email received / list updated; test error paths | ⬜ Pending |
+| `EP-7-6` | ISR revalidation verification | Publish a CMS change → verify updated content appears on public route within expected revalidation window | ⬜ Pending |
+
+---
+
+### EP-8 — Pre-Launch and Release
+
+**Objective:** Deploy production stack, populate real content, and complete launch readiness checks.
+
+**Dependency Gate:** `DG-5` must be resolved before EP-8 begins.
+**Dependency:** EP-7 complete (QA passed in staging).
+
+**Deliverables:**
+- Launch runbook (step-by-step deploy sequence)
+- Rollback plan (conditions + steps to revert)
+- Production smoke test report
+
+**Exit Criteria:**
+- All production route and integration smoke tests pass
+- Real content entered and verified by content owner
+- Rollback path documented and validated
+- Search indexing submitted
+- Post-launch monitoring active
+- Launch sign-off documented by responsible owner
+
+**Tasks:**
+
+| ID | Task | Description | Status |
+|----|------|-------------|--------|
+| `EP-8-1` | Deploy project and configure environments | Deploy to production per DG-5 topology; configure all env vars; verify build succeeds with production config | ⬜ Pending |
+| `EP-8-2` | Production database migration | Run Payload migrations against production DB; verify schema matches expected; document rollback SQL if needed | ⬜ Pending |
+| `EP-8-3` | Production CMS admin and content import | Create production admin user; set role; import or re-enter real content (products, stores, pages); verify published state | ⬜ Pending |
+| `EP-8-4` | Production smoke tests | Walk all public routes; submit contact form; subscribe to newsletter; verify map; check analytics event in dashboard | ⬜ Pending |
+| `EP-8-5` | Sitemap submission and monitoring | Submit sitemap to Google Search Console; configure uptime monitoring; set up error alerting; confirm analytics receiving data | ⬜ Pending |
+
+---
+
+## Master Task Tracker
+
+> **Status legend:** ⬜ Pending · 🔵 In Progress · ✅ Done · 🔴 Blocked · ⏸ On Hold
+
+### EP-0 Bootstrap
+
+| ID | Task | Status | Notes |
+|----|------|--------|-------|
+| `EP-0-1` | Lock DG-1 runtime policy | ✅ Done | `docs/ep-0-runtime-policy.md` |
+| `EP-0-2` | Finalize CMS integration baseline | ✅ Done | `payload.config.js`, `/api`, `/admin` baseline wired |
+| `EP-0-3` | Environment variable runbook | ✅ Done | `.env.example`, `docs/ep-0-env-runbook.md` |
+| `EP-0-4` | Configure local Postgres | ✅ Done | `docker-compose.yml` + README bootstrap steps |
+| `EP-0-5` | Path alias and import conventions | ✅ Done | `@/*` + `@payload-config` path aliases documented |
+| `EP-0-6` | Typegen and migration scripts | ✅ Done | Payload scripts added to `package.json` |
+| `EP-0-7` | Admin route and initial user flow | ✅ Done | `docs/ep-0-admin-flow.md` + route wiring |
+
+### EP-1 CMS Schemas
+
+| ID | Task | Status | Notes |
+|----|------|--------|-------|
+| `EP-1-1` | `Media` collection | ⬜ Pending | — |
+| `EP-1-2` | `Users` collection | ⬜ Pending | — |
+| `EP-1-3` | `Products` schema | ⬜ Pending | — |
+| `EP-1-4` | `ProductCollections` schema | ⬜ Pending | — |
+| `EP-1-5` | `Stores` schema | ⬜ Pending | — |
+| `EP-1-6` | `Services` schema | ⬜ Pending | — |
+| `EP-1-7` | `Pages` schema | ⬜ Pending | — |
+| `EP-1-8` | Access control helpers | ⬜ Pending | — |
+| `EP-1-9` | SEO plugin mapping | ⬜ Pending | — |
+| `EP-1-10` | Deterministic seed script | ⬜ Pending | — |
+| `EP-1-11` | Regenerate and commit Payload types | ⬜ Pending | — |
+
+### EP-2 Data Layer
+
+| ID | Task | Status | Notes |
+|----|------|--------|-------|
+| `EP-2-1` | Cached Payload singleton | ⬜ Pending | — |
+| `EP-2-2` | Product queries | ⬜ Pending | — |
+| `EP-2-3` | Collection queries | ⬜ Pending | — |
+| `EP-2-4` | Store / Service / Page queries | ⬜ Pending | — |
+| `EP-2-5` | Utility functions | ⬜ Pending | — |
+| `EP-2-6` | Published-only query guards | ⬜ Pending | — |
+
+### EP-3 Shared UI System
+
+| ID | Task | Status | Notes |
+|----|------|--------|-------|
+| `EP-3-1` | Layout components | ⬜ Pending | — |
+| `EP-3-2` | UI primitives and rich text | ⬜ Pending | — |
+| `EP-3-3` | Product card / grid / gallery / filters | ⬜ Pending | — |
+| `EP-3-4` | Store card and map wrapper | ⬜ Pending | — |
+| `EP-3-5` | Contact and newsletter forms | ⬜ Pending | — |
+| `EP-3-6` | Design tokens and responsive typography | ⬜ Pending | — |
+
+### EP-4 Public Pages
+
+| ID | Task | Status | Notes |
+|----|------|--------|-------|
+| `EP-4-1` | Homepage | ⬜ Pending | — |
+| `EP-4-2` | Catalog page | ⬜ Pending | — |
+| `EP-4-3` | Product detail page | ⬜ Pending | — |
+| `EP-4-4` | Collection detail page | ⬜ Pending | — |
+| `EP-4-5` | Stores / Services / About / Contact | ⬜ Pending | — |
+| `EP-4-6` | 404 / 500 brand fallback pages | ⬜ Pending | — |
+
+### EP-5 SEO
+
+| ID | Task | Status | Notes |
+|----|------|--------|-------|
+| `EP-5-1` | Metadata functions on all routes | ⬜ Pending | — |
+| `EP-5-2` | Static params for dynamic routes | ⬜ Pending | — |
+| `EP-5-3` | Sitemap and robots | ⬜ Pending | — |
+| `EP-5-4` | Product JSON-LD and OG fallback | ⬜ Pending | — |
+| `EP-5-5` | Image and LCP conventions | ⬜ Pending | — |
+
+### EP-6 Integrations
+
+| ID | Task | Status | Notes |
+|----|------|--------|-------|
+| `EP-6-1` | Resend account and domain setup | ⬜ Pending | — |
+| `EP-6-2` | Contact form server action | ⬜ Pending | — |
+| `EP-6-3` | Newsletter capture flow | ⬜ Pending | — |
+| `EP-6-4` | Map provider integration | ⬜ Pending | — |
+| `EP-6-5` | Analytics setup | ⬜ Pending | — |
+| `EP-6-6` | Outbound link normalization | ⬜ Pending | — |
+
+### EP-7 QA
+
+| ID | Task | Status | Notes |
+|----|------|--------|-------|
+| `EP-7-1` | Responsive matrix test | ⬜ Pending | — |
+| `EP-7-2` | Browser compatibility pass | ⬜ Pending | — |
+| `EP-7-3` | Accessibility audit and remediation | ⬜ Pending | — |
+| `EP-7-4` | Lighthouse performance budget | ⬜ Pending | — |
+| `EP-7-5` | E2E contact and newsletter tests | ⬜ Pending | — |
+| `EP-7-6` | ISR revalidation verification | ⬜ Pending | — |
+
+### EP-8 Release
+
+| ID | Task | Status | Notes |
+|----|------|--------|-------|
+| `EP-8-1` | Deploy project and configure environments | ⬜ Pending | — |
+| `EP-8-2` | Production database migration | ⬜ Pending | — |
+| `EP-8-3` | Production CMS admin and content import | ⬜ Pending | — |
+| `EP-8-4` | Production smoke tests | ⬜ Pending | — |
+| `EP-8-5` | Sitemap submission and monitoring | ⬜ Pending | — |
+
+---
+
+## Phase Dependency Chain
+
+```
+DG-1 resolved
+    └─► EP-0 (Bootstrap)
+            └─► EP-1 (CMS Schemas)
+                    └─► EP-2 (Data Layer)
+                            └─► EP-3 (UI System)
+                                    └─► EP-4 (Pages)
+                                            ├─► EP-5 (SEO)
+                                            └─► DG-2/3/4 resolved
+                                                    └─► EP-6 (Integrations)
+                                                            └─► EP-7 (QA)
+                                                                    └─► DG-5 resolved
+                                                                            └─► EP-8 (Release)
+```
+
+---
+
+## Scope Control Boundaries
+
+The following are **explicitly out of scope** for Phase 1. Any task that creeps toward these areas must be flagged and deferred.
+
+| Out of Scope | Reason |
+|-------------|--------|
+| Shopping cart / add-to-cart | Ecommerce Phase 2 |
+| User authentication / login | Ecommerce Phase 2 |
+| Payment processing | Ecommerce Phase 2 |
+| Wishlist / saved items | Ecommerce Phase 2 |
+| Order management | Ecommerce Phase 2 |
+| Inventory sync | Ecommerce Phase 2 |
+| Multi-language / i18n | Post-launch scope |
+| Blog / editorial content | Post-launch scope |
+
+---
+
+## Risk Register
+
+| ID | Risk | Likelihood | Impact | Mitigation |
+|----|------|-----------|--------|------------|
+| `R-1` | Payload / Next.js version mismatch | Medium | High | Lock DG-1 first; validate full compatibility matrix before any code |
+| `R-2` | Draft content leaking to public pages | Medium | High | Centralize published-only query guards (EP-2-6); enforce at query layer, not component layer |
+| `R-3` | Legacy template routes conflicting with new routes | Medium | Medium | Run legacy and new pages in parallel until parity confirmed; decommission checklist in EP-4 |
+| `R-4` | Third-party integration delays (domain DNS, Resend, map provider) | Medium | Medium | Pull EP-6-1 (Resend domain) earlier, during EP-4 execution; DNS changes need lead time |
+| `R-5` | Large product catalog performance regression | Low | High | Set client-side filter threshold; plan server-side paginated fallback before catalog page ships |
+| `R-6` | Unresolved decision gates blocking execution | High | High | Weekly gate review; assign owner per gate; no phase starts without gate sign-off |
+| `R-7` | Missing or inconsistent CMS content at launch | Medium | Medium | Define content entry checklist in EP-8-3; assign content owner; verify before smoke test |
+| `R-8` | Accessibility issues discovered late in QA | Low | Medium | Include accessibility acceptance criteria in EP-3 component contracts; don't defer to EP-7 only |
+
+---
+
+## Phase Gate Checklist (Copy per Phase Transition)
+
+Use this checklist each time a phase completes to confirm readiness for the next phase.
+
+```
+Phase: _______ → _______
+Date: _______
+Reviewer: _______
+
+Exit Criteria Review
+[ ] All tasks in the phase are marked Done
+[ ] All deliverables for the phase exist and are findable
+[ ] All exit criteria listed in the phase plan are met
+[ ] No critical or high defects are open from this phase
+[ ] Decision gates required for the next phase are locked
+
+Risk Review
+[ ] Risk register reviewed; new risks logged if discovered
+[ ] Existing mitigations are still valid
+
+Scope Review
+[ ] No out-of-scope items were introduced in this phase
+[ ] Any deferred items are logged for later phases
+
+Sign-off
+[ ] Approved by: _______ on _______
+```
+
+---
+
+## Execution Rhythm (When Implementation Starts)
+
+| Cadence | Activity |
+|---------|----------|
+| Weekly planning | Confirm active phase goals, task owners, and blockers |
+| Mid-week checkpoint | Validate progress against phase exit criteria; flag risks early |
+| End-of-week review | Update task statuses, refresh risk register, assess next phase readiness |
+| Phase transition | Complete phase gate checklist before any next phase work begins |
+
+---
+
+## Handoff Checklist
+
+> Complete this checklist before transitioning from planning mode to execution mode.
+
+**Decision Gates**
+- [x] `DG-1` — Runtime/version policy resolved and documented
+- [ ] `DG-2` — Map provider selected
+- [ ] `DG-3` — Analytics provider selected
+- [ ] `DG-4` — Newsletter backend selected
+- [ ] `DG-5` — Deployment topology decided
+
+**Planning Artifacts**
+- [ ] Phase scope, task IDs, and dependency order agreed by all stakeholders
+- [ ] Exit criteria per phase accepted as the done-definition for implementation
+- [ ] Out-of-scope boundaries acknowledged and accepted
+- [ ] Risk register reviewed and initial mitigations approved
+
+**Team Readiness**
+- [ ] Owners assigned per decision gate
+- [ ] Execution rhythm agreed (cadence, checkpoints, gate policy)
+- [ ] Repository access and local environment setup confirmed for all contributors
+
+**Approval**
+- [ ] Team confirms transition from planning mode to execution mode
+- [ ] Approved by: _______ on _______
