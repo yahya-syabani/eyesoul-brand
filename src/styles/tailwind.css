@@ -37,9 +37,48 @@
   --color-neutral-700: rgb(55, 65, 81);
   --color-neutral-800: rgb(31, 41, 55);
   --color-neutral-900: rgb(17, 24, 39);
+
+  /* Eyesoul brand (Phase 1 public site) */
+  --color-brand-surface: rgb(252 251 248);
+  --color-brand-ink: rgb(28 32 36);
+  --color-brand-muted: rgb(241 239 234);
+  --color-brand-border: rgb(226 222 214);
+  --color-brand-accent: rgb(201 163 74);
+  --color-brand-accent-hover: rgb(176 140 58);
+  --color-brand-muted-foreground: rgb(95 99 104);
+
+  --font-display: var(--font-eyesoul-display), ui-serif, Georgia, 'Times New Roman', serif;
+  --font-sans: var(--font-eyesoul-sans), ui-sans-serif, system-ui, sans-serif;
+
+  --text-brand-xs: 0.8125rem;
+  --text-brand-xs--line-height: 1.25rem;
+  --text-brand-sm: 0.9375rem;
+  --text-brand-sm--line-height: 1.375rem;
+  --text-brand-base: 1.0625rem;
+  --text-brand-base--line-height: 1.625rem;
+  --text-brand-lg: 1.25rem;
+  --text-brand-lg--line-height: 1.75rem;
+  --text-brand-xl: 1.5rem;
+  --text-brand-xl--line-height: 2rem;
+  --text-brand-2xl: 1.875rem;
+  --text-brand-2xl--line-height: 2.25rem;
+  --text-brand-3xl: 2.25rem;
+  --text-brand-3xl--line-height: 2.5rem;
+  --text-brand-4xl: 2.75rem;
+  --text-brand-4xl--line-height: 1.1;
 }
 
 @layer base {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
   *,
   ::after,
   ::before,

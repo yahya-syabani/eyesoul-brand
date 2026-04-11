@@ -1,28 +1,33 @@
-import I404Png from '@/images/404.png'
-import ButtonPrimary from '@/shared/Button/ButtonPrimary'
-import NcImage from '@/shared/NcImage/NcImage'
+import Link from 'next/link'
 import { Metadata } from 'next'
 
+import { BrandButton } from '@/components/brand/BrandButton'
+import { BrandShell } from '@/components/brand/BrandShell'
+import { BrandH1, BrandLead } from '@/components/brand/BrandTypography'
+
 export const metadata: Metadata = {
-  title: 'Page Not Found',
-  description: "The page you were looking for doesn't exist.",
+  title: 'Page not found',
+  description: 'The page you were looking for does not exist.',
 }
 
-const Page404 = () => (
-  <div className="nc-Page404">
-    <div className="relative container pt-5 pb-16 lg:pt-5 lg:pb-20">
-      {/* HEADER */}
-      <header className="mx-auto max-w-2xl space-y-2 text-center">
-        <NcImage src={I404Png} alt="not-found" />
-        <span className="block text-sm font-medium tracking-wider text-neutral-800 sm:text-base dark:text-neutral-200">
-          {`THE PAGE YOU WERE LOOKING FOR DOESN'T EXIST.`}{' '}
-        </span>
-        <div className="pt-8">
-          <ButtonPrimary href="/">Return Home Page</ButtonPrimary>
+export default function NotFound() {
+  return (
+    <BrandShell>
+      <div className="container flex flex-col items-center py-24 text-center">
+        <BrandH1>404</BrandH1>
+        <BrandLead className="mt-4">This page is not part of the Eyesoul site, or the link may be broken.</BrandLead>
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <BrandButton href="/" variant="primary">
+            Home
+          </BrandButton>
+          <BrandButton href="/catalog" variant="secondary">
+            Catalog
+          </BrandButton>
         </div>
-      </header>
-    </div>
-  </div>
-)
-
-export default Page404
+        <Link href="/contact" className="mt-8 text-brand-sm text-brand-accent-hover underline">
+          Contact support
+        </Link>
+      </div>
+    </BrandShell>
+  )
+}

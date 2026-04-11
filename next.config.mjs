@@ -6,6 +6,16 @@ const nextConfig = {
     minimumCacheTTL: 2678400 * 12, // 6 months
     remotePatterns: [
       {
+        protocol: 'http',
+        hostname: 'localhost',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'localhost',
+        pathname: '/**',
+      },
+      {
         protocol: 'https',
         hostname: 'images.pexels.com',
         port: '',
