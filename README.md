@@ -38,3 +38,5 @@ Open `http://localhost:3000` for the site and `http://localhost:3000/admin` for 
 - Admin flow: `docs/ep-0-admin-flow.md`
 - Master plan: `docs/eyewear-brand-implementation-plan.md`
 - EP-1 schema contracts: `docs/ep-1-schema-contracts.md`
+- EP-2 data access: `docs/ep-2-data-access.md`
+- EP-2 query contracts: `docs/ep-2-query-contracts.md`

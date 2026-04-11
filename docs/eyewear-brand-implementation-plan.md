@@ -149,12 +149,12 @@ M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch 
 
 | ID | Task | Description | Status |
 |----|------|-------------|--------|
-| `EP-2-1` | Cached Payload singleton | Single Payload client instance with caching; prevent multiple DB connections in dev hot-reload and production | ⬜ Pending |
-| `EP-2-2` | Product queries | `getProductBySlug`, `getProducts`, `getRelatedProducts` — all with `_status: published` guard | ⬜ Pending |
-| `EP-2-3` | Collection queries | `getCollectionBySlug`, `getCollections` with populated product relationships | ⬜ Pending |
-| `EP-2-4` | Store / Service / Page queries | `getStores`, `getServices`, `getPageBySlug` — cover all remaining Phase-1 data needs | ⬜ Pending |
-| `EP-2-5` | Utility functions | `buildSlug`, `buildProductUrl`, `buildCollectionUrl`, `cn` classname helper, external link normalizer | ⬜ Pending |
-| `EP-2-6` | Published-only query guards | Shared `withPublishedFilter` wrapper; document bypass policy for preview mode; add tests or assertions | ⬜ Pending |
+| `EP-2-1` | Cached Payload singleton | Single Payload client instance with caching; prevent multiple DB connections in dev hot-reload and production | ✅ Done |
+| `EP-2-2` | Product queries | `getProductBySlug`, `getProducts`, `getRelatedProducts` — all with `_status: published` guard | ✅ Done |
+| `EP-2-3` | Collection queries | `getCollectionBySlug`, `getCollections` with populated product relationships | ✅ Done |
+| `EP-2-4` | Store / Service / Page queries | `getStores`, `getServices`, `getPageBySlug` — cover all remaining Phase-1 data needs | ✅ Done |
+| `EP-2-5` | Utility functions | `buildSlug`, `buildProductUrl`, `buildCollectionUrl`, `cn` classname helper, external link normalizer | ✅ Done |
+| `EP-2-6` | Published-only query guards | Shared `withPublishedFilter` wrapper; document bypass policy for preview mode; add tests or assertions | ✅ Done |
 
 ---
 
@@ -390,12 +390,12 @@ M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch 
 
 | ID | Task | Status | Notes |
 |----|------|--------|-------|
-| `EP-2-1` | Cached Payload singleton | ⬜ Pending | — |
-| `EP-2-2` | Product queries | ⬜ Pending | — |
-| `EP-2-3` | Collection queries | ⬜ Pending | — |
-| `EP-2-4` | Store / Service / Page queries | ⬜ Pending | — |
-| `EP-2-5` | Utility functions | ⬜ Pending | — |
-| `EP-2-6` | Published-only query guards | ⬜ Pending | — |
+| `EP-2-1` | Cached Payload singleton | ✅ Done | `src/lib/payload/getPayload.ts` |
+| `EP-2-2` | Product queries | ✅ Done | `src/lib/cms/products.ts` |
+| `EP-2-3` | Collection queries | ✅ Done | `src/lib/cms/productCollections.ts` |
+| `EP-2-4` | Store / Service / Page queries | ✅ Done | `stores.ts`, `services.ts`, `pages.ts` |
+| `EP-2-5` | Utility functions | ✅ Done | `src/lib/slug.ts`, `urls.ts`, `links.ts`, `cn.ts` |
+| `EP-2-6` | Published-only query guards | ✅ Done | `src/lib/cms/published.ts`, `docs/ep-2-data-access.md` |
 
 ### EP-3 Shared UI System
 
