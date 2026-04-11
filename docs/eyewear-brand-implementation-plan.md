@@ -52,7 +52,7 @@ M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch 
 
 | Milestone | Phases | Exit Condition | Status |
 |-----------|--------|----------------|--------|
-| `M1` — Foundation Ready | EP-0, EP-1 | Admin running, schemas operational, types generated, seed data verified | ⬜ Not started |
+| `M1` — Foundation Ready | EP-0, EP-1 | Admin running, schemas operational, types generated, seed data verified | ✅ Done |
 | `M2` — Core Experience Ready | EP-2, EP-3, EP-4 | All Phase-1 routes live with CMS data, shared component system stable | ⬜ Not started |
 | `M3` — Launch Ready | EP-5, EP-6, EP-7, EP-8 | Production smoke test passes, monitoring active, sitemap submitted | ⬜ Not started |
 
@@ -115,17 +115,17 @@ M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch 
 
 | ID | Task | Description | Status |
 |----|------|-------------|--------|
-| `EP-1-1` | `Media` collection | Image sizes config, alt text requirement enforcement, content type constraints | ⬜ Pending |
-| `EP-1-2` | `Users` collection | Role field, admin vs. public role controls, access policy | ⬜ Pending |
-| `EP-1-3` | `Products` schema | All fields (`name`, `slug`, `description`, `price`, `images`, `collection`, `status`), validations, slug normalization | ⬜ Pending |
-| `EP-1-4` | `ProductCollections` schema | Relationship to Products, slug, display ordering, featured flag | ⬜ Pending |
-| `EP-1-5` | `Stores` schema | Location fields, contact normalization (phone, WhatsApp, maps link), operating hours, coordinates | ⬜ Pending |
-| `EP-1-6` | `Services` schema | Service name, description, icon/image, display order | ⬜ Pending |
-| `EP-1-7` | `Pages` schema | Block-based content strategy for editable pages (About, Contact, etc.), reusable block types | ⬜ Pending |
-| `EP-1-8` | Access control helpers | Centralized helpers for `read`, `create`, `update`, `delete` per collection; enforce published-only reads on public-facing collections | ⬜ Pending |
-| `EP-1-9` | SEO plugin mapping | Wire Payload SEO plugin per collection; define title/description fallback chain; avoid duplicate meta field definitions | ⬜ Pending |
-| `EP-1-10` | Deterministic seed script | Build seed that populates all collections with baseline content; idempotent on clean DB | ⬜ Pending |
-| `EP-1-11` | Regenerate and commit Payload types | Final `payload generate:types` run after all schemas locked; commit generated types to repo | ⬜ Pending |
+| `EP-1-1` | `Media` collection | Image sizes config, alt text requirement enforcement, content type constraints | ✅ Done |
+| `EP-1-2` | `Users` collection | Role field, admin vs. public role controls, access policy | ✅ Done |
+| `EP-1-3` | `Products` schema | All fields (`name`, `slug`, `description`, `price`, `images`, `collection`, `status`), validations, slug normalization | ✅ Done |
+| `EP-1-4` | `ProductCollections` schema | Relationship to Products, slug, display ordering, featured flag | ✅ Done |
+| `EP-1-5` | `Stores` schema | Location fields, contact normalization (phone, WhatsApp, maps link), operating hours, coordinates | ✅ Done |
+| `EP-1-6` | `Services` schema | Service name, description, icon/image, display order | ✅ Done |
+| `EP-1-7` | `Pages` schema | Block-based content strategy for editable pages (About, Contact, etc.), reusable block types | ✅ Done |
+| `EP-1-8` | Access control helpers | Centralized helpers for `read`, `create`, `update`, `delete` per collection; enforce published-only reads on public-facing collections | ✅ Done |
+| `EP-1-9` | SEO plugin mapping | Wire Payload SEO plugin per collection; define title/description fallback chain; avoid duplicate meta field definitions | ✅ Done |
+| `EP-1-10` | Deterministic seed script | Build seed that populates all collections with baseline content; idempotent on clean DB | ✅ Done |
+| `EP-1-11` | Regenerate and commit Payload types | Final `payload generate:types` run after all schemas locked; commit generated types to repo | ✅ Done |
 
 ---
 
@@ -374,17 +374,17 @@ M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch 
 
 | ID | Task | Status | Notes |
 |----|------|--------|-------|
-| `EP-1-1` | `Media` collection | ⬜ Pending | — |
-| `EP-1-2` | `Users` collection | ⬜ Pending | — |
-| `EP-1-3` | `Products` schema | ⬜ Pending | — |
-| `EP-1-4` | `ProductCollections` schema | ⬜ Pending | — |
-| `EP-1-5` | `Stores` schema | ⬜ Pending | — |
-| `EP-1-6` | `Services` schema | ⬜ Pending | — |
-| `EP-1-7` | `Pages` schema | ⬜ Pending | — |
-| `EP-1-8` | Access control helpers | ⬜ Pending | — |
-| `EP-1-9` | SEO plugin mapping | ⬜ Pending | — |
-| `EP-1-10` | Deterministic seed script | ⬜ Pending | — |
-| `EP-1-11` | Regenerate and commit Payload types | ⬜ Pending | — |
+| `EP-1-1` | `Media` collection | ✅ Done | `src/payload/collections/Media.js`, `sharp` in config |
+| `EP-1-2` | `Users` collection | ✅ Done | First-user create + role update lock |
+| `EP-1-3` | `Products` schema | ✅ Done | Lexical description, drafts, `staffOrPublished` |
+| `EP-1-4` | `ProductCollections` schema | ✅ Done | `products.collection` relation |
+| `EP-1-5` | `Stores` schema | ✅ Done | Hours array, maps/WhatsApp fields |
+| `EP-1-6` | `Services` schema | ✅ Done | Icon upload, ordering |
+| `EP-1-7` | `Pages` schema | ✅ Done | Blocks: content, hero, cta + Lexical |
+| `EP-1-8` | Access control helpers | ✅ Done | `src/payload/access/content.js` |
+| `EP-1-9` | SEO plugin mapping | ✅ Done | `seoPlugin` in `payload.config.ts` |
+| `EP-1-10` | Deterministic seed script | ✅ Done | `npm run payload:seed` |
+| `EP-1-11` | Regenerate and commit Payload types | ✅ Done | `src/payload-types.ts` |
 
 ### EP-2 Data Layer
 

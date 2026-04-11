@@ -6,6 +6,7 @@
 - Node.js: `>=20.9.0` (aligned with `@payloadcms/next` engine support)
 - TypeScript: `5.4.x` (strict mode enabled)
 - Router model: App Router only
+- Node package type: `"type": "module"` in `package.json` (required for Lexical + Payload CLI without `ERR_REQUIRE_ASYNC_MODULE` on this stack)
 
 ## Compatibility Checkpoint (Mandatory)
 - Validate Payload + Next support matrix before feature work:

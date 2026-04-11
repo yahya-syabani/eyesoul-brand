@@ -4,7 +4,11 @@ export const Users = {
   slug: 'users',
   access: {
     admin: ({ req }) => Boolean(req.user),
-    create: isAdmin,
+    create: async ({ req }) => {
+      if (req.user?.role === 'admin') return true
+      const { totalDocs } = await req.payload.count({ collection: 'users', req })
+      return totalDocs === 0
+    },
     delete: isAdmin,
     read: isAdmin,
     update: isAdmin,
@@ -20,6 +24,9 @@ export const Users = {
         { label: 'Editor', value: 'editor' },
       ],
       required: true,
+      access: {
+        update: ({ req }) => req.user?.role === 'admin',
+      },
     },
   ],
 }

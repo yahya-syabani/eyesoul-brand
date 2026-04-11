@@ -17,7 +17,9 @@ Phase-1 branding site built with Next.js and Payload CMS.
 4. Generate Payload artifacts:
    - `npm run payload:generate-types`
    - `npm run payload:generate-importmap`
-5. Run development server:
+5. (Optional) Load minimal EP-1 demo content:
+   - `npm run payload:seed`
+6. Run development server:
    - `npm run dev`
 
 Open `http://localhost:3000` for the site and `http://localhost:3000/admin` for Payload admin.
@@ -28,9 +30,11 @@ Open `http://localhost:3000` for the site and `http://localhost:3000/admin` for 
 - `npm run payload:migrate` - run pending database migrations
 - `npm run payload:migrate:create` - create a new migration
 - `npm run payload:migrate:status` - show migration status
+- `npm run payload:seed` - minimal deterministic seed (`src/payload/seed.js`)
 
 ## Docs
 - Runtime policy: `docs/ep-0-runtime-policy.md`
 - Env runbook: `docs/ep-0-env-runbook.md`
 - Admin flow: `docs/ep-0-admin-flow.md`
 - Master plan: `docs/eyewear-brand-implementation-plan.md`
+- EP-1 schema contracts: `docs/ep-1-schema-contracts.md`
