@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "test:e2e": "playwright test tests/e2e",
     "test:a11y": "playwright test tests/a11y",
-    "test:ui": "playwright test --ui"
+    "test:ui": "playwright test --ui",
+    "dev:all": "npx concurrently \"npm run dev\" \"npm run dev --prefix apps/cms\""
   },
   "dependencies": {
     "@headlessui/react": "^2.2.3",

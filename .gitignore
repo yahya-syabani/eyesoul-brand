@@ -44,3 +44,7 @@ next-env.d.ts
 # Playwright Test Outputs
 playwright-report/
 test-results/
+
+# Apps CMS build artifacts
+apps/cms/.next/
+
