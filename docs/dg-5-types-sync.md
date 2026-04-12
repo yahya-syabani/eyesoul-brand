@@ -22,6 +22,14 @@ You do NOT need to sync for access control changes, hook changes, or config-only
 
 ## Sync Process
 
+**From the repo root (recommended):** generate in the CMS app and copy to the storefront in one step:
+
+```bash
+npm run payload:sync-types
+```
+
+**Manual equivalent:**
+
 ```bash
 # 1. Make your schema change in apps/cms/src/payload/collections/
 

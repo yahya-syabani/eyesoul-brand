@@ -3,6 +3,9 @@
   "version": "2.1.0",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "apps/cms"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +14,8 @@
     "test:e2e": "playwright test tests/e2e",
     "test:a11y": "playwright test tests/a11y",
     "test:ui": "playwright test --ui",
-    "dev:all": "npx concurrently \"npm run dev\" \"npm run dev --prefix apps/cms\""
+    "dev:all": "npx concurrently \"npm run dev\" \"npm run dev -w eyesoul-cms\"",
+    "payload:sync-types": "npm run payload:generate-types -w eyesoul-cms && node scripts/sync-payload-types.mjs"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.3",

@@ -65,7 +65,7 @@ export default defineConfig({
     // For now, assume we're running `npm run dev` in apps/cms manually, or
     // modify the test runner to launch it too. Let's launch both for reliability:
     {
-      command: 'cd apps/cms && npm run dev',
+      command: 'npm run dev -w eyesoul-cms',
       url: 'http://localhost:3001/admin', // Will 200 OK when ready
       reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
