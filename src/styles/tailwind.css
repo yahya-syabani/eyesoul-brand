@@ -38,14 +38,14 @@
   --color-neutral-800: rgb(31, 41, 55);
   --color-neutral-900: rgb(17, 24, 39);
 
-  /* Eyesoul brand (Phase 1 public site) */
-  --color-brand-surface: rgb(252 251 248);
-  --color-brand-ink: rgb(28 32 36);
-  --color-brand-muted: rgb(241 239 234);
-  --color-brand-border: rgb(226 222 214);
-  --color-brand-accent: rgb(201 163 74);
-  --color-brand-accent-hover: rgb(176 140 58);
-  --color-brand-muted-foreground: rgb(95 99 104);
+  /* Eyesoul brand (Phase 1 public site) - Blue Theme */
+  --color-brand-surface: rgb(255 255 255);
+  --color-brand-ink: rgb(15 23 42);
+  --color-brand-muted: rgb(241 245 249);
+  --color-brand-border: rgb(226 232 240);
+  --color-brand-accent: rgb(37 99 235);
+  --color-brand-accent-hover: rgb(29 78 216);
+  --color-brand-muted-foreground: rgb(100 116 139);
 
   --font-display: var(--font-eyesoul-display), ui-serif, Georgia, 'Times New Roman', serif;
   --font-sans: var(--font-eyesoul-sans), ui-sans-serif, system-ui, sans-serif;

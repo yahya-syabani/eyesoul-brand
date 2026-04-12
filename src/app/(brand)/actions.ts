@@ -61,7 +61,47 @@ export async function subscribeNewsletter(_prev: FormState, formData: FormData):
     return { ok: false, message: msg }
   }
 
-  // EP-6: Mailchimp / Resend Audiences. Stub succeeds.
-  void parsed.data.email
-  return { ok: true, message: 'You are subscribed.' }
+  const email = parsed.data.email
+  const apiKey = process.env.MAILCHIMP_API_KEY
+  const listId = process.env.MAILCHIMP_AUDIENCE_ID
+  const server = process.env.MAILCHIMP_SERVER_PREFIX
+
+  if (!apiKey || !listId || !server) {
+    console.error('Missing Mailchimp config:', { apiKey: !!apiKey, listId: !!listId, server: !!server })
+    // Fail silently or with a generic message for security
+    return { ok: false, message: 'Subscription service unavailable.' }
+  }
+
+  try {
+    const response = await fetch(
+      `https://${server}.api.mailchimp.com/3.0/lists/${listId}/members`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${Buffer.from(`any:${apiKey}`).toString('base64')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email_address: email,
+          status: 'subscribed',
+        }),
+      }
+    )
+
+    const data = await response.json()
+
+    if (response.ok) {
+      return { ok: true, message: 'You have been subscribed successfully.' }
+    }
+
+    if (data.title === 'Member Exists') {
+      return { ok: true, message: 'You are already subscribed.' }
+    }
+
+    console.error('Mailchimp API error:', data)
+    return { ok: false, message: 'Could not subscribe. Please try again later.' }
+  } catch (err) {
+    console.error('Mailchimp fetch error:', err)
+    return { ok: false, message: 'Network error. Please try again later.' }
+  }
 }

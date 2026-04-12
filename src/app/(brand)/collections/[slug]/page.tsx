@@ -5,7 +5,31 @@ import Image from 'next/image'
 import { ProductGrid } from '@/components/brand/ProductGrid'
 import { BrandH1, BrandLead } from '@/components/brand/BrandTypography'
 import { resolveBrandImage } from '@/components/brand/brandMedia'
-import { getCollectionBySlug } from '@/lib/cms/productCollections'
+import { Metadata } from 'next'
+import { getCollectionBySlug, getCollections } from '@/lib/cms/productCollections'
+
+export async function generateStaticParams() {
+  const collections = await getCollections()
+  return collections.map((collection) => ({
+    slug: collection.slug,
+  }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const { collection } = await getCollectionBySlug(slug, { depth: 1 })
+  if (!collection) return {}
+
+  return {
+    title: collection.title,
+    description: collection.description || `Explore the ${collection.title} eyewear collection at Eyesoul.`,
+    openGraph: {
+      title: `${collection.title} — Eyesoul`,
+      description: collection.description || `Explore the ${collection.title} eyewear collection.`,
+      url: `https://eyesoul.brand/collections/${collection.slug}`,
+    },
+  }
+}
 
 export default async function CollectionDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params

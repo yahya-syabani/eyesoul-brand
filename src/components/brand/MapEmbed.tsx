@@ -37,12 +37,39 @@ export function MapEmbed({ latitude, longitude, label, mapsUrl }: MapEmbedProps)
     )
   }
 
-  if (provider === 'mapbox' && latitude != null && longitude != null && process.env.NEXT_PUBLIC_MAPBOX_TOKEN) {
+  if (
+    provider === 'mapbox' &&
+    latitude != null &&
+    longitude != null &&
+    process.env.NEXT_PUBLIC_MAPBOX_TOKEN
+  ) {
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
-    const src = `https://api.mapbox.com/styles/v1/mapbox/streets-v12.html?access_token=${token}#15/${latitude}/${longitude}`
+    const style = 'mapbox/streets-v12'
+    const zoom = 15
+    const width = 800
+    const height = 500
+    const marker = `pin-s+brand-blue(${longitude},${latitude})` // Simple marker
+    const src = `https://api.mapbox.com/styles/v1/${style}/static/${marker}/${longitude},${latitude},${zoom}/${width}x${height}@2x?access_token=${token}`
+
     return (
-      <div className="overflow-hidden rounded-2xl border border-brand-border bg-brand-muted">
-        <iframe title={`Map: ${label}`} className="aspect-[16/10] w-full border-0" loading="lazy" src={src} />
+      <div className="relative overflow-hidden rounded-2xl border border-brand-border bg-brand-muted">
+        <a
+          href={normalizedMaps || `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group block"
+        >
+          <img
+            src={src}
+            alt={`Map location of ${label}`}
+            className="aspect-[16/10] w-full object-cover transition-opacity group-hover:opacity-90"
+          />
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
+            <div className="rounded-full bg-brand-ink/90 px-4 py-2 text-brand-xs font-medium text-brand-surface shadow-xl">
+              View on larger map
+            </div>
+          </div>
+        </a>
       </div>
     )
   }

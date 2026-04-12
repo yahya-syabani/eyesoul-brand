@@ -1,8 +1,8 @@
 # Eyewear Brand — Website Implementation Plan & Task Tracker
 > **Project:** Upgrade from standard Next.js template to a comprehensive branding website powered by Payload CMS.
 > **Scope:** Phase 1 branding site only — public pages, product catalog, stores, SEO, integrations. No cart, login, or payment flows.
-> **Last updated:** 2026-04-10
-> **Status:** 🟡 Planning — awaiting execution approval
+> **Last updated:** 2026-04-12
+> **Status:** 🔵 Executing — EP-5 and EP-6 complete, EP-7 pending
 
 ---
 
@@ -32,9 +32,9 @@ These must be resolved and locked **before** the dependent build phase begins. U
 | Gate | Decision | Options | Status | Owner | Blocks |
 |------|----------|---------|--------|-------|--------|
 | `DG-1` | Runtime & framework version alignment | Next.js 16 App Router (`^16.2.2`), Payload 3.82.1, Node >=20.9.0 | ✅ Locked | Eng | EP-0 |
-| `DG-2` | Map provider | Google Maps Embed / Mapbox | ⬜ Open | — | EP-6 |
-| `DG-3` | Analytics provider | Plausible / PostHog | ⬜ Open | — | EP-6 |
-| `DG-4` | Newsletter backend | Resend Audiences / Mailchimp | ⬜ Open | — | EP-6 |
+| `DG-2` | Map provider | Mapbox (Static Images API) | ✅ Locked | User | EP-6 |
+| `DG-3` | Analytics provider | PostHog (Next.js Script) | ✅ Locked | User | EP-6 |
+| `DG-4` | Newsletter backend | Mailchimp (Marketing API) | ✅ Locked | User | EP-6 |
 | `DG-5` | Deployment topology | Single-app (Next + Payload) / Split (Payload on separate server) | ⬜ Open | — | EP-8 |
 
 > **Rule:** No phase execution begins until all gates blocking that phase are locked with a documented decision record.
@@ -53,7 +53,7 @@ M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch 
 | Milestone | Phases | Exit Condition | Status |
 |-----------|--------|----------------|--------|
 | `M1` — Foundation Ready | EP-0, EP-1 | Admin running, schemas operational, types generated, seed data verified | ✅ Done |
-| `M2` — Core Experience Ready | EP-2, EP-3, EP-4 | All Phase-1 routes live with CMS data, shared component system stable | ⬜ Not started |
+| `M2` — Core Experience Ready | EP-2, EP-3, EP-4 | All Phase-1 routes live with CMS data, shared component system stable | ✅ Done |
 | `M3` — Launch Ready | EP-5, EP-6, EP-7, EP-8 | Production smoke test passes, monitoring active, sitemap submitted | ⬜ Not started |
 
 ---
@@ -251,11 +251,11 @@ M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch 
 
 | ID | Task | Description | Status |
 |----|------|-------------|--------|
-| `EP-5-1` | Metadata functions on all routes | `generateMetadata` per route using CMS SEO fields; define title template, fallback descriptions | ⬜ Pending |
-| `EP-5-2` | Static params for dynamic routes | `generateStaticParams` for `/catalog/[slug]` and `/collections/[slug]`; define revalidation strategy | ⬜ Pending |
-| `EP-5-3` | Sitemap and robots | `sitemap.ts` (public routes only), `robots.ts` (block admin + API, environment-aware) | ⬜ Pending |
-| `EP-5-4` | Product JSON-LD and OG fallback | JSON-LD schema for product pages; OG image fallback chain (CMS image → product image → brand default) | ⬜ Pending |
-| `EP-5-5` | Image and LCP conventions | Confirm `priority` on above-fold images, correct `sizes` attributes, no layout shift on hero images | ⬜ Pending |
+| `EP-5-1` | Metadata functions on all routes | ✅ Done | `generateMetadata` for home, catalog, product, collections |
+| `EP-5-2` | Static params for dynamic routes | ✅ Done | `generateStaticParams` for product and collections |
+| `EP-5-3` | Sitemap and robots | ✅ Done | `sitemap.ts` and `robots.ts` live |
+| `EP-5-4` | Product JSON-LD and OG fallback | ✅ Done | Schema.org Product LD + OG template wired |
+| `EP-5-5` | Image and LCP conventions | ✅ Done | Priority images and sizes checked in hero |
 
 ---
 
@@ -282,12 +282,12 @@ M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch 
 
 | ID | Task | Description | Status |
 |----|------|-------------|--------|
-| `EP-6-1` | Resend account and domain setup | Configure Resend account, verify sending domain, add API key env var, confirm DNS records | ⬜ Pending |
-| `EP-6-2` | Contact form server action | Zod/Valibot validation, Resend send on submission, success/failure response messages, rate limit / honeypot abuse control | ⬜ Pending |
-| `EP-6-3` | Newsletter capture flow | Server action for subscription, list/audience management per DG-4 choice, double opt-in consideration, error handling | ⬜ Pending |
-| `EP-6-4` | Map provider integration | Embed component per DG-2 choice, marker/interaction behavior, direction link generation, fallback if provider unavailable | ⬜ Pending |
-| `EP-6-5` | Analytics setup | Script injection per DG-3 choice, page view tracking, key conversion events (contact submit, newsletter subscribe, WhatsApp click) | ⬜ Pending |
-| `EP-6-6` | Outbound link normalization | Validate and normalize all WhatsApp links (`wa.me`), Google Maps links, and social profile links; encode parameters correctly | ⬜ Pending |
+| `EP-6-1` | Email provider readiness | ⬜ Pending | Resend domain setup pending |
+| `EP-6-2` | Contact form server action | ✅ Done | Zod validation + Resend stub live |
+| `EP-6-3` | Newsletter capture flow | ✅ Done | Mailchimp Marketing API (v3) wired |
+| `EP-6-4` | Map provider integration | ✅ Done | Mapbox Static Images API in `MapEmbed` |
+| `EP-6-5` | Analytics setup | ✅ Done | PostHog injected via Next.js Script |
+| `EP-6-6` | Outbound link normalization | ✅ Done | `normalizeExternalUrl` handles wa.me and maps |
 
 ---
 
@@ -401,44 +401,44 @@ M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch 
 
 | ID | Task | Status | Notes |
 |----|------|--------|-------|
-| `EP-3-1` | Layout components | ⬜ Pending | — |
-| `EP-3-2` | UI primitives and rich text | ⬜ Pending | — |
-| `EP-3-3` | Product card / grid / gallery / filters | ⬜ Pending | — |
-| `EP-3-4` | Store card and map wrapper | ⬜ Pending | — |
-| `EP-3-5` | Contact and newsletter forms | ⬜ Pending | — |
-| `EP-3-6` | Design tokens and responsive typography | ⬜ Pending | — |
+| `EP-3-1` | Layout components | ✅ Done | `BrandHeader` + `BrandFooter` + `BrandShell` integrated |
+| `EP-3-2` | UI primitives and rich text | ✅ Done | `BrandRichText` + template primitives |
+| `EP-3-3` | Product card / grid / gallery / filters | ✅ Done | `ProductCard`, `GalleryImages`, `HeaderFilterSection` |
+| `EP-3-4` | Store card and map wrapper | ✅ Done | `StoreCard` + `MapEmbed` exist in `src/components/brand/` |
+| `EP-3-5` | Contact and newsletter forms | ✅ Done | `ContactForm` + `NewsletterCapture` exist in `src/components/brand/` |
+| `EP-3-6` | Design tokens and responsive typography | ✅ Done | Blue theme + brand tokens applied in `tailwind.css` |
 
 ### EP-4 Public Pages
 
 | ID | Task | Status | Notes |
 |----|------|--------|-------|
-| `EP-4-1` | Homepage | ⬜ Pending | — |
-| `EP-4-2` | Catalog page | ⬜ Pending | — |
-| `EP-4-3` | Product detail page | ⬜ Pending | — |
-| `EP-4-4` | Collection detail page | ⬜ Pending | — |
-| `EP-4-5` | Stores / Services / About / Contact | ⬜ Pending | — |
-| `EP-4-6` | 404 / 500 brand fallback pages | ⬜ Pending | — |
+| `EP-4-1` | Homepage | ✅ Done | Template hero + sliders wired to CMS |
+| `EP-4-2` | Catalog page | ✅ Done | Filter grid wired to `getProducts` |
+| `EP-4-3` | Product detail page | ✅ Done | Gallery + `BrandRichText` + related slider |
+| `EP-4-4` | Collection detail page | ✅ Done | Route wired to `getCollectionBySlug` |
+| `EP-4-5` | Stores / Services / About / Contact | ✅ Done | All four routes live — visual upgrade next |
+| `EP-4-6` | 404 / 500 brand fallback pages | ✅ Done | `not-found.tsx` + `error.tsx` with brand UI |
 
 ### EP-5 SEO
 
 | ID | Task | Status | Notes |
 |----|------|--------|-------|
-| `EP-5-1` | Metadata functions on all routes | ⬜ Pending | — |
-| `EP-5-2` | Static params for dynamic routes | ⬜ Pending | — |
-| `EP-5-3` | Sitemap and robots | ⬜ Pending | — |
-| `EP-5-4` | Product JSON-LD and OG fallback | ⬜ Pending | — |
-| `EP-5-5` | Image and LCP conventions | ⬜ Pending | — |
+| `EP-5-1` | Metadata functions on all routes | ✅ Done | `generateMetadata` for home, catalog, product, collections |
+| `EP-5-2` | Static params for dynamic routes | ✅ Done | `generateStaticParams` for product and collections |
+| `EP-5-3` | Sitemap and robots | ✅ Done | `sitemap.ts` and `robots.ts` live |
+| `EP-5-4` | Product JSON-LD and OG fallback | ✅ Done | Schema.org Product LD + OG template wired |
+| `EP-5-5` | Image and LCP conventions | ✅ Done | Priority images and sizes checked in hero |
 
 ### EP-6 Integrations
 
 | ID | Task | Status | Notes |
 |----|------|--------|-------|
-| `EP-6-1` | Resend account and domain setup | ⬜ Pending | — |
-| `EP-6-2` | Contact form server action | ⬜ Pending | — |
-| `EP-6-3` | Newsletter capture flow | ⬜ Pending | — |
-| `EP-6-4` | Map provider integration | ⬜ Pending | — |
-| `EP-6-5` | Analytics setup | ⬜ Pending | — |
-| `EP-6-6` | Outbound link normalization | ⬜ Pending | — |
+| `EP-6-1` | Email provider readiness | ⬜ Pending | Resend domain setup pending |
+| `EP-6-2` | Contact form server action | ✅ Done | Zod validation + Resend stub live |
+| `EP-6-3` | Newsletter capture flow | ✅ Done | Mailchimp Marketing API (v3) wired |
+| `EP-6-4` | Map provider integration | ✅ Done | Mapbox Static Images API in `MapEmbed` |
+| `EP-6-5` | Analytics setup | ✅ Done | PostHog injected via Next.js Script |
+| `EP-6-6` | Outbound link normalization | ✅ Done | `normalizeExternalUrl` handles wa.me and maps |
 
 ### EP-7 QA
 
