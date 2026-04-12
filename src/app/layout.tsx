@@ -3,6 +3,7 @@ import '@/styles/tailwind.css'
 import { Metadata } from 'next'
 import { DM_Sans, Fraunces } from 'next/font/google'
 import GlobalClient from './GlobalClient'
+import Script from 'next/script'
 
 const eyesoulSans = DM_Sans({
   subsets: ['latin'],

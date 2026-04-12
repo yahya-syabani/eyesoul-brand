@@ -1,26 +1,19 @@
-import type { Where } from 'payload'
-
 import type { Product } from '@/payload-types'
 
-import { getPayloadInstance } from '@/lib/payload/getPayload'
-
+import { cmsFind } from './client'
 import { mergePublishedWhere } from './published'
 
 export async function getProductBySlug(
   slug: string,
   options: { depth?: number } = {},
 ): Promise<Product | null> {
-  const payload = await getPayloadInstance()
-  const where = await mergePublishedWhere({
-    slug: { equals: slug },
-  })
-  const res = await payload.find({
-    collection: 'products',
+  const where = await mergePublishedWhere({ slug: { equals: slug } })
+  const res = await cmsFind<Product>('products', {
     where,
     limit: 1,
     depth: options.depth ?? 2,
   })
-  return (res.docs[0] as Product | undefined) ?? null
+  return res.docs[0] ?? null
 }
 
 export async function getProducts(
@@ -31,24 +24,19 @@ export async function getProducts(
     depth?: number
   } = {},
 ): Promise<Product[]> {
-  const payload = await getPayloadInstance()
-  const base: Where = {}
-  if (options.collectionId != null) {
-    base.collection = { equals: options.collectionId }
-  }
+  const base = options.collectionId != null ? { collection: { equals: options.collectionId } } : {}
   const where = await mergePublishedWhere(base)
-  const res = await payload.find({
-    collection: 'products',
+  const res = await cmsFind<Product>('products', {
     where,
     limit: options.limit ?? 200,
     sort: options.sort ?? '-updatedAt',
     depth: options.depth ?? 2,
   })
-  return res.docs as Product[]
+  return res.docs
 }
 
 /**
- * Same collection, excluding the current product by id.
+ * Same collection as the given product, excluding the product itself.
  */
 export async function getRelatedProducts(options: {
   productId: number
@@ -58,17 +46,19 @@ export async function getRelatedProducts(options: {
 }): Promise<Product[]> {
   if (options.collectionId == null) return []
 
-  const payload = await getPayloadInstance()
-  const inner: Where = {
-    and: [{ collection: { equals: options.collectionId } }, { id: { not_equals: options.productId } }],
+  const inner = {
+    and: [
+      { collection: { equals: options.collectionId } },
+      { id: { not_equals: options.productId } },
+    ],
   }
   const where = await mergePublishedWhere(inner)
-  const res = await payload.find({
-    collection: 'products',
+  const res = await cmsFind<Product>('products', {
     where,
     limit: options.limit ?? 4,
     sort: '-updatedAt',
     depth: options.depth ?? 1,
   })
-  return res.docs as Product[]
+  return res.docs
 }
+

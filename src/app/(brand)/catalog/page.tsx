@@ -1,5 +1,9 @@
 import { getProducts } from '@/lib/cms/products'
+import { toTProductItems } from '@/lib/cms/adapters'
 import { Metadata } from 'next'
+import HeaderFilterSection from '@/components/HeaderFilterSection'
+import ProductCard from '@/components/ProductCard'
+import SectionPromo1 from '@/components/SectionPromo1'
 
 export const metadata: Metadata = {
   title: 'Catalog',

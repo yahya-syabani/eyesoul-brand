@@ -1,4 +1,8 @@
-import { withPayload } from '@payloadcms/next/withPayload'
+/**
+ * Storefront Next.js config — no Payload dependency.
+ * The CMS runs as a separate app (apps/cms/). Update NEXT_PUBLIC_CMS_URL
+ * and the remotePatterns hostname below before deploying to production.
+ */
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -11,9 +15,10 @@ const nextConfig = {
         pathname: '/**',
       },
       {
+        // CMS server media uploads — update to real host before production deploy
         protocol: 'https',
-        hostname: 'localhost',
-        pathname: '/**',
+        hostname: 'cms.eyesoul.id',
+        pathname: '/media/**',
       },
       {
         protocol: 'https',
@@ -31,4 +36,5 @@ const nextConfig = {
   },
 }
 
-export default withPayload(nextConfig)
+export default nextConfig
+

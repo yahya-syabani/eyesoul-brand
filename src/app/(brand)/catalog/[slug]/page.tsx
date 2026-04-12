@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { BrandRichText } from '@/components/brand/BrandRichText'
 import { toTProductItem, toTProductItems } from '@/lib/cms/adapters'
-import { getProductBySlug, getRelatedProducts } from '@/lib/cms/products'
+import { getProductBySlug, getRelatedProducts, getProducts } from '@/lib/cms/products'
 import Prices from '@/components/Prices'
 import ProductStatus from '@/components/ProductStatus'
 import SectionSliderProductCard from '@/components/SectionSliderProductCard'
@@ -10,7 +10,6 @@ import { StarIcon } from '@heroicons/react/24/solid'
 import GalleryImages from '@/app/(shop)/(other-pages)/products/GalleryImages'
 import Policy from '@/app/(shop)/(other-pages)/products/Policy'
 import { Metadata, ResolvingMetadata } from 'next'
-import { getProductBySlug, getRelatedProducts, getProducts } from '@/lib/cms/products'
 
 export async function generateStaticParams() {
   const products = await getProducts({ limit: 100 })
@@ -131,16 +130,16 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: product.name,
+    name: product.title,
     image: galleryImages,
-    description: `Shop the ${product.name} eyewear collection. Designer frames with premium clarity and style.`,
+    description: `Shop the ${product.title} eyewear collection. Designer frames with premium clarity and style.`,
     brand: {
       '@type': 'Brand',
       name: 'Eyesoul',
     },
     offers: {
       '@type': 'Offer',
-      url: `https://eyesoul.brand/catalog/${product.slug}`,
+      url: `https://eyesoul.brand/catalog/${product.handle}`,
       priceCurrency: 'USD',
       price: product.price,
       availability: 'https://schema.org/InStock',

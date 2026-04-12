@@ -40,3 +40,7 @@ next-env.d.ts
 
 # Payload default local upload directory
 /media/
+
+# Playwright Test Outputs
+playwright-report/
+test-results/

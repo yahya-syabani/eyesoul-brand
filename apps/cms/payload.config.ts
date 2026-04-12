@@ -78,7 +78,9 @@ export default buildConfig({
             ? doc.slug
             : ''
         if (!slug) return ''
-        const base = (process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3000').replace(
+        // In split topology, canonical URLs must point to the storefront, not
+        // the CMS server. NEXT_PUBLIC_STOREFRONT_URL is the storefront origin.
+        const base = (process.env.NEXT_PUBLIC_STOREFRONT_URL ?? 'http://localhost:3000').replace(
           /\/$/,
           '',
         )

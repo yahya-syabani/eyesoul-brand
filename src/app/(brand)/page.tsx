@@ -1,5 +1,11 @@
 import { getProducts } from '@/lib/cms/products'
+import { getCollections } from '@/lib/cms/productCollections'
+import { toTProductItems, toTCollections } from '@/lib/cms/adapters'
 import { Metadata } from 'next'
+import SectionHero3 from '@/components/SectionHero/SectionHero3'
+import SectionSliderProductCard from '@/components/SectionSliderProductCard'
+import SectionCollectionSlider from '@/components/SectionCollectionSlider'
+import SectionGridFeatureItems from '@/components/SectionGridFeatureItems'
 
 export const metadata: Metadata = {
   title: 'Eyesoul — Clarity in every frame',

@@ -1,45 +1,39 @@
 import { draftMode } from 'next/headers'
 
-import type { Where } from 'payload'
+import type { WhereClause } from './client'
 
-const publishedClause: Where = {
-  _status: {
-    equals: 'published',
-  },
+const publishedClause: WhereClause = {
+  _status: { equals: 'published' },
 }
 
 /**
  * When Next draft mode is on, skip `_status` so previews can load drafts.
- * Hardening preview behind auth is deferred (EP-5/EP-6 per plan).
+ * Hardening preview behind auth is deferred (post Phase 1).
  */
 export async function shouldFilterPublishedOnly(): Promise<boolean> {
-  const dm = await draftMode()
-  return !dm.isEnabled
+  try {
+    const dm = await draftMode()
+    return !dm.isEnabled
+  } catch {
+    // Throws during generateStaticParams because there is no HTTP request context
+    return true
+  }
 }
 
 /**
- * Merge `where` with published-only constraint for anonymous-style reads.
- * Does not bypass Payload collection access rules (staff still get full API reads when authenticated).
+ * Merge `where` with published-only constraint for anonymous REST reads.
+ * The resulting object is serialised to query-string params by the REST client.
  */
-export async function mergePublishedWhere(where: Where = {}): Promise<Where> {
+export async function mergePublishedWhere(where: WhereClause = {}): Promise<WhereClause> {
   const filter = await shouldFilterPublishedOnly()
-  if (!filter) {
-    return where
-  }
+  if (!filter) return where
 
   const keys = Object.keys(where)
-  if (keys.length === 0) {
-    return { ...publishedClause }
+  if (keys.length === 0) return { ...publishedClause }
+
+  if ('and' in where && Array.isArray(where.and)) {
+    return { and: [publishedClause, ...where.and] }
   }
 
-  if ('and' in where && Array.isArray((where as { and: Where[] }).and)) {
-    const w = where as { and: Where[] }
-    return {
-      and: [publishedClause, ...w.and],
-    }
-  }
-
-  return {
-    and: [publishedClause, where],
-  }
+  return { and: [publishedClause, where] }
 }
