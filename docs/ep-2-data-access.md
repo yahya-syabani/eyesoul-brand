@@ -19,3 +19,9 @@
 ## Caching beyond RSC
 
 - This phase uses React `cache()` only. Cross-request **`unstable_cache`** / tag-based revalidation is deferred to EP-5 (ISR and publish hooks).
+
+## Build-time CMS fallback
+
+- `cmsFind` in [`src/lib/cms/client.ts`](../src/lib/cms/client.ts) includes a build-phase guard for `NEXT_PHASE === 'phase-production-build'`.
+- During storefront production build, unreachable CMS host or `5xx` CMS responses return an empty typed list instead of throwing.
+- This prevents build failures when CMS is temporarily offline while preserving strict runtime behavior in development/production requests.

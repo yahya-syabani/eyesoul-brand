@@ -24,6 +24,7 @@
 | Impact Area | Result |
 |-------------|--------|
 | Data access | Storefront uses Payload REST API over HTTP — no direct DB connection |
+| Storefront build resiliency | Build tolerates temporary CMS unavailability by falling back to empty CMS lists during build-time data collection |
 | Types | `payload-types.ts` must be manually synced on schema changes (see `dg-5-types-sync.md`) |
 | Local development | Run `apps/cms` on port 3001 + storefront on port 3000 concurrently |
 | Media | Uploaded media is served from the CMS host; storefront proxies via `next/image` |

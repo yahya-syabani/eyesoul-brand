@@ -25,6 +25,13 @@ Phase 1 branding site built with Next.js and Payload CMS. **(Status: Phase 1 Com
 
 Open `http://localhost:3000` for the storefront and `http://localhost:3001/admin` for Payload admin (`NEXT_PUBLIC_CMS_URL` should point at `http://localhost:3001`).
 
+## Build Behavior
+
+- `npm run build` builds the storefront.
+- `npm run build -w eyesoul-cms` builds the CMS app.
+- Storefront build now degrades gracefully when `NEXT_PUBLIC_CMS_URL` is temporarily unavailable (no hard failure during static generation).
+- For full CMS-backed static output in development, run CMS (`npm run dev -w eyesoul-cms`) before storefront build.
+
 ## Payload Scripts
 
 Run these from the repo root with `npm run <script> -w eyesoul-cms`, or `cd apps/cms` first:

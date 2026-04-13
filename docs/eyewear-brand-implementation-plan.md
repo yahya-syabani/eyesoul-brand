@@ -395,7 +395,7 @@ M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch 
 | `EP-2-3` | Collection queries | ✅ Done | `src/lib/cms/productCollections.ts` |
 | `EP-2-4` | Store / Service / Page queries | ✅ Done | `stores.ts`, `services.ts`, `pages.ts` |
 | `EP-2-5` | Utility functions | ✅ Done | `src/lib/slug.ts`, `urls.ts`, `links.ts`, `cn.ts` |
-| `EP-2-6` | Published-only query guards | ✅ Done | `src/lib/cms/published.ts`, `docs/ep-2-data-access.md` |
+| `EP-2-6` | Published-only query guards | ✅ Done | `src/lib/cms/published.ts`, `src/lib/cms/client.ts` build-phase fallback, `docs/ep-2-data-access.md` |
 
 ### EP-3 Shared UI System
 

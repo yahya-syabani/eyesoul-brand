@@ -7,7 +7,7 @@
 
 ## First Admin Creation
 1. Ensure local PostgreSQL is running and `apps/cms/.env.local` has a valid `DATABASE_URI`, then run `npm run dev`.
-2. Open `http://localhost:3000/admin`.
+2. Open `http://localhost:3001/admin`.
 3. On first boot, Payload shows the create-first-user screen.
 4. Create the initial admin account (email + password).
 5. Confirm access to the admin dashboard after login.
