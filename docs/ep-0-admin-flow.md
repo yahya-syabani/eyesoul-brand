@@ -6,7 +6,7 @@
 - GraphQL endpoints are mounted at `/api/graphql` and `/api/graphql-playground`.
 
 ## First Admin Creation
-1. Start local services and app (`docker compose up -d`, then `npm run dev`).
+1. Ensure local PostgreSQL is running and `apps/cms/.env.local` has a valid `DATABASE_URI`, then run `npm run dev`.
 2. Open `http://localhost:3000/admin`.
 3. On first boot, Payload shows the create-first-user screen.
 4. Create the initial admin account (email + password).

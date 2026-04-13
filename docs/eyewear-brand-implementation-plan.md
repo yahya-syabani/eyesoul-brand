@@ -87,7 +87,7 @@ M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch 
 | `EP-0-1` | Lock DG-1 runtime policy | Decide and document Next.js version, Payload version, Node.js minimum, TypeScript config target | ✅ Done |
 | `EP-0-2` | Finalize CMS integration baseline | Confirm Payload installation approach, adapter (PostgreSQL), and dependency policy for monorepo or standalone | ✅ Done |
 | `EP-0-3` | Environment variable runbook | Document all env vars by environment (`local`, `staging`, `production`), owner, and secret vs. public classification | ✅ Done |
-| `EP-0-4` | Configure local Postgres | Standardize connection string format, confirm local DB provisioning method (Docker / native), validate connectivity | ✅ Done |
+| `EP-0-4` | Configure local Postgres | Standardize connection string format, confirm local DB provisioning method (native local Postgres), validate connectivity | ✅ Done |
 | `EP-0-5` | Path alias and import conventions | Define `@/` aliases, import boundary rules, module resolution config in tsconfig and Next.js | ✅ Done |
 | `EP-0-6` | Typegen and migration scripts | Add `payload generate:types` and migration lifecycle scripts; run first type generation and commit output | ✅ Done |
 | `EP-0-7` | Admin route and initial user flow | Validate `/admin` route works, document initial admin creation steps, confirm role assignment | ✅ Done |
@@ -365,7 +365,7 @@ M1 — Foundation Ready        M2 — Core Experience Ready       M3 — Launch 
 | `EP-0-1` | Lock DG-1 runtime policy | ✅ Done | `docs/ep-0-runtime-policy.md` |
 | `EP-0-2` | Finalize CMS integration baseline | ✅ Done | `payload.config.js`, `/api`, `/admin` baseline wired |
 | `EP-0-3` | Environment variable runbook | ✅ Done | `.env.example`, `docs/ep-0-env-runbook.md` |
-| `EP-0-4` | Configure local Postgres | ✅ Done | `docker-compose.yml` + README bootstrap steps |
+| `EP-0-4` | Configure local Postgres | ✅ Done | `apps/cms/.env.example` + README bootstrap steps |
 | `EP-0-5` | Path alias and import conventions | ✅ Done | `@/*` + `@payload-config` path aliases documented |
 | `EP-0-6` | Typegen and migration scripts | ✅ Done | Payload scripts added to `package.json` |
 | `EP-0-7` | Admin route and initial user flow | ✅ Done | `docs/ep-0-admin-flow.md` + route wiring |

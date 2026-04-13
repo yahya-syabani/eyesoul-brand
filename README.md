@@ -4,7 +4,7 @@ Phase 1 branding site built with Next.js and Payload CMS. **(Status: Phase 1 Com
 
 ## Prerequisites
 - Node.js `>=20.9.0`
-- Docker Desktop (for local Postgres)
+- PostgreSQL (local running instance)
 - npm
 
 ## Local Setup (EP-0 baseline)
@@ -12,8 +12,9 @@ Phase 1 branding site built with Next.js and Payload CMS. **(Status: Phase 1 Com
    - `npm install`
 2. Create local environment file:
    - `cp .env.example .env.local`
-3. Start local PostgreSQL:
-   - `docker compose up -d`
+3. Configure CMS database environment:
+   - `cp apps/cms/.env.example apps/cms/.env.local`
+   - Update `DATABASE_URI` in `apps/cms/.env.local` if your local Postgres credentials differ
 4. Generate Payload artifacts (from `apps/cms/`, where the Payload CLI runs):
    - `npm run payload:sync-types` (generates types and copies them to `src/payload-types.ts` for the storefront)
    - `npm run payload:generate-importmap -w eyesoul-cms`

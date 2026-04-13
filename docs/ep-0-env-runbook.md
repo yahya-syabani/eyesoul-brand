@@ -10,18 +10,18 @@
 
 ## Local Baseline
 - Local `DATABASE_URI` format:
-  - `postgres://postgres:postgres@localhost:5433/eyesoul_brand`
+  - `postgres://postgres:postgres@localhost:5432/eyesoul_brand`
 - Use `.env.example` as the source template and copy to `.env.local`.
 - Never commit `.env.local` or production secrets.
 
 ## Provisioning Notes
-- `local`: developer-provisioned (Docker compose in repository)
+- `local`: developer-provisioned local PostgreSQL instance
 - `staging`: managed secret store
 - `production`: managed secret store with restricted access
 
 ## Validation Steps
 1. `npm install`
 2. `cp .env.example .env.local` and set a strong `PAYLOAD_SECRET`
-3. `docker compose up -d`
+3. Ensure local PostgreSQL is running and reachable from `DATABASE_URI`
 4. `npm run payload:generate-types`
 5. `npm run dev` and visit `/admin`
