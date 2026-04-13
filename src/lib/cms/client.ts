@@ -1,3 +1,5 @@
+import net from 'node:net'
+
 /**
  * Typed REST client for the Payload CMS API.
  *
@@ -10,6 +12,8 @@
  */
 
 const CMS_URL = (process.env.NEXT_PUBLIC_CMS_URL ?? 'http://localhost:3001').replace(/\/$/, '')
+const IS_BUILD_PHASE = process.env.NEXT_PHASE === 'phase-production-build'
+let cmsReachablePromise: Promise<boolean> | null = null
 
 export type WhereField =
   | { equals: unknown }
@@ -41,6 +45,50 @@ export type CmsListResponse<T> = {
   totalPages: number
   hasNextPage: boolean
   hasPrevPage: boolean
+}
+
+function emptyCmsList<T>(limit = 0, page = 1): CmsListResponse<T> {
+  return {
+    docs: [],
+    totalDocs: 0,
+    limit,
+    page,
+    totalPages: 0,
+    hasNextPage: false,
+    hasPrevPage: false,
+  }
+}
+
+async function isCmsReachableAtBuild(): Promise<boolean> {
+  if (!IS_BUILD_PHASE) return true
+  if (cmsReachablePromise) return cmsReachablePromise
+
+  cmsReachablePromise = new Promise<boolean>((resolve) => {
+    let url: URL
+    try {
+      url = new URL(CMS_URL)
+    } catch {
+      resolve(false)
+      return
+    }
+
+    const port =
+      url.port !== '' ? Number(url.port) : url.protocol === 'https:' ? 443 : 80
+
+    const socket = new net.Socket()
+    const done = (reachable: boolean) => {
+      socket.destroy()
+      resolve(reachable)
+    }
+
+    socket.setTimeout(350)
+    socket.once('connect', () => done(true))
+    socket.once('timeout', () => done(false))
+    socket.once('error', () => done(false))
+    socket.connect(port, url.hostname)
+  })
+
+  return cmsReachablePromise
 }
 
 /**
@@ -83,6 +131,13 @@ export async function cmsFind<T>(
   collection: string,
   options: CmsQueryOptions = {},
 ): Promise<CmsListResponse<T>> {
+  if (IS_BUILD_PHASE) {
+    const cmsReachable = await isCmsReachableAtBuild()
+    if (!cmsReachable) {
+      return emptyCmsList<T>(options.limit ?? 0, options.page ?? 1)
+    }
+  }
+
   const params = new URLSearchParams()
 
   if (options.limit != null) params.set('limit', String(options.limit))
@@ -101,13 +156,25 @@ export async function cmsFind<T>(
   const qs = params.toString()
   const url = `${CMS_URL}/api/${collection}${qs ? `?${qs}` : ''}`
 
-  const res = await fetch(url, {
-    // next.js cache: treat CMS responses as ISR-cacheable data
-    next: { revalidate: 60 },
-    headers: { Accept: 'application/json' },
-  })
+  let res: Response
+  try {
+    res = await fetch(url, {
+      // next.js cache: treat CMS responses as ISR-cacheable data
+      next: { revalidate: 60 },
+      headers: { Accept: 'application/json' },
+    })
+  } catch (error) {
+    // Build should still complete when CMS is temporarily offline.
+    if (IS_BUILD_PHASE) {
+      return emptyCmsList<T>(options.limit ?? 0, options.page ?? 1)
+    }
+    throw error
+  }
 
   if (!res.ok) {
+    if (IS_BUILD_PHASE && res.status >= 500) {
+      return emptyCmsList<T>(options.limit ?? 0, options.page ?? 1)
+    }
     throw new Error(`CMS fetch failed [${res.status}] GET /api/${collection} — ${res.statusText}`)
   }
 
