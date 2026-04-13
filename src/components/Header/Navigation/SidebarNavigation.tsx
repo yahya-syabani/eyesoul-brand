@@ -10,7 +10,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/solid'
 import { Search01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import clsx from 'clsx'
-import { redirect } from 'next/navigation'
+import { redirect, usePathname } from 'next/navigation'
 import React from 'react'
 
 interface SidebarNavigationProps {
@@ -19,6 +19,18 @@ interface SidebarNavigationProps {
 
 const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ data }) => {
   const handleClose = useClose()
+  const pathname = usePathname()
+
+  const isLinkActive = (href?: string) => {
+    if (!href || href === '#' || href.startsWith('/#')) return false
+    if (href === '/') return pathname === '/'
+    return pathname === href || pathname.startsWith(`${href}/`)
+  }
+
+  const isItemActive = (item: TNavigationItem): boolean => {
+    if (isLinkActive(item.href)) return true
+    return item.children?.some((child) => isItemActive(child)) ?? false
+  }
 
   const _renderMenuChild = (
     item: TNavigationItem,
@@ -30,7 +42,12 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ data }) => {
           <Disclosure key={index} as="li">
             <Link
               href={childMenu.href || '#'}
-              className={`mt-0.5 flex rounded-lg pr-4 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 ${itemClass}`}
+              className={clsx(
+                'mt-0.5 flex rounded-lg pr-4 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800',
+                itemClass,
+                isItemActive(childMenu) && 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100',
+              )}
+              aria-current={isItemActive(childMenu) ? 'page' : undefined}
             >
               <span className={`py-2.5 ${!childMenu.children ? 'block w-full' : ''}`}>{childMenu.name}</span>
               {childMenu.children && (
@@ -58,8 +75,13 @@ const SidebarNavigation: React.FC<SidebarNavigationProps> = ({ data }) => {
         <DisclosureButton className="flex w-full cursor-pointer rounded-lg px-3 text-start text-sm font-medium tracking-wide uppercase hover:bg-neutral-100 dark:hover:bg-neutral-800">
           <Link
             href={menu.href || '#'}
-            className={clsx(!menu.children?.length && 'flex-1', 'block py-2.5')}
+            className={clsx(
+              !menu.children?.length && 'flex-1',
+              'block py-2.5',
+              isItemActive(menu) && 'text-neutral-900 dark:text-neutral-100',
+            )}
             onClick={handleClose}
+            aria-current={isItemActive(menu) ? 'page' : undefined}
           >
             {menu.name}
           </Link>

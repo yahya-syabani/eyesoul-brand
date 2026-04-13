@@ -13,6 +13,11 @@ export type NavItem = { href: string; label: string }
 export function BrandHeader({ nav }: { nav: NavItem[] }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const isActive = (href: string) => {
+    if (!href) return false
+    if (href === '/') return pathname === '/'
+    return pathname === href || pathname.startsWith(`${href}/`)
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-brand-border bg-brand-surface/95 backdrop-blur-md motion-safe:transition-colors">
@@ -25,10 +30,11 @@ export function BrandHeader({ nav }: { nav: NavItem[] }) {
               href={item.href}
               className={cn(
                 'rounded-md px-3 py-2 text-sm font-medium motion-safe:transition-colors',
-                pathname === item.href
+                isActive(item.href)
                   ? 'bg-brand-muted text-brand-ink'
                   : 'text-brand-muted-foreground hover:bg-brand-muted/80 hover:text-brand-ink',
               )}
+              aria-current={isActive(item.href) ? 'page' : undefined}
             >
               {item.label}
             </Link>
@@ -59,8 +65,12 @@ export function BrandHeader({ nav }: { nav: NavItem[] }) {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-md px-3 py-2 text-sm font-medium text-brand-ink hover:bg-brand-muted"
+              className={cn(
+                'rounded-md px-3 py-2 text-sm font-medium text-brand-ink hover:bg-brand-muted',
+                isActive(item.href) && 'bg-brand-muted',
+              )}
               onClick={() => setOpen(false)}
+              aria-current={isActive(item.href) ? 'page' : undefined}
             >
               {item.label}
             </Link>

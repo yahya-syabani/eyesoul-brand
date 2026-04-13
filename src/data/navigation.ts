@@ -7,212 +7,85 @@ export async function getNavigation(): Promise<TNavigationItem[]> {
     },
     {
       id: '2',
-      href: '/collections/page-style-2/all',
-      name: 'Shop',
+      href: '/collections',
+      name: 'Collections',
     },
     {
       id: '3',
-      href: '/collections/all',
-      name: 'Beauty',
+      href: '/products/leather-tote-bag',
+      name: 'Products',
     },
     {
       id: '4',
-      href: '/collections/page-style-2/all',
-      name: 'Sport',
+      href: '/about',
+      name: 'About',
     },
     {
       id: '5',
-      href: '/collections/all',
-      name: 'Templates',
+      href: '/catalog',
+      name: 'Explore',
       type: 'mega-menu',
       children: [
         {
           id: '1',
-          href: '/',
-          name: 'Home Page',
+          href: '/catalog',
+          name: 'Catalog',
           type: 'dropdown',
           children: [
-            {
-              id: '1-1',
-              href: '/',
-              name: 'Home 1',
-            },
-            {
-              id: '1-2',
-              href: '/home-2',
-              name: 'Home 2',
-            },
-            { id: '1-3', href: '/', name: 'Header 1' },
-            { id: '1-4', href: '/home-2', name: 'Header 2' },
-            { id: '1-5', href: '/coming-soon', name: 'Coming Soon' },
+            { id: '1-1', href: '/catalog', name: 'Catalog' },
+            { id: '1-2', href: '/collections', name: 'Collections' },
+            { id: '1-3', href: '/stores', name: 'Stores' },
+            { id: '1-4', href: '/services', name: 'Services' },
           ],
         },
         {
           id: '2',
-          href: '/#',
-          name: 'Shop Pages',
+          href: '/about',
+          name: 'Company',
           type: 'dropdown',
           children: [
-            { id: '2-1', href: '/collections/sale-collection', name: 'Collection 1' },
-            { id: '2-2', href: '/collections/page-style-2/sale-collection', name: 'Collection 2' },
-            { id: '2-3', href: '/products/leather-tote-bag', name: 'Product 1' },
-            { id: '2-4', href: '/products/page-style-2/leather-tote-bag', name: 'Product 2' },
-            { id: '2-5', href: '/cart', name: 'Cart' },
-            { id: '2-6', href: '/checkout', name: 'Checkout', children: [] },
-            { id: '2-7', href: '/orders', name: 'Orders history' },
+            { id: '2-1', href: '/about', name: 'About' },
+            { id: '2-2', href: '/contact', name: 'Contact' },
+            { id: '2-3', href: '/blog', name: 'Blog' },
+            { id: '2-4', href: '/search', name: 'Search' },
           ],
         },
         {
           id: '3',
-          href: '/#',
-          name: 'Other Pages',
+          href: '/account',
+          name: 'Account',
           type: 'dropdown',
           children: [
-            { id: '3-2', href: '/search', name: 'Search' },
             { id: '3-4', href: '/account', name: 'Account' },
-            { id: '3-3', href: '/order-successful', name: 'Order Successful' },
-            { id: '3-1', href: '/checkout', name: 'Checkout' },
-            { id: '3-5', href: '/orders', name: 'Orders history' },
-            { id: '3-6', href: '/orders/4657', name: 'Order detail' },
-            { id: '3-7', href: '/subscription', name: 'Subscription' },
+            { id: '3-1', href: '/orders', name: 'Orders' },
+            { id: '3-2', href: '/cart', name: 'Cart' },
+            { id: '3-3', href: '/checkout', name: 'Checkout' },
+            { id: '3-4', href: '/subscription', name: 'Subscription' },
           ],
         },
         {
           id: '4',
-          href: '/#',
-          name: 'Other Pages',
+          href: '/login',
+          name: 'Auth',
           type: 'dropdown',
           children: [
-            { id: '4-1', href: '/blog', name: 'Blog' },
-            { id: '4-2', href: '/blog/graduation-dresses-style-guide', name: 'Blog Single' },
-            { id: '4-3', href: '/about', name: 'About' },
-            { id: '4-4', href: '/contact', name: 'Contact' },
-            { id: '4-5', href: '/login', name: 'Login' },
-            { id: '4-6', href: '/signup', name: 'Signup' },
-            { id: '4-7', href: '/forgot-password', name: 'Forgot Password' },
+            { id: '4-1', href: '/login', name: 'Login' },
+            { id: '4-2', href: '/signup', name: 'Signup' },
+            { id: '4-3', href: '/forgot-password', name: 'Forgot Password' },
           ],
         },
       ],
     },
     {
       id: '6',
-      href: '/collections/page-style-2/all',
-      name: 'Explore',
+      href: '/contact',
+      name: 'Support',
       type: 'dropdown',
       children: [
-        {
-          id: '3',
-          href: '/collections/all',
-          name: 'Collection pages',
-          type: 'dropdown',
-          children: [
-            {
-              id: '3-1',
-              href: '/collections/all',
-              name: 'Collection 1',
-            },
-            {
-              id: '3-2',
-              href: '/collections/page-style-2/all',
-              name: 'Collection 2',
-            },
-          ],
-        },
-        {
-          id: '4',
-          href: '/products/leather-tote-bag',
-          name: 'Product Pages',
-          type: 'dropdown',
-          children: [
-            {
-              id: '4-1',
-              href: '/products/leather-tote-bag',
-              name: 'Product 1',
-            },
-            {
-              id: '4-2',
-              href: '/products/page-style-2/leather-tote-bag',
-              name: 'Product 2',
-            },
-          ],
-        },
-        {
-          id: '5',
-          href: '/cart',
-          name: 'Cart Page',
-        },
-        {
-          id: '6',
-          href: '/checkout',
-          name: 'Checkout',
-        },
-        {
-          id: 'gid://6',
-          href: '/orders',
-          name: 'Orders',
-        },
-        {
-          id: '7',
-          href: '/search',
-          name: 'Search Page',
-        },
-        {
-          id: '8',
-          href: '/account',
-          name: 'Account Page',
-        },
-        {
-          id: '9',
-          href: '/about',
-          name: 'Other Pages',
-          type: 'dropdown',
-          children: [
-            {
-              id: '9-1',
-              href: '/about',
-              name: 'About',
-            },
-            {
-              id: '9-2',
-              href: '/contact',
-              name: 'Contact us',
-            },
-            {
-              id: '9-3',
-              href: '/login',
-              name: 'Login',
-            },
-            {
-              id: '9-4',
-              href: '/signup',
-              name: 'Signup',
-            },
-            {
-              id: '9-5',
-              href: '/subscription',
-              name: 'Subscription',
-            },
-            { id: '9-6', href: '/forgot-pass', name: 'Forgot Password' },
-          ],
-        },
-        {
-          id: '10',
-          href: '/blog',
-          name: 'Blog Page',
-          type: 'dropdown',
-          children: [
-            {
-              id: '10-1',
-              href: '/blog',
-              name: 'Blog Page',
-            },
-            {
-              id: '10-2',
-              href: '/blog/graduation-dresses-style-guide',
-              name: 'Blog Single',
-            },
-          ],
-        },
+        { id: '6-1', href: '/contact', name: 'Contact' },
+        { id: '6-2', href: '/stores', name: 'Stores' },
+        { id: '6-3', href: '/services', name: 'Services' },
+        { id: '6-4', href: '/search', name: 'Search' },
       ],
     },
   ]
@@ -220,9 +93,8 @@ export async function getNavigation(): Promise<TNavigationItem[]> {
 
 export async function getNavMegaMenu(): Promise<TNavigationItem> {
   const navigation = await getNavigation()
-
-  // Find the mega menu item in the navigation array
-  return navigation[4]
+  const megaMenuItem = navigation.find((item) => item.type === 'mega-menu')
+  return megaMenuItem ?? navigation[0] ?? {}
 }
 
 // ============ TYPE =============

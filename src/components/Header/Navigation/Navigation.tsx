@@ -1,3 +1,5 @@
+'use client'
+
 import CollectionCard3 from '@/components/CollectionCard3'
 import { TCollection } from '@/data/data'
 import { TNavigationItem } from '@/data/navigation'
@@ -5,12 +7,31 @@ import { Link } from '@/shared/link'
 import { ChevronDownIcon } from '@heroicons/react/24/solid'
 import clsx from 'clsx'
 import { FC } from 'react'
+import { usePathname } from 'next/navigation'
 
-const Lv1MenuItem = ({ menuItem }: { menuItem: TNavigationItem }) => {
+const isLinkActive = (pathname: string, href?: string) => {
+  if (!href || href === '#' || href.startsWith('/#')) return false
+  if (href === '/') return pathname === '/'
+  return pathname === href || pathname.startsWith(`${href}/`)
+}
+
+const isItemActive = (pathname: string, item: TNavigationItem): boolean => {
+  if (isLinkActive(pathname, item.href)) return true
+  return item.children?.some((child) => isItemActive(pathname, child)) ?? false
+}
+
+const Lv1MenuItem = ({ menuItem, pathname }: { menuItem: TNavigationItem; pathname: string }) => {
+  const active = isItemActive(pathname, menuItem)
   return (
     <Link
-      className="flex items-center self-center rounded-full px-4 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 lg:text-[15px] xl:px-5 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+      className={clsx(
+        'flex items-center self-center rounded-full px-4 py-2.5 text-sm font-medium lg:text-[15px] xl:px-5',
+        active
+          ? 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-neutral-200'
+          : 'text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800 dark:hover:text-neutral-200',
+      )}
       href={menuItem.href || '#'}
+      aria-current={active ? 'page' : undefined}
     >
       {menuItem.name}
       {menuItem.children?.length && (
@@ -20,13 +41,20 @@ const Lv1MenuItem = ({ menuItem }: { menuItem: TNavigationItem }) => {
   )
 }
 
-const MegaMenu = ({ menuItem, collection }: { menuItem: TNavigationItem; collection: TCollection }) => {
+const MegaMenu = ({ menuItem, collection, pathname }: { menuItem: TNavigationItem; collection: TCollection; pathname: string }) => {
   const renderNavlink = (item: TNavigationItem) => {
+    const active = isLinkActive(pathname, item.href)
     return (
       <li key={item.id} className={clsx('menu-item', item.isNew && 'menuIsNew')}>
         <Link
-          className="font-normal text-neutral-600 hover:text-black dark:text-neutral-400 dark:hover:text-white"
+          className={clsx(
+            'font-normal',
+            active
+              ? 'text-black dark:text-white'
+              : 'text-neutral-600 hover:text-black dark:text-neutral-400 dark:hover:text-white',
+          )}
           href={item.href || '#'}
+          aria-current={active ? 'page' : undefined}
         >
           {item.name}
         </Link>
@@ -36,7 +64,7 @@ const MegaMenu = ({ menuItem, collection }: { menuItem: TNavigationItem; collect
 
   return (
     <li className="menu-megamenu menu-item">
-      <Lv1MenuItem menuItem={menuItem} />
+      <Lv1MenuItem menuItem={menuItem} pathname={pathname} />
 
       {menuItem.children?.length && menuItem.type === 'mega-menu' ? (
         <div className="absolute inset-x-0 top-full z-10 sub-menu">
@@ -63,12 +91,19 @@ const MegaMenu = ({ menuItem, collection }: { menuItem: TNavigationItem; collect
   )
 }
 
-const DropdownMenu = ({ menuItem }: { menuItem: TNavigationItem }) => {
+const DropdownMenu = ({ menuItem, pathname }: { menuItem: TNavigationItem; pathname: string }) => {
   const renderMenuLink = (menuItem: TNavigationItem) => {
+    const active = isItemActive(pathname, menuItem)
     return (
       <Link
-        className="flex items-center rounded-md px-4 py-2 font-normal text-neutral-600 hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+        className={clsx(
+          'flex items-center rounded-md px-4 py-2 font-normal',
+          active
+            ? 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200'
+            : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200',
+        )}
         href={menuItem.href || '#'}
+        aria-current={active ? 'page' : undefined}
       >
         {menuItem.name}
         {menuItem.children?.length && <ChevronDownIcon className="ml-2 h-4 w-4 text-neutral-500" aria-hidden="true" />}
@@ -102,7 +137,7 @@ const DropdownMenu = ({ menuItem }: { menuItem: TNavigationItem }) => {
 
   return (
     <li className="menu-dropdown relative menu-item">
-      <Lv1MenuItem menuItem={menuItem} />
+      <Lv1MenuItem menuItem={menuItem} pathname={pathname} />
 
       {menuItem.children?.length && menuItem.type === 'dropdown' ? (
         <div className="absolute top-full left-0 z-10 sub-menu w-56">
@@ -130,18 +165,20 @@ export interface Props {
   featuredCollection: TCollection
 }
 const Navigation: FC<Props> = ({ menu, className, featuredCollection }) => {
+  const pathname = usePathname()
+
   return (
     <ul className={clsx('flex', className)}>
       {menu.map((menuItem) => {
         if (menuItem.type === 'dropdown') {
-          return <DropdownMenu key={menuItem.id} menuItem={menuItem} />
+          return <DropdownMenu key={menuItem.id} menuItem={menuItem} pathname={pathname} />
         }
         if (menuItem.type === 'mega-menu') {
-          return <MegaMenu collection={featuredCollection} key={menuItem.id} menuItem={menuItem} />
+          return <MegaMenu collection={featuredCollection} key={menuItem.id} menuItem={menuItem} pathname={pathname} />
         }
         return (
           <li key={menuItem.id} className="relative menu-item">
-            <Lv1MenuItem key={menuItem.id} menuItem={menuItem} />
+            <Lv1MenuItem key={menuItem.id} menuItem={menuItem} pathname={pathname} />
           </li>
         )
       })}
