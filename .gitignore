@@ -48,3 +48,4 @@ test-results/
 # Apps CMS build artifacts
 apps/cms/.next/
 
+apps/cms/media/

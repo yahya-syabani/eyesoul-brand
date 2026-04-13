@@ -1,6 +1,6 @@
 # eyesoul-brand
 
-Phase-1 branding site built with Next.js and Payload CMS.
+Phase 1 branding site built with Next.js and Payload CMS. **(Status: Phase 1 Completed / Launch Ready)**
 
 ## Prerequisites
 - Node.js `>=20.9.0`

@@ -10,7 +10,7 @@
 
 ## Local Baseline
 - Local `DATABASE_URI` format:
-  - `postgres://postgres:postgres@localhost:5432/eyesoul_brand`
+  - `postgres://postgres:postgres@localhost:5433/eyesoul_brand`
 - Use `.env.example` as the source template and copy to `.env.local`.
 - Never commit `.env.local` or production secrets.
 
