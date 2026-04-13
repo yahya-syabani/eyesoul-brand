@@ -20,6 +20,8 @@ export type WhereField =
   | { not_equals: unknown }
   | { in: unknown[] }
   | { contains: unknown }
+  | { greater_than_equal: number }
+  | { less_than_equal: number }
   | { exists: boolean }
 
 export type WhereClause = {

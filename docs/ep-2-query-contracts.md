@@ -12,7 +12,14 @@ Maps planned public routes (EP-4) to data-layer functions and empty-state behavi
 | `/services` | `getServices` | Empty state: “No services” |
 | `/about` | `getPageBySlug('about')` | **404** or fallback copy when null |
 | `/contact` | `getPageBySlug('contact')` | **404** or fallback when null |
+| `/journal` | `getPosts` | Empty state: “No published articles yet” |
+| `/journal/[slug]` | `getPostBySlug` | **404** when post is null |
 | `not-found` / `error` | None (static / brand UI) | N/A |
+
+## Phase-1 Route Guardrails
+
+- `src/app/(auth)` and `src/app/(accounts)` remain **design references only** in Phase 1.
+- These route groups are intentionally excluded from public nav and sitemap until real auth/account backends are implemented.
 
 ## Utilities
 

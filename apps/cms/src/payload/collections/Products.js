@@ -53,6 +53,25 @@ export const Products = {
       },
     },
     {
+      name: 'availabilityStatus',
+      type: 'select',
+      required: true,
+      defaultValue: 'in-stock',
+      options: [
+        {
+          label: 'In stock',
+          value: 'in-stock',
+        },
+        {
+          label: 'Available',
+          value: 'available',
+        },
+      ],
+      admin: {
+        description: 'Catalog availability filter value for storefront search.',
+      },
+    },
+    {
       name: 'images',
       type: 'relationship',
       relationTo: 'media',

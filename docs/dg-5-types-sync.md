@@ -68,3 +68,40 @@ npm run build
 ```
 
 TypeScript will surface any type mismatches introduced by the schema change.
+
+---
+
+## Migration + Sync Checklist (posts and availabilityStatus)
+
+When schema changes include collection additions or new fields (for example `posts` and `products.availabilityStatus`), run this checklist in order.
+
+1. Validate migration registration order:
+   - Check [apps/cms/src/migrations/index.ts](/Users/yahyasyabani/Documents/Developer/PROJECT/eyesoul-brand/apps/cms/src/migrations/index.ts)
+   - Ensure all files in [apps/cms/src/migrations/](/Users/yahyasyabani/Documents/Developer/PROJECT/eyesoul-brand/apps/cms/src/migrations/) are listed newest-last in `migrations`.
+2. Check migration status:
+   - `npm run payload:migrate:status -w eyesoul-cms`
+3. Apply migrations:
+   - `npm run payload:migrate -w eyesoul-cms`
+4. Sync generated Payload types:
+   - `npm run payload:sync-types`
+   - Script path: [scripts/sync-payload-types.mjs](/Users/yahyasyabani/Documents/Developer/PROJECT/eyesoul-brand/scripts/sync-payload-types.mjs)
+5. Verify both generated type files are updated together:
+   - `apps/cms/src/payload-types.ts` (canonical)
+   - `src/payload-types.ts` (storefront copy)
+6. Run compile checks from repo root:
+   - `npx tsc --noEmit`
+   - `npm run build`
+
+### Fresh bootstrap verification
+
+On a clean/local reset database:
+
+- Run migrations and seed:
+  - `npm run payload:migrate -w eyesoul-cms`
+  - `npm run payload:seed -w eyesoul-cms`
+- In Payload admin, confirm:
+  - `Products` includes `availabilityStatus` values (`in-stock`, `available`)
+  - `Posts` collection exists and seeded post(s) can be published
+- Re-run `npm run payload:sync-types` and verify generated types include:
+  - `Product.availabilityStatus`
+  - `posts` collection interfaces/select types

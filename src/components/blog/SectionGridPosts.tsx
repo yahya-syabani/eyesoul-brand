@@ -1,5 +1,5 @@
 import Heading from '@/components/Heading/Heading'
-import { TBlogPost } from '@/data/data'
+import type { BlogCardPost } from '@/lib/cms/ui-types'
 import {
   Pagination,
   PaginationList,
@@ -13,7 +13,7 @@ import PostCard1 from './PostCard1'
 //
 interface SectionLatestPostsProps {
   className?: string
-  posts: TBlogPost[]
+  posts: BlogCardPost[]
   heading?: string
 }
 

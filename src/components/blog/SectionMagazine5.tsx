@@ -1,11 +1,11 @@
-import { TBlogPost } from '@/data/data'
+import type { BlogCardPost } from '@/lib/cms/ui-types'
 import clsx from 'clsx'
 import { FC } from 'react'
 import PostCard1 from './PostCard1'
 import PostCard2 from './PostCard2'
 
 interface SectionMagazine5Props {
-  posts: TBlogPost[]
+  posts: BlogCardPost[]
   className?: string
 }
 

@@ -1,4 +1,4 @@
-import { TBlogPost } from '@/data/data'
+import type { BlogCardPost } from '@/lib/cms/ui-types'
 import NcImage from '@/shared/NcImage/NcImage'
 import { Link } from '@/shared/link'
 import { FC } from 'react'
@@ -6,7 +6,7 @@ import PostCardMeta from './PostCardMeta'
 
 interface Props {
   className?: string
-  post: TBlogPost
+  post: BlogCardPost
 }
 
 const PostCard2: FC<Props> = ({ className, post }) => {
@@ -16,7 +16,7 @@ const PostCard2: FC<Props> = ({ className, post }) => {
     <div className={`group relative flex justify-between gap-x-8 ${className}`}>
       <div className="flex h-full flex-col py-2">
         <h2 className={`block text-base font-semibold nc-card-title`}>
-          <Link href={'/blog-single'} className="line-clamp-2 capitalize" title={'title'}>
+          <Link href={'/journal/' + handle} className="line-clamp-2 capitalize" title={title}>
             {title}
           </Link>
         </h2>
@@ -31,11 +31,11 @@ const PostCard2: FC<Props> = ({ className, post }) => {
         </div>
       </div>
 
-      <Link href={'/blog/' + handle} className="relative block h-full w-2/5 shrink-0 sm:w-1/3">
+      <Link href={'/journal/' + handle} className="relative block h-full w-2/5 shrink-0 sm:w-1/3">
         {image?.src && (
           <NcImage
             alt={title}
-            src={image}
+            src={image.src}
             containerClassName="absolute inset-0"
             className="rounded-xl object-cover brightness-100 transition-[filter] group-hover:brightness-90 sm:rounded-3xl"
             sizes="400px"

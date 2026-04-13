@@ -1,4 +1,4 @@
-import { TBlogPost } from '@/data/data'
+import type { BlogCardPost } from '@/lib/cms/ui-types'
 import { Link } from '@/shared/link'
 import clsx from 'clsx'
 import Image from 'next/image'
@@ -7,7 +7,7 @@ import PostCardMeta from './PostCardMeta'
 
 interface Props {
   className?: string
-  post: TBlogPost
+  post: BlogCardPost
   size?: 'sm' | 'md'
 }
 
@@ -16,10 +16,10 @@ const PostCard1: FC<Props> = ({ className = 'h-full', post, size = 'md' }) => {
 
   return (
     <div className={clsx(className, 'flex flex-col', size === 'sm' && 'gap-y-6', size === 'md' && 'gap-y-10')}>
-      <Link href={'/blog/' + handle} title={title} className="relative block aspect-4/3 overflow-hidden rounded-3xl">
+      <Link href={'/journal/' + handle} title={title} className="relative block aspect-4/3 overflow-hidden rounded-3xl">
         {image?.src && (
           <Image
-            src={image}
+            src={image.src}
             alt={title || ''}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -36,7 +36,7 @@ const PostCard1: FC<Props> = ({ className = 'h-full', post, size = 'md' }) => {
             size === 'md' && 'text-lg sm:text-2xl'
           )}
         >
-          <Link href={'/blog/' + handle} className="line-clamp-1">
+          <Link href={'/journal/' + handle} className="line-clamp-1">
             {title}
           </Link>
         </h2>

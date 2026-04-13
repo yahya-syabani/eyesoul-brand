@@ -11,6 +11,7 @@ import { Media } from './src/payload/collections/Media.js'
 import { Pages } from './src/payload/collections/Pages.js'
 import { ProductCollections } from './src/payload/collections/ProductCollections.js'
 import { Products } from './src/payload/collections/Products.js'
+import { Posts } from './src/payload/collections/Posts.js'
 import { Services } from './src/payload/collections/Services.js'
 import { Stores } from './src/payload/collections/Stores.js'
 import { Users } from './src/payload/collections/Users.js'
@@ -37,7 +38,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, ProductCollections, Products, Stores, Services, Pages],
+  collections: [Users, Media, ProductCollections, Products, Stores, Services, Pages, Posts],
   db: postgresAdapter({
     pool: {
       connectionString: requiredEnv('DATABASE_URI'),
@@ -46,7 +47,7 @@ export default buildConfig({
   editor: standardLexicalEditor,
   plugins: [
     seoPlugin({
-      collections: ['product-collections', 'products', 'stores', 'services', 'pages'],
+      collections: ['product-collections', 'products', 'stores', 'services', 'pages', 'posts'],
       uploadsCollection: 'media',
       tabbedUI: true,
       generateTitle: ({ doc }) => {
@@ -87,6 +88,7 @@ export default buildConfig({
         const key = collectionConfig?.slug
         if (key === 'products') return `${base}/catalog/${slug}`
         if (key === 'product-collections') return `${base}/collections/${slug}`
+        if (key === 'posts') return `${base}/journal/${slug}`
         if (key === 'pages') return `${base}/${slug}`
         if (key === 'stores') return `${base}/stores`
         if (key === 'services') return `${base}/services`

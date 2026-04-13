@@ -10,6 +10,9 @@ import { StarIcon } from '@heroicons/react/24/solid'
 import GalleryImages from '@/app/(shop)/(other-pages)/products/GalleryImages'
 import Policy from '@/app/(shop)/(other-pages)/products/Policy'
 import { Metadata, ResolvingMetadata } from 'next'
+import AccordionInfo from '@/components/AccordionInfo'
+import ProductReviews from '@/app/(shop)/(other-pages)/products/ProductReviews'
+import type { ProductReviewItem } from '@/lib/cms/ui-types'
 
 export async function generateStaticParams() {
   const products = await getProducts({ limit: 100 })
@@ -79,6 +82,22 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   ]
 
   const galleryImages = (product.images || []).map((img) => img.src).filter(Boolean)
+  const reviews: ProductReviewItem[] = [
+    {
+      id: `${product.id}-r1`,
+      author: 'Eyesoul Customer',
+      date: 'Apr 10, 2026',
+      rating: 5,
+      content: `<p>Excellent lens clarity and a lightweight frame. Great for all-day wear.</p>`,
+    },
+    {
+      id: `${product.id}-r2`,
+      author: 'Verified Buyer',
+      date: 'Apr 03, 2026',
+      rating: 4,
+      content: `<p>Premium finish and comfortable fit. I would recommend this style.</p>`,
+    },
+  ]
 
   const renderRightSide = () => {
     return (
@@ -161,7 +180,15 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <div className="block xl:hidden">
           <Policy />
         </div>
-        
+
+        <AccordionInfo />
+
+        <ProductReviews
+          rating={product.rating || 4.5}
+          reviewNumber={reviews.length}
+          reviews={reviews}
+        />
+
         {relatedProducts.length > 0 && (
           <>
             <hr className="border-neutral-200 dark:border-neutral-700" />

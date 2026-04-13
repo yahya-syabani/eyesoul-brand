@@ -1,4 +1,4 @@
-import { TBlogPost } from '@/data/data'
+import type { BlogCardAuthor } from '@/lib/cms/ui-types'
 import Avatar from '@/shared/Avatar/Avatar'
 import { Link } from '@/shared/link'
 import { FC } from 'react'
@@ -6,7 +6,7 @@ import { FC } from 'react'
 interface PostCardMetaProps {
   className?: string
   hiddenAvatar?: boolean
-  author: TBlogPost['author']
+  author: BlogCardAuthor
   date: string
 }
 

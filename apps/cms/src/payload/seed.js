@@ -113,6 +113,7 @@ async function seed() {
     slug: 'sample-frame',
     description: lexicalParagraph('Sample eyewear for catalog preview (EP-1 seed).'),
     price: 129,
+    availabilityStatus: 'in-stock',
     images: [mediaId],
     collection: collectionId,
   })
@@ -175,6 +176,19 @@ async function seed() {
         href: 'https://wa.me/6281234567890',
       },
     ],
+  })
+
+  await upsertBySlug(payload, 'posts', 'how-to-choose-eyewear', {
+    title: 'How to choose eyewear for daily comfort',
+    slug: 'how-to-choose-eyewear',
+    excerpt: 'A practical guide to frame fit, lens choices, and comfort for all-day wear.',
+    content: lexicalParagraph('Use this seed article as a baseline and replace with editorial content in admin.'),
+    featuredImage: mediaId,
+    category: 'Guides',
+    authorName: 'Eyesoul Editorial Team',
+    authorBio: 'Writers and optician collaborators at Eyesoul.',
+    authorAvatar: mediaId,
+    timeToRead: '4 min read',
   })
 
   payload.logger.info('EP-1 seed completed.')

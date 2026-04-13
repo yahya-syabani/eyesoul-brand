@@ -1,4 +1,4 @@
-import { TReview } from '@/data/data'
+import type { ProductReviewItem } from '@/lib/cms/ui-types'
 import Avatar from '@/shared/Avatar/Avatar'
 import { StarIcon } from '@heroicons/react/24/solid'
 import clsx from 'clsx'
@@ -6,7 +6,7 @@ import { FC } from 'react'
 
 export interface ReviewItemProps {
   className?: string
-  data: TReview
+  data: ProductReviewItem
 }
 
 const ReviewItem: FC<ReviewItemProps> = ({ className, data }) => {

@@ -1,14 +1,16 @@
 import { MetadataRoute } from 'next'
 import { getProducts } from '@/lib/cms/products'
 import { getCollections } from '@/lib/cms/productCollections'
+import { getPosts } from '@/lib/cms/posts'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://eyesoul.brand'
 
   // Fetch all products and collections
-  const [products, collections] = await Promise.all([
+  const [products, collections, postsRes] = await Promise.all([
     getProducts({ limit: 1000 }),
     getCollections(),
+    getPosts({ limit: 1000, depth: 1 }),
   ])
 
   // Static routes
@@ -17,6 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/catalog',
     '/stores',
     '/services',
+    '/journal',
     '/about',
     '/contact',
   ].map((route) => ({
@@ -40,5 +43,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  return [...staticRoutes, ...productRoutes, ...collectionRoutes]
+  const postRoutes: MetadataRoute.Sitemap = postsRes.docs.map((post) => ({
+    url: `${baseUrl}/journal/${post.slug}`,
+    lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }))
+
+  return [...staticRoutes, ...productRoutes, ...collectionRoutes, ...postRoutes]
 }

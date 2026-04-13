@@ -2,7 +2,7 @@
 
 import ReviewItem from '@/components/ReviewItem'
 import StarReview from '@/components/StarReview'
-import { TReview } from '@/data/data'
+import type { ProductReviewItem } from '@/lib/cms/ui-types'
 import { Button } from '@/shared/Button/Button'
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/shared/dialog'
 import { Field, Fieldset, Label } from '@/shared/fieldset'
@@ -20,7 +20,7 @@ const ProductReviews = ({
   reviews,
   className,
 }: {
-  reviews: TReview[]
+  reviews: ProductReviewItem[]
   className?: string
   rating: number
   reviewNumber: number
