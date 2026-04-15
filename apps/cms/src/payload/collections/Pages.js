@@ -100,6 +100,37 @@ export const Pages = {
             },
           ],
         },
+        {
+          slug: 'faq',
+          labels: {
+            singular: 'FAQ',
+            plural: 'FAQ blocks',
+          },
+          fields: [
+            {
+              name: 'heading',
+              type: 'text',
+              admin: { description: 'Optional section title above the questions.' },
+            },
+            {
+              name: 'items',
+              type: 'array',
+              minRows: 1,
+              fields: [
+                {
+                  name: 'question',
+                  type: 'text',
+                  required: true,
+                },
+                {
+                  name: 'answer',
+                  type: 'textarea',
+                  required: true,
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
   ],

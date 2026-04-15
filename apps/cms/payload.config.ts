@@ -12,9 +12,11 @@ import { Pages } from './src/payload/collections/Pages.js'
 import { ProductCollections } from './src/payload/collections/ProductCollections.js'
 import { Products } from './src/payload/collections/Products.js'
 import { Posts } from './src/payload/collections/Posts.js'
+import { ProductReviews } from './src/payload/collections/ProductReviews.js'
 import { Services } from './src/payload/collections/Services.js'
 import { Stores } from './src/payload/collections/Stores.js'
 import { Users } from './src/payload/collections/Users.js'
+import { Homepage } from './src/payload/globals/Homepage.js'
 import { standardLexicalEditor } from './src/payload/lexical/editor.js'
 
 const filename = fileURLToPath(import.meta.url)
@@ -38,7 +40,18 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, ProductCollections, Products, Stores, Services, Pages, Posts],
+  collections: [
+    Users,
+    Media,
+    ProductCollections,
+    Products,
+    ProductReviews,
+    Stores,
+    Services,
+    Pages,
+    Posts,
+  ],
+  globals: [Homepage],
   db: postgresAdapter({
     pool: {
       connectionString: requiredEnv('DATABASE_URI'),

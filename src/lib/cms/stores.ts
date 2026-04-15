@@ -1,10 +1,26 @@
 import type { Store } from '@/payload-types'
 
 import { cmsFind } from './client'
+import type { WhereClause } from './client'
 import { mergePublishedWhere } from './published'
 
-export async function getStores(options: { limit?: number; depth?: number } = {}): Promise<Store[]> {
-  const where = await mergePublishedWhere({})
+export type GetStoresOptions = {
+  limit?: number
+  depth?: number
+  /** Exact match on `city` (optional storefront filter). */
+  city?: string
+  /** Exact match on `region` (optional storefront filter). */
+  region?: string
+}
+
+export async function getStores(options: GetStoresOptions = {}): Promise<Store[]> {
+  const and: WhereClause[] = []
+  const city = options.city?.trim()
+  const region = options.region?.trim()
+  if (city) and.push({ city: { equals: city } })
+  if (region) and.push({ region: { equals: region } })
+
+  const where = await mergePublishedWhere(and.length ? { and } : {})
   const res = await cmsFind<Store>('stores', {
     where,
     limit: options.limit ?? 100,

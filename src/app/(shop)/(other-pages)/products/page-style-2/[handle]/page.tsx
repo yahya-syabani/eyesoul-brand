@@ -26,7 +26,8 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
   const { handle } = await params
   const product = await getLegacyShopProductDetailByHandle(handle)
   const title = product?.title || 'product detail'
-  const description = product?.description || 'product detail page'
+  const description =
+    (product as { description?: string } | null | undefined)?.description ?? 'product detail page'
   return {
     title,
     description,
@@ -116,7 +117,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
               </span>
             </a>
             <span className="mx-2.5 hidden sm:block">·</span>
-            <ProductStatus status={status || ''} />
+            <ProductStatus status={status ?? 'In Stock'} />
           </div>
         </div>
         {/*  */}

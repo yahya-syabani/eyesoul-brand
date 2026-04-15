@@ -47,6 +47,13 @@ export const Stores = {
       type: 'text',
     },
     {
+      name: 'region',
+      type: 'text',
+      admin: {
+        description: 'Optional region or province for filtering.',
+      },
+    },
+    {
       name: 'phone',
       type: 'text',
       admin: {

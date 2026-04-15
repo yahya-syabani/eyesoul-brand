@@ -11,6 +11,8 @@ import SectionPromo3 from '@/components/SectionPromo3'
 import SectionSliderLargeProduct from '@/components/SectionSliderLargeProduct'
 import SectionSliderProductCard from '@/components/SectionSliderProductCard'
 import SectionMagazine5 from '@/components/blog/SectionMagazine5'
+import { getGroupCollections } from '@/data/data'
+import type { BlogCardPost } from '@/lib/cms/ui-types'
 import {
   getLegacyShopBlogPosts,
   getLegacyShopCollections,
@@ -50,7 +52,9 @@ async function PageHome2() {
         <SectionSliderLargeProduct products={carouselProducts3} />
         <div className="relative pt-24 pb-20 lg:pt-28">
           <BackgroundSection />
-          <SectionGridMoreExplore groupCollections={groupCollections} />
+          <SectionGridMoreExplore
+            groupCollections={groupCollections as Awaited<ReturnType<typeof getGroupCollections>>}
+          />
         </div>
       </div>
 
@@ -61,7 +65,7 @@ async function PageHome2() {
         <Divider />
         <div>
           <Heading headingDim="From the Ciseco blog">The latest news</Heading>
-          <SectionMagazine5 posts={blogPosts} />
+          <SectionMagazine5 posts={blogPosts as BlogCardPost[]} />
           <div className="mt-20 flex justify-center">
             <ButtonSecondary href="/blog">Show all blog articles</ButtonSecondary>
           </div>

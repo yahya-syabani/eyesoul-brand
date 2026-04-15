@@ -1,13 +1,14 @@
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { SerializedEditorState } from 'lexical'
 
-import type { Page, Product } from '@/payload-types'
+import type { Page, Product, ProductReview } from '@/payload-types'
 
 import { cn } from '@/lib/cn'
 
-type LexicalData = NonNullable<Product['description']> | NonNullable<
-  Extract<NonNullable<Page['blocks']>[number], { blockType: 'content' }>['body']
->
+type LexicalData =
+  | NonNullable<Product['description']>
+  | NonNullable<Extract<NonNullable<Page['blocks']>[number], { blockType: 'content' }>['body']>
+  | NonNullable<ProductReview['body']>
 
 export function BrandRichText({
   data,

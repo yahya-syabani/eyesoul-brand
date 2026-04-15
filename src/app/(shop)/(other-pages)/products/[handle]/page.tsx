@@ -29,7 +29,8 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
   const { handle } = await params
   const product = await getLegacyShopProductDetailByHandle(handle)
   const title = product?.title || 'product detail'
-  const description = product?.description || 'product detail page'
+  const description =
+    (product as { description?: string } | null | undefined)?.description ?? 'product detail page'
   return {
     title,
     description,
@@ -46,8 +47,9 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
     return notFound()
   }
 
-  const { title, status, featuredImage, rating, reviewNumber, options, price, selectedOptions, images, breadcrumbs } =
-    product
+  const { title, status, featuredImage, rating, reviewNumber, options, price, selectedOptions, images } = product
+  const breadcrumbs =
+    (product as { breadcrumbs?: Array<{ id: number; name: string; href: string }> }).breadcrumbs ?? []
   const sizeSelected = selectedOptions?.find((option) => option.name === 'Size')?.value || ''
   const colorSelected = selectedOptions?.find((option) => option.name === 'Color')?.value || ''
 
@@ -72,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
                   </div>
                 </a>
                 <span>·</span>
-                <ProductStatus status={status} />
+                <ProductStatus status={status ?? 'In Stock'} />
               </div>
             </div>
           </div>

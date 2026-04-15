@@ -8,6 +8,7 @@ import { BrandButton } from './BrandButton'
 import { BrandRichText } from './BrandRichText'
 import { BrandH2, BrandLead } from './BrandTypography'
 import { resolveBrandImage } from './brandMedia'
+import { FaqBlock } from './FaqBlock'
 
 type Block = NonNullable<Page['blocks']>[number]
 
@@ -64,6 +65,10 @@ function PageBlock({ block }: { block: Block }) {
         </BrandButton>
       </section>
     )
+  }
+
+  if (block.blockType === 'faq') {
+    return <FaqBlock heading={block.heading} items={block.items} />
   }
 
   return null

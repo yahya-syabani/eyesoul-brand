@@ -1,12 +1,14 @@
-import {
-  getCatalogProducts,
-  type CatalogSort,
-  type CatalogStatusFilter,
-} from '@/lib/cms/products'
-import { toTProductItems } from '@/lib/cms/adapters'
-import { Metadata } from 'next'
+import { CatalogFilterChips } from '@/components/brand/CatalogFilterChips'
 import ProductCard from '@/components/ProductCard'
 import SectionPromo1 from '@/components/SectionPromo1'
+import {
+  buildCatalogQueryString,
+  getCatalogFilterChips,
+  parseCatalogSearchParams,
+  type CatalogSearchParams,
+} from '@/lib/catalog/searchParams'
+import { toTProductItems } from '@/lib/cms/adapters'
+import { getCatalogProducts } from '@/lib/cms/products'
 import { getCollections } from '@/lib/cms/productCollections'
 import {
   Pagination,
@@ -18,23 +20,15 @@ import {
 } from '@/shared/Pagination/Pagination'
 import { Search01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
+import Link from 'next/link'
+import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Catalog',
   description: 'Browse our exclusive collection of premium eyewear and designer frames.',
 }
 
-type CatalogSearchParams = {
-  q?: string
-  collection?: string
-  status?: CatalogStatusFilter
-  minPrice?: string
-  maxPrice?: string
-  sort?: CatalogSort
-  page?: string
-}
-
-const SORT_OPTIONS: Array<{ label: string; value: CatalogSort }> = [
+const SORT_OPTIONS: Array<{ label: string; value: CatalogSearchParams['sort'] }> = [
   { label: 'Newest', value: 'newest' },
   { label: 'Oldest', value: 'oldest' },
   { label: 'Price: low to high', value: 'price-low-to-high' },
@@ -42,16 +36,6 @@ const SORT_OPTIONS: Array<{ label: string; value: CatalogSort }> = [
   { label: 'Name: A to Z', value: 'name-a-z' },
   { label: 'Name: Z to A', value: 'name-z-a' },
 ]
-
-function toQueryString(params: CatalogSearchParams): string {
-  const query = new URLSearchParams()
-  for (const [key, value] of Object.entries(params)) {
-    if (!value) continue
-    query.set(key, value)
-  }
-  const text = query.toString()
-  return text ? `?${text}` : ''
-}
 
 function parsePositiveNumber(value: string | undefined): number | undefined {
   if (!value) return undefined
@@ -85,18 +69,11 @@ export default async function CatalogPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   const raw = await searchParams
-  const queryParams: CatalogSearchParams = {
-    q: typeof raw.q === 'string' ? raw.q : undefined,
-    collection: typeof raw.collection === 'string' ? raw.collection : undefined,
-    status: typeof raw.status === 'string' ? (raw.status as CatalogStatusFilter) : 'all',
-    minPrice: typeof raw.minPrice === 'string' ? raw.minPrice : undefined,
-    maxPrice: typeof raw.maxPrice === 'string' ? raw.maxPrice : undefined,
-    sort: typeof raw.sort === 'string' ? (raw.sort as CatalogSort) : 'newest',
-    page: typeof raw.page === 'string' ? raw.page : '1',
-  }
+  const queryParams = parseCatalogSearchParams(raw)
 
   const collections = await getCollections({ depth: 1 })
   const collectionBySlug = new Map(collections.map((item) => [item.slug, item.id]))
+  const collectionTitleBySlug = new Map(collections.map((item) => [item.slug, item.title]))
   const selectedCollectionId = queryParams.collection ? collectionBySlug.get(queryParams.collection) : undefined
 
   const page = Math.max(1, Number(queryParams.page ?? '1') || 1)
@@ -113,6 +90,7 @@ export default async function CatalogPage({
   })
 
   const products = toTProductItems(result.docs)
+  const filterChips = getCatalogFilterChips(queryParams, collectionTitleBySlug)
 
   return (
     <div className="nc-PageSearch relative">
@@ -222,14 +200,16 @@ export default async function CatalogPage({
               >
                 Apply filters
               </button>
-              <a
+              <Link
                 href="/catalog"
                 className="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
               >
                 Reset
-              </a>
+              </Link>
             </div>
           </form>
+
+          <CatalogFilterChips params={queryParams} chips={filterChips} />
 
           <p className="mt-6 text-sm text-neutral-500">
             Showing {products.length} of {result.totalDocs} products
@@ -254,7 +234,7 @@ export default async function CatalogPage({
                 <PaginationPrevious
                   href={
                     result.hasPrevPage
-                      ? `/catalog${toQueryString({ ...queryParams, page: String(result.page - 1) })}`
+                      ? `/catalog${buildCatalogQueryString({ ...queryParams, page: String(result.page - 1) })}`
                       : null
                   }
                 />
@@ -262,20 +242,20 @@ export default async function CatalogPage({
                   {buildPaginationModel(result.page, result.totalPages).map((item, index) => {
                     if (item === 'gap') return <PaginationGap key={`gap-${index}`} />
                     return (
-                        <PaginationPage
-                          key={item}
-                          href={`/catalog${toQueryString({ ...queryParams, page: String(item) })}`}
-                          current={item === result.page}
-                        >
-                          {item}
-                        </PaginationPage>
+                      <PaginationPage
+                        key={item}
+                        href={`/catalog${buildCatalogQueryString({ ...queryParams, page: String(item) })}`}
+                        current={item === result.page}
+                      >
+                        {item}
+                      </PaginationPage>
                     )
                   })}
                 </PaginationList>
                 <PaginationNext
                   href={
                     result.hasNextPage
-                      ? `/catalog${toQueryString({ ...queryParams, page: String(result.page + 1) })}`
+                      ? `/catalog${buildCatalogQueryString({ ...queryParams, page: String(result.page + 1) })}`
                       : null
                   }
                 />
@@ -289,4 +269,3 @@ export default async function CatalogPage({
     </div>
   )
 }
-

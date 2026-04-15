@@ -37,9 +37,31 @@ Slug rules: lowercase, `[a-z0-9-]+`, auto-normalized from `name` or `title` when
 | slug        | text          | Unique, normalized                  |
 | description | richText      | Lexical                             |
 | price       | number        | Min 0                               |
+| availabilityStatus | select | `in-stock` \| `available` (catalog filter) |
 | images      | relationship  | hasMany → `media`                   |
 | collection  | relationship  | → `product-collections`             |
+| specs       | group         | Optional fit/lens measurements, materials, `dimensionDiagram` → `media`, `showSpecsOnPdp` |
+| videoUrl    | text          | Optional YouTube/Vimeo URL (validated in admin) |
+| videoPoster | upload        | Optional → `media`                  |
 | Draft/publish | versions    | `drafts: true` (replaces separate `status` field) |
+
+## Product reviews (`product-reviews`)
+
+| Field       | Type          | Notes                               |
+| ----------- | ------------- | ----------------------------------- |
+| product     | relationship  | Required → `products`               |
+| rating      | number        | 1–5                                  |
+| title       | text          | Required                             |
+| body        | richText      | Lexical                              |
+| authorName  | text          | Required                             |
+| verified    | checkbox      | Default false                        |
+| Draft/publish | versions    | `drafts: true`                      |
+
+## Homepage global (`homepage`)
+
+| Field    | Type   | Notes                                      |
+| -------- | ------ | ------------------------------------------ |
+| modules  | blocks | `heroModule`, `collectionSpotlight`, `productRow`, `journalFeature`, `seasonalBanner` |
 
 ## Stores (`stores`)
 
@@ -49,6 +71,7 @@ Slug rules: lowercase, `[a-z0-9-]+`, auto-normalized from `name` or `title` when
 | slug       | text     | Unique               |
 | address    | text     | Multi-line           |
 | city       | text     | Optional             |
+| region     | text     | Optional (filtering) |
 | phone      | text     | Optional             |
 | whatsApp   | text     | Optional (wa.me URL) |
 | email      | email    | Optional             |
@@ -67,6 +90,10 @@ Slug rules: lowercase, `[a-z0-9-]+`, auto-normalized from `name` or `title` when
 | description   | textarea | Optional           |
 | icon          | upload   | Optional → `media` |
 | displayOrder  | number   | Default 0          |
+| serviceType   | select   | `exam` \| `fitting` \| `adjustments` \| `other` |
+| bookingUrl    | text     | Optional external booking link |
+| bookingPhone  | text     | Optional when no URL          |
+| primaryCtaLabel | text   | Default “Book appointment”     |
 | Draft/publish | versions | `drafts: true`   |
 
 ## Pages (`pages`)
@@ -85,6 +112,7 @@ Slug rules: lowercase, `[a-z0-9-]+`, auto-normalized from `name` or `title` when
 | content          | `body` richText (Lexical)                   |
 | hero             | `heading`, `subheading`, optional `image`   |
 | cta              | `label`, `href`                             |
+| faq              | optional `heading`, `items[]` with `question`, `answer` |
 
 ## Public read policy
 
@@ -92,4 +120,4 @@ Unauthenticated `read`: only documents with `_status === 'published'`. Authentic
 
 ## SEO plugin
 
-Collections: `product-collections`, `products`, `stores`, `services`, `pages`. Uploads: `media`. Title/description/image fallbacks defined in plugin config (no duplicate manual meta fields).
+Collections: `product-collections`, `products`, `stores`, `services`, `pages`, `posts`. Uploads: `media`. Title/description/image fallbacks defined in plugin config (no duplicate manual meta fields).

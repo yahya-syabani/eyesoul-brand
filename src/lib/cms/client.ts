@@ -182,3 +182,53 @@ export async function cmsFind<T>(
 
   return res.json() as Promise<CmsListResponse<T>>
 }
+
+export type CmsGlobalOptions = {
+  depth?: number
+}
+
+/**
+ * Fetch a single Payload global document via REST (`GET /api/globals/:slug`).
+ * Returns null when the global is missing or CMS is unreachable during build.
+ */
+export async function cmsGetGlobal<T>(slug: string, options: CmsGlobalOptions = {}): Promise<T | null> {
+  if (IS_BUILD_PHASE) {
+    const cmsReachable = await isCmsReachableAtBuild()
+    if (!cmsReachable) {
+      return null
+    }
+  }
+
+  const params = new URLSearchParams()
+  if (options.depth != null) params.set('depth', String(options.depth))
+
+  const qs = params.toString()
+  const url = `${CMS_URL}/api/globals/${slug}${qs ? `?${qs}` : ''}`
+
+  let res: Response
+  try {
+    res = await fetch(url, {
+      next: { revalidate: 60 },
+      headers: { Accept: 'application/json' },
+    })
+  } catch {
+    return null
+  }
+
+  if (res.status === 404) {
+    return null
+  }
+
+  if (!res.ok) {
+    if (res.status >= 500) {
+      return null
+    }
+    throw new Error(`CMS fetch failed [${res.status}] GET /api/globals/${slug} — ${res.statusText}`)
+  }
+
+  const json = (await res.json()) as T | { result?: T }
+  if (json && typeof json === 'object' && 'result' in json && json.result != null) {
+    return json.result as T
+  }
+  return json as T
+}

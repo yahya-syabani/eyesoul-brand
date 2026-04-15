@@ -108,7 +108,7 @@ async function seed() {
     coverImage: mediaId,
   })
 
-  await upsertBySlug(payload, 'products', 'sample-frame', {
+  const productId = await upsertBySlug(payload, 'products', 'sample-frame', {
     name: 'Sample Frame',
     slug: 'sample-frame',
     description: lexicalParagraph('Sample eyewear for catalog preview (EP-1 seed).'),
@@ -116,6 +116,20 @@ async function seed() {
     availabilityStatus: 'in-stock',
     images: [mediaId],
     collection: collectionId,
+    specs: {
+      showSpecsOnPdp: true,
+      bridgeMm: 18,
+      templeMm: 145,
+      lensWidthMm: 52,
+      lensHeightMm: 42,
+      lensType: 'single-vision',
+      lensMaterial: 'polycarbonate',
+      lensTreatment: 'anti-reflective',
+      frameMaterial: 'acetate',
+      fitNotes: 'Medium fit for most adults.',
+      faceShapeHints: 'Oval, heart',
+    },
+    videoUrl: 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
   })
 
   await upsertBySlug(payload, 'stores', 'flagship-store', {
@@ -123,6 +137,7 @@ async function seed() {
     slug: 'flagship-store',
     address: '123 Example Street\nJakarta',
     city: 'Jakarta',
+    region: 'Java',
     phone: '+62-21-0000-0000',
     whatsApp: 'https://wa.me/6281234567890',
     email: 'store@example.com',
@@ -141,6 +156,9 @@ async function seed() {
     description: 'Comprehensive vision screening and prescription check.',
     icon: mediaId,
     displayOrder: 0,
+    serviceType: 'exam',
+    bookingUrl: 'https://cal.com',
+    primaryCtaLabel: 'Book eye exam',
   })
 
   await upsertBySlug(payload, 'pages', 'about', {
@@ -158,6 +176,20 @@ async function seed() {
         body: lexicalParagraph(
           'This is seeded content from EP-1. Replace with your brand story in the admin.',
         ),
+      },
+      {
+        blockType: 'faq',
+        heading: 'Common questions',
+        items: [
+          {
+            question: 'Do you offer eye exams?',
+            answer: 'Yes — book an exam at one of our locations or use the booking link on the Services page.',
+          },
+          {
+            question: 'What is your return policy?',
+            answer: 'Contact the store where you purchased for returns and exchanges. Policies may vary by region.',
+          },
+        ],
       },
     ],
   })
@@ -178,7 +210,7 @@ async function seed() {
     ],
   })
 
-  await upsertBySlug(payload, 'posts', 'how-to-choose-eyewear', {
+  const postId = await upsertBySlug(payload, 'posts', 'how-to-choose-eyewear', {
     title: 'How to choose eyewear for daily comfort',
     slug: 'how-to-choose-eyewear',
     excerpt: 'A practical guide to frame fit, lens choices, and comfort for all-day wear.',
@@ -189,6 +221,63 @@ async function seed() {
     authorBio: 'Writers and optician collaborators at Eyesoul.',
     authorAvatar: mediaId,
     timeToRead: '4 min read',
+  })
+
+  const existingReview = await payload.find({
+    collection: 'product-reviews',
+    where: { product: { equals: productId } },
+    limit: 1,
+    draft: true,
+  })
+  if (!existingReview.docs[0]) {
+    await payload.create({
+      collection: 'product-reviews',
+      data: {
+        product: productId,
+        rating: 5,
+        title: 'Clear lenses, comfortable fit',
+        body: lexicalParagraph('Lightweight frame and sharp optics — great for daily wear.'),
+        authorName: 'Seed Customer',
+        verified: true,
+        _status: 'published',
+      },
+      draft: false,
+    })
+  }
+
+  await payload.updateGlobal({
+    slug: 'homepage',
+    data: {
+      modules: [
+        {
+          blockType: 'heroModule',
+          eyebrow: 'New season',
+          heading: 'Clarity in every frame',
+          subheading: 'Eyewear and vision care, crafted for daily life.',
+          image: mediaId,
+          ctaLabel: 'Shop catalog',
+          ctaHref: '/catalog',
+        },
+        {
+          blockType: 'collectionSpotlight',
+          heading: 'Shop by collection',
+          subHeading: 'Explore by style',
+          collections: [collectionId],
+        },
+        {
+          blockType: 'productRow',
+          heading: 'Featured frames',
+          subHeading: 'Bestsellers from the seed catalog',
+          products: [productId],
+        },
+        {
+          blockType: 'journalFeature',
+          heading: 'From the journal',
+          subHeading: 'Guides and stories',
+          posts: [postId],
+        },
+      ],
+    },
   })
 
   payload.logger.info('EP-1 seed completed.')

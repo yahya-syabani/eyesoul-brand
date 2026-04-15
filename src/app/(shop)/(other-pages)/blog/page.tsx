@@ -3,6 +3,7 @@ import SectionPromo2 from '@/components/SectionPromo2'
 import SectionAds from '@/components/blog/SectionAds'
 import SectionGridPosts from '@/components/blog/SectionGridPosts'
 import SectionMagazine5 from '@/components/blog/SectionMagazine5'
+import type { BlogCardPost } from '@/lib/cms/ui-types'
 import { getLegacyShopBlogPosts } from '@/lib/cms/shopLegacy'
 import { Metadata } from 'next'
 import React from 'react'
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
 }
 
 const BlogPage: React.FC = async () => {
-  const blogPosts = await getLegacyShopBlogPosts()
+  const blogPosts = (await getLegacyShopBlogPosts()) as BlogCardPost[]
 
   return (
     <div>

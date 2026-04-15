@@ -37,7 +37,7 @@ const CheckoutPage = async () => {
           {image?.src && (
             <Image
               fill
-              src={image}
+              src={image.src}
               alt={image.alt || ''}
               sizes="300px"
               className="object-contain object-center"

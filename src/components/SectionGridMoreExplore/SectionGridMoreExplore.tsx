@@ -38,7 +38,9 @@ const SectionGridMoreExplore: FC<SectionGridMoreExploreProps> = ({
   groupCollections,
   heading = 'Start exploring.',
 }) => {
-  const [tabActive, setTabActive] = useState(groupCollections[1].id)
+  const [tabActive, setTabActive] = useState(
+    () => groupCollections[1]?.id ?? groupCollections[0]?.id ?? '',
+  )
 
   const renderCollectionCard = (collection: TCollection, index: number) => {
     switch (boxCard) {

@@ -10,6 +10,8 @@ interface SectionMagazine5Props {
 }
 
 const SectionMagazine5: FC<SectionMagazine5Props> = ({ posts, className }) => {
+  if (!posts.length) return null
+
   const featuredPost = posts[0]
   const otherPosts = posts.slice(1, 4)
 

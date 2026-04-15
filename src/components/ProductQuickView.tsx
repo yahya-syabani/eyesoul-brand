@@ -232,7 +232,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className }) => {
                 <div key={index} className="aspect-w-3 aspect-h-4">
                   <Image
                     fill
-                    src={image}
+                    src={image.src}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="w-full rounded-xl object-cover"
                     alt={image.alt}

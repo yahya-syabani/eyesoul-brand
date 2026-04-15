@@ -36,7 +36,7 @@ const CartPage = async () => {
           {image?.src && (
             <Image
               fill
-              src={image}
+              src={image.src}
               alt={image.alt || ''}
               sizes="300px"
               className="rounded-xl object-contain object-center"

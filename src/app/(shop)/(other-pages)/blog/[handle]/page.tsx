@@ -1,5 +1,6 @@
 import { Divider } from '@/components/Divider'
 import PostCard1 from '@/components/blog/PostCard1'
+import type { BlogCardPost } from '@/lib/cms/ui-types'
 import { getLegacyShopBlogPostByHandle, getLegacyShopBlogPosts } from '@/lib/cms/shopLegacy'
 import Avatar from '@/shared/Avatar/Avatar'
 import ButtonPrimary from '@/shared/Button/ButtonPrimary'
@@ -38,15 +39,16 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
 
 export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params
-  const { featuredImage, id, author, content, date, title, timeToRead, category, excerpt, tags } =
-    await getLegacyShopBlogPostByHandle(handle)
+  const post = await getLegacyShopBlogPostByHandle(handle)
+  const { featuredImage, id, author, date, title, timeToRead, category, excerpt } = post
+  const tags = (post as { tags?: string[] }).tags
 
   if (!id) {
     return notFound()
   }
 
   // only get the first 4 posts demo
-  const relatedPosts = (await getLegacyShopBlogPosts()).slice(0, 4)
+  const relatedPosts = (await getLegacyShopBlogPosts()).slice(0, 4) as BlogCardPost[]
 
   const renderHeader = () => {
     return (
@@ -190,7 +192,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
   const renderTags = () => {
     return (
       <div className="mx-auto flex w-full max-w-(--breakpoint-md) flex-wrap gap-2">
-        {tags.map((tag) => (
+        {(tags ?? []).map((tag) => (
           <Tag key={tag} className="mb-2">
             {tag}
           </Tag>

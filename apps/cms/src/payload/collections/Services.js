@@ -51,5 +51,36 @@ export const Services = {
       type: 'number',
       defaultValue: 0,
     },
+    {
+      name: 'serviceType',
+      type: 'select',
+      required: true,
+      defaultValue: 'other',
+      options: [
+        { label: 'Exam', value: 'exam' },
+        { label: 'Fitting', value: 'fitting' },
+        { label: 'Adjustments', value: 'adjustments' },
+        { label: 'Other', value: 'other' },
+      ],
+    },
+    {
+      name: 'bookingUrl',
+      type: 'text',
+      admin: {
+        description: 'Optional Cal.com, Google Appointments, or other booking link.',
+      },
+    },
+    {
+      name: 'bookingPhone',
+      type: 'text',
+      admin: {
+        description: 'Optional phone for booking when no URL is set.',
+      },
+    },
+    {
+      name: 'primaryCtaLabel',
+      type: 'text',
+      defaultValue: 'Book appointment',
+    },
   ],
 }

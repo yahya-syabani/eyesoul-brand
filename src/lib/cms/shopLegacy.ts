@@ -22,7 +22,14 @@ export async function getLegacyShopProducts(): Promise<TProductItem[]> {
   return toTProductItems(products)
 }
 
-export async function getLegacyShopProductDetailByHandle(handle: string): Promise<TProductItem> {
+export async function getLegacyShopProductDetailByHandle(
+  handle: string,
+): Promise<
+  TProductItem & {
+    description?: string
+    breadcrumbs?: Array<{ id: number; name: string; href: string }>
+  }
+> {
   const product = await getProductBySlug(handle, { depth: 2 })
   if (!product) return {}
 
@@ -65,16 +72,28 @@ function toLegacyBlogPost(post: Awaited<ReturnType<typeof getPosts>>['docs'][num
     excerpt: card.excerpt,
     date: card.date,
     timeToRead: card.timeToRead,
-    category: card.category ? { title: card.category.title } : { title: 'Journal' },
-    featuredImage: card.featuredImage,
+    category: card.category
+      ? { title: card.category.title, href: card.category.href }
+      : { title: 'Journal', href: '/journal' },
+    featuredImage: {
+      src: card.featuredImage.src,
+      width: card.featuredImage.width ?? 1600,
+      height: card.featuredImage.height ?? 900,
+      alt: card.featuredImage.alt ?? '',
+    },
     tags: ['eyesoul', 'journal'],
     author: {
       name: card.author.name,
-      avatar: card.author.avatar,
-      description: card.author.description,
+      avatar: {
+        src: card.author.avatar.src,
+        width: card.author.avatar.width ?? 96,
+        height: card.author.avatar.height ?? 96,
+        alt: card.author.avatar.alt ?? '',
+      },
+      description: card.author.description ?? '',
     },
     content: post.content,
-  }
+  } as TBlogPost
 }
 
 export async function getLegacyShopBlogPosts(): Promise<TBlogPost[]> {
@@ -138,7 +157,7 @@ export async function getLegacyOrders(): Promise<TOrder[]> {
       })),
       cost: cart.cost,
     },
-  ]
+  ] as unknown as TOrder[]
 }
 
 export async function getLegacyShopCollections(): Promise<TCollection[]> {

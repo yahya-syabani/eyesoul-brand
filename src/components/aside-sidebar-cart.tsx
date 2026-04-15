@@ -71,7 +71,7 @@ const CartProduct = ({ product }: { product: TCardProduct }) => {
   return (
     <div className="flex py-5 last:pb-0">
       <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-neutral-100">
-        {image?.src && <Image fill src={image} alt={image.alt} className="object-contain" sizes="200px" />}
+        {image?.src && <Image fill src={image.src} alt={image.alt} className="object-contain" sizes="200px" />}
         <Link className="absolute inset-0" href={'/products/' + handle} />
       </div>
 

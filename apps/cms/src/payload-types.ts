@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     'product-collections': ProductCollection;
     products: Product;
+    'product-reviews': ProductReview;
     stores: Store;
     services: Service;
     pages: Page;
@@ -86,6 +87,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     'product-collections': ProductCollectionsSelect<false> | ProductCollectionsSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    'product-reviews': ProductReviewsSelect<false> | ProductReviewsSelect<true>;
     stores: StoresSelect<false> | StoresSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
@@ -99,8 +101,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    homepage: Homepage;
+  };
+  globalsSelect: {
+    homepage: HomepageSelect<false> | HomepageSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -260,6 +266,40 @@ export interface Product {
   availabilityStatus: 'in-stock' | 'available';
   images?: (number | Media)[] | null;
   collection?: (number | null) | ProductCollection;
+  specs?: {
+    /**
+     * When off, the storefront hides the specs module.
+     */
+    showSpecsOnPdp?: boolean | null;
+    /**
+     * Bridge width (mm)
+     */
+    bridgeMm?: number | null;
+    /**
+     * Temple length (mm)
+     */
+    templeMm?: number | null;
+    lensWidthMm?: number | null;
+    lensHeightMm?: number | null;
+    lensType?: ('single-vision' | 'progressive' | 'photochromic' | 'polarized' | 'other') | null;
+    lensMaterial?: ('cr39' | 'polycarbonate' | 'high-index' | 'other') | null;
+    lensTreatment?: ('anti-reflective' | 'blue-light' | 'uv' | 'scratch-resistant' | 'none') | null;
+    frameMaterial?: ('acetate' | 'metal' | 'titanium' | 'mixed' | 'other') | null;
+    /**
+     * Short notes on fit (e.g. narrow bridge).
+     */
+    fitNotes?: string | null;
+    /**
+     * e.g. oval, heart — avoid color-only cues.
+     */
+    faceShapeHints?: string | null;
+    dimensionDiagram?: (number | null) | Media;
+  };
+  /**
+   * YouTube or Vimeo page URL (no autoplay on storefront).
+   */
+  videoUrl?: string | null;
+  videoPoster?: (number | null) | Media;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -274,6 +314,36 @@ export interface Product {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-reviews".
+ */
+export interface ProductReview {
+  id: number;
+  product: number | Product;
+  rating: number;
+  title: string;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  authorName: string;
+  verified?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "stores".
  */
 export interface Store {
@@ -282,6 +352,10 @@ export interface Store {
   slug: string;
   address: string;
   city?: string | null;
+  /**
+   * Optional region or province for filtering.
+   */
+  region?: string | null;
   /**
    * E.164 or local format as you prefer.
    */
@@ -334,6 +408,16 @@ export interface Service {
   description?: string | null;
   icon?: (number | null) | Media;
   displayOrder?: number | null;
+  serviceType: 'exam' | 'fitting' | 'adjustments' | 'other';
+  /**
+   * Optional Cal.com, Google Appointments, or other booking link.
+   */
+  bookingUrl?: string | null;
+  /**
+   * Optional phone for booking when no URL is set.
+   */
+  bookingPhone?: string | null;
+  primaryCtaLabel?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -390,6 +474,22 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'cta';
+          }
+        | {
+            /**
+             * Optional section title above the questions.
+             */
+            heading?: string | null;
+            items?:
+              | {
+                  question: string;
+                  answer: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
           }
       )[]
     | null;
@@ -489,6 +589,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'products';
         value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'product-reviews';
+        value: number | ProductReview;
       } | null)
     | ({
         relationTo: 'stores';
@@ -657,6 +761,24 @@ export interface ProductsSelect<T extends boolean = true> {
   availabilityStatus?: T;
   images?: T;
   collection?: T;
+  specs?:
+    | T
+    | {
+        showSpecsOnPdp?: T;
+        bridgeMm?: T;
+        templeMm?: T;
+        lensWidthMm?: T;
+        lensHeightMm?: T;
+        lensType?: T;
+        lensMaterial?: T;
+        lensTreatment?: T;
+        frameMaterial?: T;
+        fitNotes?: T;
+        faceShapeHints?: T;
+        dimensionDiagram?: T;
+      };
+  videoUrl?: T;
+  videoPoster?: T;
   meta?:
     | T
     | {
@@ -670,6 +792,21 @@ export interface ProductsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-reviews_select".
+ */
+export interface ProductReviewsSelect<T extends boolean = true> {
+  product?: T;
+  rating?: T;
+  title?: T;
+  body?: T;
+  authorName?: T;
+  verified?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "stores_select".
  */
 export interface StoresSelect<T extends boolean = true> {
@@ -677,6 +814,7 @@ export interface StoresSelect<T extends boolean = true> {
   slug?: T;
   address?: T;
   city?: T;
+  region?: T;
   phone?: T;
   whatsApp?: T;
   email?: T;
@@ -712,6 +850,10 @@ export interface ServicesSelect<T extends boolean = true> {
   description?: T;
   icon?: T;
   displayOrder?: T;
+  serviceType?: T;
+  bookingUrl?: T;
+  bookingPhone?: T;
+  primaryCtaLabel?: T;
   meta?:
     | T
     | {
@@ -754,6 +896,20 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               label?: T;
               href?: T;
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -834,6 +990,127 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage".
+ */
+export interface Homepage {
+  id: number;
+  modules?:
+    | (
+        | {
+            eyebrow?: string | null;
+            heading: string;
+            subheading?: string | null;
+            image?: (number | null) | Media;
+            ctaLabel?: string | null;
+            ctaHref?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'heroModule';
+          }
+        | {
+            heading: string;
+            subHeading?: string | null;
+            collections?: (number | ProductCollection)[] | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'collectionSpotlight';
+          }
+        | {
+            heading: string;
+            subHeading?: string | null;
+            products?: (number | Product)[] | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'productRow';
+          }
+        | {
+            heading: string;
+            subHeading?: string | null;
+            posts?: (number | Post)[] | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'journalFeature';
+          }
+        | {
+            heading: string;
+            body?: string | null;
+            backgroundImage?: (number | null) | Media;
+            linkLabel?: string | null;
+            linkHref?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'seasonalBanner';
+          }
+      )[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_select".
+ */
+export interface HomepageSelect<T extends boolean = true> {
+  modules?:
+    | T
+    | {
+        heroModule?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              subheading?: T;
+              image?: T;
+              ctaLabel?: T;
+              ctaHref?: T;
+              id?: T;
+              blockName?: T;
+            };
+        collectionSpotlight?:
+          | T
+          | {
+              heading?: T;
+              subHeading?: T;
+              collections?: T;
+              id?: T;
+              blockName?: T;
+            };
+        productRow?:
+          | T
+          | {
+              heading?: T;
+              subHeading?: T;
+              products?: T;
+              id?: T;
+              blockName?: T;
+            };
+        journalFeature?:
+          | T
+          | {
+              heading?: T;
+              subHeading?: T;
+              posts?: T;
+              id?: T;
+              blockName?: T;
+            };
+        seasonalBanner?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              backgroundImage?: T;
+              linkLabel?: T;
+              linkHref?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

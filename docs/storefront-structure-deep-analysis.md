@@ -218,7 +218,8 @@ This document maps the current storefront structure in depth, focusing on route 
 
 ## Template/demo data still in repository
 
-- Several `(shop)` pages use `@/data/data` mock/demo sources instead of CMS contracts
+- `(shop)` routes are now wired through `src/lib/cms/shopLegacy.ts` (CMS-backed compatibility layer).
+- The compatibility layer still uses legacy-shaped view models to preserve template components.
 
 ## 4) Duplication Audit (Components/Sections)
 
@@ -250,7 +251,7 @@ This section highlights duplicated logic and duplicated page-section patterns th
   - policy/spec blocks
   - related products
 - Risk:
-  - parallel PDP code paths with different contracts (`slug` vs `handle`, CMS vs mock data)
+  - parallel PDP code paths with different contracts (`slug` vs `handle`, canonical vs compatibility adapters)
   - design and behavior inconsistency
 - Suggested direction:
   - keep one canonical PDP architecture (brand/CMS)
@@ -359,3 +360,4 @@ This section highlights duplicated logic and duplicated page-section patterns th
 ---
 
 Generated from current codebase snapshot by inspecting `src/app/(brand)`, `src/app/(shop)`, relevant shared components, and storefront docs.
+Last refreshed after CMS compatibility migration for `(shop)` routes.
