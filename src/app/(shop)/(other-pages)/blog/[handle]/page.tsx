@@ -1,6 +1,6 @@
 import { Divider } from '@/components/Divider'
 import PostCard1 from '@/components/blog/PostCard1'
-import { getBlogPosts, getBlogPostsByHandle } from '@/data/data'
+import { getLegacyShopBlogPostByHandle, getLegacyShopBlogPosts } from '@/lib/cms/shopLegacy'
 import Avatar from '@/shared/Avatar/Avatar'
 import ButtonPrimary from '@/shared/Button/ButtonPrimary'
 import SocialsList from '@/shared/SocialsList/SocialsList'
@@ -13,29 +13,40 @@ import { notFound } from 'next/navigation'
 
 export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }): Promise<Metadata> {
   const { handle } = await params
-  const post = await getBlogPostsByHandle(handle)
+  const post = await getLegacyShopBlogPostByHandle(handle)
   if (!post) {
     return {
       title: 'Blog',
       description:
         'Stay up-to-date with the latest industry news as our marketing teams finds new ways to re-purpose old CSS tricks articles.',
+      robots: {
+        index: false,
+        follow: false,
+      },
     }
   }
   const { title, excerpt } = post
-  return { title, description: excerpt }
+  return {
+    title,
+    description: excerpt,
+    robots: {
+      index: false,
+      follow: false,
+    },
+  }
 }
 
 export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params
   const { featuredImage, id, author, content, date, title, timeToRead, category, excerpt, tags } =
-    await getBlogPostsByHandle(handle)
+    await getLegacyShopBlogPostByHandle(handle)
 
   if (!id) {
     return notFound()
   }
 
   // only get the first 4 posts demo
-  const relatedPosts = (await getBlogPosts()).slice(0, 4)
+  const relatedPosts = (await getLegacyShopBlogPosts()).slice(0, 4)
 
   const renderHeader = () => {
     return (

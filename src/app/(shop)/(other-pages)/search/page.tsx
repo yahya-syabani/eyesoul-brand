@@ -3,7 +3,7 @@ import HeaderFilterSection from '@/components/HeaderFilterSection'
 import ProductCard from '@/components/ProductCard'
 import SectionPromo1 from '@/components/SectionPromo1'
 import SectionSliderLargeProduct from '@/components/SectionSliderLargeProduct'
-import { getProducts } from '@/data/data'
+import { getLegacyShopProducts } from '@/lib/cms/shopLegacy'
 import ButtonCircle from '@/shared/Button/ButtonCircle'
 import {
   Pagination,
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 }
 
 const PageSearch = async () => {
-  const products = await getProducts()
+  const products = await getLegacyShopProducts()
   const featuredProducts = products.slice(0, 4)
 
   const handleFormSubmit = async (formData: FormData) => {

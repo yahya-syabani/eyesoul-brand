@@ -1,7 +1,7 @@
 import { Divider } from '@/components/Divider'
 import Heading from '@/components/Heading/Heading'
 import Prices from '@/components/Prices'
-import { getOrders } from '@/data/data'
+import { getLegacyOrders } from '@/lib/cms/shopLegacy'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   // for demo purposes, you need to use the getOrder(number) function to get the order by number, example: getOrder(123456789)
-  const order = (await getOrders())[0]
+  const order = (await getLegacyOrders())[0]
 
   if (!order) {
     return notFound()

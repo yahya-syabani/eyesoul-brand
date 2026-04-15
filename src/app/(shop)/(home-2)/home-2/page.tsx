@@ -11,7 +11,12 @@ import SectionPromo3 from '@/components/SectionPromo3'
 import SectionSliderLargeProduct from '@/components/SectionSliderLargeProduct'
 import SectionSliderProductCard from '@/components/SectionSliderProductCard'
 import SectionMagazine5 from '@/components/blog/SectionMagazine5'
-import { getBlogPosts, getCollections, getGroupCollections, getProducts } from '@/data/data'
+import {
+  getLegacyShopBlogPosts,
+  getLegacyShopCollections,
+  getLegacyShopGroupCollections,
+  getLegacyShopProducts,
+} from '@/lib/cms/shopLegacy'
 import ButtonSecondary from '@/shared/Button/ButtonSecondary'
 import { Metadata } from 'next'
 
@@ -23,14 +28,14 @@ export const metadata: Metadata = {
 }
 
 async function PageHome2() {
-  const allCollections = await getCollections()
+  const allCollections = await getLegacyShopCollections()
   const featuredCollections = allCollections.slice(7, 11)
-  const groupCollections = await getGroupCollections()
-  const products = await getProducts()
+  const groupCollections = await getLegacyShopGroupCollections()
+  const products = await getLegacyShopProducts()
   const carouselProducts1 = products.slice(0, 5)
   const carouselProducts2 = products.slice(3, 10)
   const carouselProducts3 = products.slice(2, 6)
-  const blogPosts = await getBlogPosts()
+  const blogPosts = await getLegacyShopBlogPosts()
 
   return (
     <div className="nc-PageHome2 relative">

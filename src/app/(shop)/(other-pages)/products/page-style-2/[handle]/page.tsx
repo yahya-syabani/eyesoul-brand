@@ -6,7 +6,11 @@ import ProductColorOptions from '@/components/ProductForm/ProductColorOptions'
 import ProductForm from '@/components/ProductForm/ProductForm'
 import ProductSizeOptions from '@/components/ProductForm/ProductSizeOptions'
 import SectionSliderProductCard from '@/components/SectionSliderProductCard'
-import { getProductDetailByHandle, getProductReviews, getProducts } from '@/data/data'
+import {
+  getLegacyRelatedProductsForHandle,
+  getLegacyShopProductDetailByHandle,
+  getLegacyShopProductReviews,
+} from '@/lib/cms/shopLegacy'
 import ButtonPrimary from '@/shared/Button/ButtonPrimary'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { ShoppingBag03Icon } from '@hugeicons/core-free-icons'
@@ -20,7 +24,7 @@ import ProductStatus from '../../ProductStatus'
 
 export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }): Promise<Metadata> {
   const { handle } = await params
-  const product = await getProductDetailByHandle(handle)
+  const product = await getLegacyShopProductDetailByHandle(handle)
   const title = product?.title || 'product detail'
   const description = product?.description || 'product detail page'
   return {
@@ -31,9 +35,9 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
 
 export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params
-  const product = await getProductDetailByHandle(handle)
-  const relatedProducts = (await getProducts()).slice(2, 8)
-  const reviews = await getProductReviews(handle)
+  const product = await getLegacyShopProductDetailByHandle(handle)
+  const relatedProducts = await getLegacyRelatedProductsForHandle(handle)
+  const reviews = await getLegacyShopProductReviews(handle)
 
   if (!product.id) {
     return notFound()

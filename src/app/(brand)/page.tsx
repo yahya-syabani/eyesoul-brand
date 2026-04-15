@@ -21,8 +21,6 @@ export default async function HomePage() {
   const collections = toTCollections(collectionsRaw)
   const products = toTProductItems(productsRaw)
 
-  // Featured products for the slider
-  const featuredProducts = products.slice(0, 8)
   const newArrivals = products.slice(0, 8)
 
   return (

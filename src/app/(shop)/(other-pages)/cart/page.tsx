@@ -1,6 +1,6 @@
 import NcInputNumber from '@/components/NcInputNumber'
 import Prices from '@/components/Prices'
-import { TCardProduct, getCart } from '@/data/data'
+import { getLegacyCart, type LegacyCartLine } from '@/lib/cms/shopLegacy'
 import Breadcrumb from '@/shared/Breadcrumb'
 import ButtonPrimary from '@/shared/Button/ButtonPrimary'
 import { CheckIcon } from '@heroicons/react/24/outline'
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 }
 
 const CartPage = async () => {
-  const cart = await getCart('id://cart')
+  const cart = await getLegacyCart()
 
   const renderStatusInstock = () => {
     return (
@@ -27,7 +27,7 @@ const CartPage = async () => {
     )
   }
 
-  const renderProduct = (product: TCardProduct) => {
+  const renderProduct = (product: LegacyCartLine) => {
     const { image, price, name, handle, id, size, color, quantity } = product
 
     return (
