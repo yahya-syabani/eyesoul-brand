@@ -30,3 +30,16 @@ export async function getStores(options: GetStoresOptions = {}): Promise<Store[]
   return res.docs
 }
 
+export function getStoresCompletenessReport(stores: Store[]) {
+  const missingCoordinates = stores.filter((store) => store.latitude == null || store.longitude == null).length
+  const missingMapsUrl = stores.filter((store) => !store.mapsUrl).length
+  const missingHours = stores.filter((store) => !store.hours?.length).length
+
+  return {
+    total: stores.length,
+    missingCoordinates,
+    missingMapsUrl,
+    missingHours,
+  }
+}
+

@@ -69,8 +69,10 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    'contact-submissions': ContactSubmission;
     'product-collections': ProductCollection;
     products: Product;
+    'product-variants': ProductVariant;
     'product-reviews': ProductReview;
     stores: Store;
     services: Service;
@@ -85,8 +87,10 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     'product-collections': ProductCollectionsSelect<false> | ProductCollectionsSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    'product-variants': ProductVariantsSelect<false> | ProductVariantsSelect<true>;
     'product-reviews': ProductReviewsSelect<false> | ProductReviewsSelect<true>;
     stores: StoresSelect<false> | StoresSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
@@ -103,9 +107,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     homepage: Homepage;
+    'store-locator-settings': StoreLocatorSetting;
   };
   globalsSelect: {
     homepage: HomepageSelect<false> | HomepageSelect<true>;
+    'store-locator-settings': StoreLocatorSettingsSelect<false> | StoreLocatorSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -207,6 +213,32 @@ export interface Media {
   };
 }
 /**
+ * Inbound contact form submissions from the storefront.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions".
+ */
+export interface ContactSubmission {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  inquiryType?: ('general' | 'appointment' | 'support' | 'feedback') | null;
+  preferredDate?: string | null;
+  honeypotTriggered?: boolean | null;
+  /**
+   * SHA-256 hash of requester IP (never store raw IP).
+   */
+  ipHash?: string | null;
+  userAgent?: string | null;
+  submissionStatus: 'new' | 'in_progress' | 'resolved' | 'spam';
+  handledBy?: (number | null) | User;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "product-collections".
  */
@@ -239,6 +271,10 @@ export interface ProductCollection {
  */
 export interface Product {
   id: number;
+  /**
+   * High-level product line for storefront navigation and filtering.
+   */
+  productType: 'optical-frame' | 'sunglasses' | 'contact-soft' | 'contact-care' | 'accessory';
   name: string;
   slug: string;
   description?: {
@@ -257,6 +293,14 @@ export interface Product {
     [k: string]: unknown;
   } | null;
   /**
+   * Brand label shown on PDP and used in filtering.
+   */
+  brand?: string | null;
+  /**
+   * Optional GTIN/EAN/UPC for retail/integrations.
+   */
+  gtin?: string | null;
+  /**
    * Display price (Phase 1 catalog only; no checkout).
    */
   price: number;
@@ -265,7 +309,36 @@ export interface Product {
    */
   availabilityStatus: 'in-stock' | 'available';
   images?: (number | Media)[] | null;
-  collection?: (number | null) | ProductCollection;
+  /**
+   * Editorial groupings (multi-select). Used for /collections pages and collection filters.
+   */
+  collections?: (number | ProductCollection)[] | null;
+  /**
+   * Merchandising flag (e.g. homepage rows).
+   */
+  featured?: boolean | null;
+  /**
+   * Optional list of badge strings, e.g. ["new","bestseller"]. Kept as JSON to avoid extra join tables in Phase 1.
+   */
+  badges?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  frame?: {
+    frameShape?: ('round' | 'rectangle' | 'square' | 'aviator' | 'cat-eye' | 'browline' | 'other') | null;
+    rimType?: ('full-rim' | 'semi-rimless' | 'rimless' | 'other') | null;
+    frameColor?: string | null;
+    rxAble?: boolean | null;
+    lensColor?: string | null;
+    polarized?: boolean | null;
+    uv400?: boolean | null;
+    lensCategory?: number | null;
+  };
   specs?: {
     /**
      * When off, the storefront hides the specs module.
@@ -295,6 +368,70 @@ export interface Product {
     faceShapeHints?: string | null;
     dimensionDiagram?: (number | null) | Media;
   };
+  contactLens?: {
+    replacementSchedule?: ('daily' | 'biweekly' | 'monthly' | 'other') | null;
+    unitsPerBox?: number | null;
+    /**
+     * JSON array of numbers, e.g. [8.4, 8.8]
+     */
+    baseCurveOptionsMm?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    /**
+     * JSON array of numbers, e.g. [14.0, 14.2]
+     */
+    diameterOptionsMm?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    spherePowerRange?: {
+      min?: number | null;
+      max?: number | null;
+      step?: number | null;
+    };
+    hasCylinder?: boolean | null;
+    cylinderPowerRange?: {
+      min?: number | null;
+      max?: number | null;
+      step?: number | null;
+    };
+    axisStep?: number | null;
+    hasAdd?: boolean | null;
+    addPowerRange?: {
+      min?: number | null;
+      max?: number | null;
+      step?: number | null;
+    };
+    materialType?: ('hydrogel' | 'silicone-hydrogel' | 'other') | null;
+    waterContentPercent?: number | null;
+    /**
+     * Oxygen transmissibility (Dk/t), if known.
+     */
+    dkT?: number | null;
+    wearingModality?: ('daily-wear' | 'extended-wear') | null;
+  };
+  careProduct?: {
+    unitOfMeasure?: ('bottle' | 'box' | 'pack' | 'other') | null;
+    unitVolumeMl?: number | null;
+    unitsPerPack?: number | null;
+    compatibility?: ('all' | 'soft-only' | 'other') | null;
+  };
+  accessory?: {
+    accessoryType?: ('case' | 'cloth' | 'chain' | 'kit' | 'other') | null;
+    unitsPerPack?: number | null;
+    compatibilityNotes?: string | null;
+  };
   /**
    * YouTube or Vimeo page URL (no autoplay on storefront).
    */
@@ -307,6 +444,40 @@ export interface Product {
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
     image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-variants".
+ */
+export interface ProductVariant {
+  id: number;
+  product: number | Product;
+  /**
+   * e.g. Matte Black / 52-18-145
+   */
+  title: string;
+  /**
+   * Optional internal SKU for this specific variant.
+   */
+  sku?: string | null;
+  /**
+   * Optional GTIN/EAN/UPC for this variant.
+   */
+  gtin?: string | null;
+  /**
+   * Variant-specific images (falls back to product images if empty).
+   */
+  images?: (number | Media)[] | null;
+  attributes?: {
+    colorName?: string | null;
+    colorCode?: string | null;
+    lensWidthMm?: number | null;
+    bridgeMm?: number | null;
+    templeMm?: number | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -408,7 +579,8 @@ export interface Service {
   description?: string | null;
   icon?: (number | null) | Media;
   displayOrder?: number | null;
-  serviceType: 'exam' | 'fitting' | 'adjustments' | 'other';
+  category: 'core_service' | 'premium_benefit';
+  serviceType: 'exam' | 'fitting' | 'adjustments' | 'guarantee' | 'trade-in' | 'benefit' | 'other';
   /**
    * Optional Cal.com, Google Appointments, or other booking link.
    */
@@ -418,6 +590,42 @@ export interface Service {
    */
   bookingPhone?: string | null;
   primaryCtaLabel?: string | null;
+  /**
+   * Large background image for the detail page hero section.
+   */
+  heroImage?: (number | null) | Media;
+  /**
+   * Main body content for the service detail page.
+   */
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  processSteps?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  faqs?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -583,12 +791,20 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
+        relationTo: 'contact-submissions';
+        value: number | ContactSubmission;
+      } | null)
+    | ({
         relationTo: 'product-collections';
         value: number | ProductCollection;
       } | null)
     | ({
         relationTo: 'products';
         value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'product-variants';
+        value: number | ProductVariant;
       } | null)
     | ({
         relationTo: 'product-reviews';
@@ -729,6 +945,26 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions_select".
+ */
+export interface ContactSubmissionsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  message?: T;
+  inquiryType?: T;
+  preferredDate?: T;
+  honeypotTriggered?: T;
+  ipHash?: T;
+  userAgent?: T;
+  submissionStatus?: T;
+  handledBy?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "product-collections_select".
  */
 export interface ProductCollectionsSelect<T extends boolean = true> {
@@ -754,13 +990,30 @@ export interface ProductCollectionsSelect<T extends boolean = true> {
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
+  productType?: T;
   name?: T;
   slug?: T;
   description?: T;
+  brand?: T;
+  gtin?: T;
   price?: T;
   availabilityStatus?: T;
   images?: T;
-  collection?: T;
+  collections?: T;
+  featured?: T;
+  badges?: T;
+  frame?:
+    | T
+    | {
+        frameShape?: T;
+        rimType?: T;
+        frameColor?: T;
+        rxAble?: T;
+        lensColor?: T;
+        polarized?: T;
+        uv400?: T;
+        lensCategory?: T;
+      };
   specs?:
     | T
     | {
@@ -777,6 +1030,57 @@ export interface ProductsSelect<T extends boolean = true> {
         faceShapeHints?: T;
         dimensionDiagram?: T;
       };
+  contactLens?:
+    | T
+    | {
+        replacementSchedule?: T;
+        unitsPerBox?: T;
+        baseCurveOptionsMm?: T;
+        diameterOptionsMm?: T;
+        spherePowerRange?:
+          | T
+          | {
+              min?: T;
+              max?: T;
+              step?: T;
+            };
+        hasCylinder?: T;
+        cylinderPowerRange?:
+          | T
+          | {
+              min?: T;
+              max?: T;
+              step?: T;
+            };
+        axisStep?: T;
+        hasAdd?: T;
+        addPowerRange?:
+          | T
+          | {
+              min?: T;
+              max?: T;
+              step?: T;
+            };
+        materialType?: T;
+        waterContentPercent?: T;
+        dkT?: T;
+        wearingModality?: T;
+      };
+  careProduct?:
+    | T
+    | {
+        unitOfMeasure?: T;
+        unitVolumeMl?: T;
+        unitsPerPack?: T;
+        compatibility?: T;
+      };
+  accessory?:
+    | T
+    | {
+        accessoryType?: T;
+        unitsPerPack?: T;
+        compatibilityNotes?: T;
+      };
   videoUrl?: T;
   videoPoster?: T;
   meta?:
@@ -785,6 +1089,29 @@ export interface ProductsSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-variants_select".
+ */
+export interface ProductVariantsSelect<T extends boolean = true> {
+  product?: T;
+  title?: T;
+  sku?: T;
+  gtin?: T;
+  images?: T;
+  attributes?:
+    | T
+    | {
+        colorName?: T;
+        colorCode?: T;
+        lensWidthMm?: T;
+        bridgeMm?: T;
+        templeMm?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -850,10 +1177,27 @@ export interface ServicesSelect<T extends boolean = true> {
   description?: T;
   icon?: T;
   displayOrder?: T;
+  category?: T;
   serviceType?: T;
   bookingUrl?: T;
   bookingPhone?: T;
   primaryCtaLabel?: T;
+  heroImage?: T;
+  content?: T;
+  processSteps?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
   meta?:
     | T
     | {
@@ -1051,6 +1395,39 @@ export interface Homepage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "store-locator-settings".
+ */
+export interface StoreLocatorSetting {
+  id: number;
+  enabled?: boolean | null;
+  defaultCenterLat: number;
+  defaultCenterLng: number;
+  defaultZoom: number;
+  selectedZoom: number;
+  maxZoom: number;
+  fitBoundsPadding: number;
+  markerRadius: number;
+  /**
+   * Hex color for unselected markers, e.g. #1f2937
+   */
+  markerColor: string;
+  /**
+   * Hex color for selected marker, e.g. #2563eb
+   */
+  selectedMarkerColor: string;
+  tileUrl: string;
+  tileAttribution: string;
+  scrollWheelZoom?: boolean | null;
+  dragging?: boolean | null;
+  touchZoom?: boolean | null;
+  doubleClickZoom?: boolean | null;
+  showZoomControl?: boolean | null;
+  showPopupDirections?: boolean | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "homepage_select".
  */
 export interface HomepageSelect<T extends boolean = true> {
@@ -1108,6 +1485,33 @@ export interface HomepageSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "store-locator-settings_select".
+ */
+export interface StoreLocatorSettingsSelect<T extends boolean = true> {
+  enabled?: T;
+  defaultCenterLat?: T;
+  defaultCenterLng?: T;
+  defaultZoom?: T;
+  selectedZoom?: T;
+  maxZoom?: T;
+  fitBoundsPadding?: T;
+  markerRadius?: T;
+  markerColor?: T;
+  selectedMarkerColor?: T;
+  tileUrl?: T;
+  tileAttribution?: T;
+  scrollWheelZoom?: T;
+  dragging?: T;
+  touchZoom?: T;
+  doubleClickZoom?: T;
+  showZoomControl?: T;
+  showPopupDirections?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

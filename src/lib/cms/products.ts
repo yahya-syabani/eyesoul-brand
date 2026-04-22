@@ -8,12 +8,26 @@ export type CatalogSort = 'newest' | 'oldest' | 'price-low-to-high' | 'price-hig
 
 export type CatalogStatusFilter = 'all' | 'in-stock' | 'available'
 
+export type CatalogProductType =
+  | 'all'
+  | 'optical-frame'
+  | 'sunglasses'
+  | 'contact-soft'
+  | 'contact-care'
+  | 'accessory'
+
 export type CatalogProductFilters = {
   q?: string
   collectionId?: number
+  productType?: CatalogProductType
   minPrice?: number
   maxPrice?: number
   status?: CatalogStatusFilter
+  frameShape?: string
+  rimType?: string
+  polarized?: boolean
+  replacementSchedule?: string
+  accessoryType?: string
   page?: number
   limit?: number
   sort?: CatalogSort
@@ -78,7 +92,11 @@ export async function getCatalogProducts(
   const and: WhereClause[] = []
 
   if (filters.collectionId != null) {
-    and.push({ collection: { equals: filters.collectionId } })
+    and.push({ collections: { equals: filters.collectionId } })
+  }
+
+  if (filters.productType && filters.productType !== 'all') {
+    and.push({ productType: { equals: filters.productType } })
   }
 
   const minPrice = normalizeFiniteNumber(filters.minPrice)
@@ -93,6 +111,26 @@ export async function getCatalogProducts(
 
   if (filters.status && filters.status !== 'all') {
     and.push({ availabilityStatus: { equals: filters.status } })
+  }
+
+  if (filters.frameShape) {
+    and.push({ 'frame.frameShape': { equals: filters.frameShape } })
+  }
+
+  if (filters.rimType) {
+    and.push({ 'frame.rimType': { equals: filters.rimType } })
+  }
+
+  if (filters.polarized != null) {
+    and.push({ 'frame.polarized': { equals: filters.polarized } })
+  }
+
+  if (filters.replacementSchedule) {
+    and.push({ 'contactLens.replacementSchedule': { equals: filters.replacementSchedule } })
+  }
+
+  if (filters.accessoryType) {
+    and.push({ 'accessory.accessoryType': { equals: filters.accessoryType } })
   }
 
   const q = normalizeSearchTerm(filters.q)
@@ -136,7 +174,7 @@ export async function getProducts(
     depth?: number
   } = {},
 ): Promise<Product[]> {
-  const base = options.collectionId != null ? { collection: { equals: options.collectionId } } : {}
+  const base = options.collectionId != null ? { collections: { equals: options.collectionId } } : {}
   const where = await mergePublishedWhere(base)
   const res = await cmsFind<Product>('products', {
     where,
@@ -160,7 +198,7 @@ export async function getRelatedProducts(options: {
 
   const inner = {
     and: [
-      { collection: { equals: options.collectionId } },
+      { collections: { equals: options.collectionId } },
       { id: { not_equals: options.productId } },
     ],
   }

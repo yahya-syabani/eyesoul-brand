@@ -15,7 +15,8 @@
     "test:a11y": "playwright test tests/a11y",
     "test:ui": "playwright test --ui",
     "dev:all": "npx concurrently \"npm run dev\" \"npm run dev -w eyesoul-cms\"",
-    "payload:sync-types": "npm run payload:generate-types -w eyesoul-cms && node scripts/sync-payload-types.mjs"
+    "payload:sync-types": "npm run payload:generate-types -w eyesoul-cms && node scripts/sync-payload-types.mjs",
+    "payload:seed": "npm run payload:seed -w eyesoul-cms"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.3",
@@ -28,12 +29,14 @@
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "leaflet": "^1.9.4",
     "next": "^16.2.2",
     "posthog-js": "^1.367.0",
     "rc-slider": "^11.1.9",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-hot-toast": "^2.5.2",
+    "react-leaflet": "^5.0.0",
     "react-swipeable": "^7.0.2",
     "react-use": "^17.6.0",
     "resend": "^6.10.0",
@@ -44,6 +47,7 @@
     "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4.1.6",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "20.12.12",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",

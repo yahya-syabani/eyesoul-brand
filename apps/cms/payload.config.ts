@@ -8,15 +8,18 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
 import { Media } from './src/payload/collections/Media.js'
+import { ContactSubmissions } from './src/payload/collections/ContactSubmissions.js'
 import { Pages } from './src/payload/collections/Pages.js'
 import { ProductCollections } from './src/payload/collections/ProductCollections.js'
 import { Products } from './src/payload/collections/Products.js'
+import { ProductVariants } from './src/payload/collections/ProductVariants.js'
 import { Posts } from './src/payload/collections/Posts.js'
 import { ProductReviews } from './src/payload/collections/ProductReviews.js'
 import { Services } from './src/payload/collections/Services.js'
 import { Stores } from './src/payload/collections/Stores.js'
 import { Users } from './src/payload/collections/Users.js'
 import { Homepage } from './src/payload/globals/Homepage.js'
+import { StoreLocatorSettings } from './src/payload/globals/StoreLocatorSettings.js'
 import { standardLexicalEditor } from './src/payload/lexical/editor.js'
 
 const filename = fileURLToPath(import.meta.url)
@@ -43,15 +46,17 @@ export default buildConfig({
   collections: [
     Users,
     Media,
+    ContactSubmissions,
     ProductCollections,
     Products,
+    ProductVariants,
     ProductReviews,
     Stores,
     Services,
     Pages,
     Posts,
   ],
-  globals: [Homepage],
+  globals: [Homepage, StoreLocatorSettings],
   db: postgresAdapter({
     pool: {
       connectionString: requiredEnv('DATABASE_URI'),

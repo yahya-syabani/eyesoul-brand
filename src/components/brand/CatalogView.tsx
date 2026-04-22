@@ -21,9 +21,12 @@ export function CatalogView({
   const filtered = useMemo(() => {
     if (!collectionSlug) return products
     return products.filter((p) => {
-      const c = p.collection
-      if (c == null || typeof c === 'number') return false
-      return c.slug === collectionSlug
+      const collections = p.collections
+      if (!Array.isArray(collections) || collections.length === 0) return false
+      return collections.some((c) => {
+        if (c == null || typeof c === 'number') return false
+        return c.slug === collectionSlug
+      })
     })
   }, [products, collectionSlug])
 

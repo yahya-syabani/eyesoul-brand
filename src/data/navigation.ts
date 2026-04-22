@@ -12,8 +12,8 @@ export async function getNavigation(): Promise<TNavigationItem[]> {
     },
     {
       id: '3',
-      href: '/products/leather-tote-bag',
-      name: 'Products',
+      href: '/catalog',
+      name: 'Shop',
     },
     {
       id: '4',
@@ -211,9 +211,9 @@ export const getCurrencies = async () => {
 export const getHeaderDropdownCategories = async () => {
   return [
     {
-      name: 'Jackets',
-      handle: 'jackets',
-      description: 'New items in 2025',
+      name: 'Frames',
+      href: '/catalog?type=optical-frame',
+      description: 'Optical frames for everyday wear',
       icon: `<svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M12 16C15.866 16 19 12.866 19 9C19 5.13401 15.866 2 12 2C8.13401 2 5 5.13401 5 9C5 12.866 8.13401 16 12 16Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M12 16V22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -222,9 +222,9 @@ export const getHeaderDropdownCategories = async () => {
     `,
     },
     {
-      name: 'T-Shirts',
-      handle: 'page-style-2/t-shirts',
-      description: 'Perfect for gentlemen',
+      name: 'Sunglasses',
+      href: '/catalog?type=sunglasses',
+      description: 'UV protection and style',
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-8" width="24" height="24" color="currentColor" fill="none">
         <path d="M6 9V16.6841C6 18.4952 6 19.4008 6.58579 19.9635C7.89989 21.2257 15.8558 21.4604 17.4142 19.9635C18 19.4008 18 18.4952 18 16.6841V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
         <path d="M5.74073 12L3.04321 9.38915C2.34774 8.71602 2 8.37946 2 7.96123C2 7.543 2.34774 7.20644 3.04321 6.53331L5.04418 4.59664C5.39088 4.26107 5.56423 4.09329 5.77088 3.96968C5.97753 3.84607 6.21011 3.77103 6.67526 3.62096L8.32112 3.08997C8.56177 3.01233 8.68209 2.97351 8.76391 3.02018C8.84573 3.06686 8.87157 3.2013 8.92324 3.47018C9.19358 4.87684 10.4683 5.94185 12 5.94185C13.5317 5.94185 14.8064 4.87684 15.0768 3.47018C15.1284 3.2013 15.1543 3.06686 15.2361 3.02018C15.3179 2.97351 15.4382 3.01233 15.6789 3.08997L17.3247 3.62096C17.7899 3.77103 18.0225 3.84607 18.2291 3.96968C18.4358 4.09329 18.6091 4.26107 18.9558 4.59664L20.9568 6.53331C21.6523 7.20644 22 7.543 22 7.96123C22 8.37946 21.6523 8.71602 20.9568 9.38915L18.2593 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -232,9 +232,9 @@ export const getHeaderDropdownCategories = async () => {
     `,
     },
     {
-      name: 'Shoes',
-      handle: 'shoes',
-      description: 'The needs of sports ',
+      name: 'Soft contact lenses',
+      href: '/catalog?type=contact-soft',
+      description: 'Daily comfort contacts',
       icon: `<svg xmlns="http://www.w3.org/2000/svg" class="size-8" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
         <path d="M19.1012 18H7.96299C5.02913 18 3.56221 18 2.66807 16.8828C0.97093 14.7623 2.9047 9.1238 4.07611 7C4.47324 9.4 8.56152 9.33333 10.0507 9C9.05852 7.00119 10.3831 6.33413 11.0453 6.00059L11.0465 6C14 9.5 20.3149 11.404 21.8624 15.2188C22.5309 16.8667 20.6262 18 19.1012 18Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
         <path d="M2 14C6.16467 15.4294 8.73097 15.8442 12.0217 14.8039C13.0188 14.4887 13.5174 14.3311 13.8281 14.3525C14.1389 14.3739 14.7729 14.6695 16.0408 15.2608C17.6243 15.9992 19.7971 16.4243 22 15.3583" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
@@ -244,9 +244,9 @@ export const getHeaderDropdownCategories = async () => {
      `,
     },
     {
-      name: 'Bags',
-      handle: 'page-style-2/bags',
-      description: 'Luxury and nobility',
+      name: 'Lens care',
+      href: '/catalog?type=contact-care',
+      description: 'Solution and care essentials',
       icon: `<svg xmlns="http://www.w3.org/2000/svg" class="size-8" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
         <path d="M19.1737 12.9256V12.12C19.1737 10.6492 19.1737 9.91383 18.7234 9.45691C18.2732 9 17.5485 9 16.0992 9H7.90077C6.45147 9 5.72682 9 5.27658 9.45691C4.82634 9.91383 4.82634 10.6492 4.82634 12.12V12.9256C4.82634 13.3018 4.82634 13.4899 4.79345 13.6739C4.76056 13.858 4.69549 14.0341 4.56534 14.3863L4.34812 14.9742C3.16867 18.166 2.57895 19.7619 3.34312 20.8809C4.1073 22 5.78684 22 9.14591 22H14.8541C18.2132 22 19.8927 22 20.6569 20.8809C21.4211 19.7619 20.8313 18.166 19.6519 14.9742L19.4347 14.3863C19.3045 14.0341 19.2394 13.858 19.2065 13.6739C19.1737 13.4899 19.1737 13.3018 19.1737 12.9256Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
         <path d="M16 11C16 5 13.8655 2 12 2C10.1345 2 8 5 8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
@@ -258,8 +258,8 @@ export const getHeaderDropdownCategories = async () => {
     },
     {
       name: 'Accessories',
-      handle: 'accessories',
-      description: 'Diamond always popular',
+      href: '/catalog?type=accessory',
+      description: 'Cases, cloths, and extras',
       icon: `<svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M10.7998 3.40005L7.19982 7.70005C7.09982 7.90005 6.99982 8.20005 6.89982 8.40005L5.19982 17C5.09982 17.6 5.39982 18.3 5.89982 18.6L11.1998 21.6C11.5998 21.8 12.2998 21.8 12.6998 21.6L17.9998 18.6C18.4998 18.3 18.7998 17.6 18.6998 17L16.9998 8.40005C16.9998 8.20005 16.7998 7.90005 16.6998 7.70005L13.0998 3.40005C12.4998 2.60005 11.4998 2.60005 10.7998 3.40005Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M16.8002 8.5L12.5002 20.7C12.3002 21.1 11.7002 21.1 11.6002 20.7L7.2002 8.5" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>

@@ -182,9 +182,11 @@ export async function getLegacyShopGroupCollections(): Promise<
 
 export async function getLegacyRelatedProductsForHandle(handle: string): Promise<TProductItem[]> {
   const product = await getProductBySlug(handle, { depth: 2 })
-  if (!product || !product.collection || typeof product.collection !== 'object') {
+  const firstCollection =
+    product && Array.isArray(product.collections) && product.collections.length > 0 ? product.collections[0] : null
+  if (!product || !firstCollection || typeof firstCollection !== 'object') {
     return (await getLegacyShopProducts()).slice(0, 6)
   }
-  const { products } = await getCollectionBySlug(product.collection.slug, { productDepth: 2, productLimit: 12 })
+  const { products } = await getCollectionBySlug(firstCollection.slug, { productDepth: 2, productLimit: 12 })
   return toTProductItems(products.filter((item) => item.slug !== handle)).slice(0, 6)
 }

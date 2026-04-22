@@ -7,16 +7,18 @@ import type { Product, ProductCollection } from '@/payload-types'
 import { BrandBadge } from './BrandBadge'
 import { resolveBrandImage } from './brandMedia'
 
-function collectionLabel(collection: Product['collection']): string | null {
-  if (collection == null || typeof collection === 'number') return null
-  return (collection as ProductCollection).title
+function firstCollectionLabel(collections: Product['collections']): string | null {
+  if (!Array.isArray(collections) || collections.length === 0) return null
+  const first = collections[0]
+  if (first == null || typeof first === 'number') return null
+  return (first as ProductCollection).title
 }
 
 export function ProductCard({ product }: { product: Product }) {
   const firstImage = product.images?.[0]
   const img = resolveBrandImage(firstImage, 'card')
   const href = buildProductUrl(product.slug)
-  const collectionTitle = collectionLabel(product.collection)
+  const collectionTitle = firstCollectionLabel(product.collections)
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-brand-border bg-brand-surface motion-safe:transition-shadow hover:shadow-md">

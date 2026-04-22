@@ -1,71 +1,82 @@
-import Image from 'next/image'
-
-import { BrandButton } from '@/components/brand/BrandButton'
-import { BrandH1, BrandLead } from '@/components/brand/BrandTypography'
 import { resolveBrandImage } from '@/components/brand/brandMedia'
 import { getServices } from '@/lib/cms/services'
-import { getStores } from '@/lib/cms/stores'
-import { normalizeExternalUrl } from '@/lib/links'
-import Link from 'next/link'
+
+import { ServiceCard } from '@/components/brand/services/ServiceCard'
+import { ServiceHero } from '@/components/brand/services/ServiceHero'
+import { TrustBadgeRow } from '@/components/brand/services/TrustBadgeRow'
 
 export default async function ServicesPage() {
-  const [services, stores] = await Promise.all([getServices({ depth: 2 }), getStores({ limit: 5, depth: 1 })])
-  const fallbackPhone = stores.map((s) => s.phone).find(Boolean)
+  const services = await getServices({ depth: 2 })
+
+  // Safely fallback to 'core_service' if the category field isn't populated yet
+  const coreServices = services.filter((s) => !s.category || s.category === 'core_service')
+  const premiumBenefits = services.filter((s) => s.category === 'premium_benefit')
 
   return (
-    <section className="container py-10 md:py-14">
-      <BrandH1>Services</BrandH1>
-      <BrandLead className="mt-3">Professional vision care and in-store experiences.</BrandLead>
-      {!services.length ? (
-        <p className="mt-10 text-brand-sm text-brand-muted-foreground">No services published yet.</p>
-      ) : (
-        <ul className="mt-10 grid gap-10 md:grid-cols-2">
-          {services.map((s) => {
-            const icon = resolveBrandImage(s.icon, 'card')
-            const bookingHref = s.bookingUrl ? normalizeExternalUrl(s.bookingUrl) || s.bookingUrl : ''
-            const phone = s.bookingPhone || fallbackPhone
-            const tel = phone ? `tel:${phone.replace(/\s/g, '')}` : ''
-            const primaryLabel = s.primaryCtaLabel?.trim() || 'Book appointment'
+    <div className="pb-20">
+      <ServiceHero 
+        title="Premium Services & Care" 
+        subtitle="Experience professional vision care and exclusive benefits designed around your lifestyle and visual needs." 
+      />
+      
+      <TrustBadgeRow />
 
-            return (
-              <li key={s.id} className="flex flex-col gap-6 rounded-2xl border border-brand-border bg-brand-surface p-6 md:flex-row">
-                {icon ? (
-                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-brand-border bg-brand-muted">
-                    <Image src={icon.src} alt={icon.alt || s.name} fill className="object-cover" sizes="80px" />
-                  </div>
-                ) : null}
-                <div className="min-w-0 flex-1">
-                  <h2 className="font-display text-brand-2xl font-semibold text-brand-ink">{s.name}</h2>
-                  {s.description ? <p className="mt-2 text-brand-sm text-brand-muted-foreground">{s.description}</p> : null}
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    {bookingHref ? (
-                      <BrandButton href={bookingHref} variant="primary">
-                        {primaryLabel}
-                      </BrandButton>
-                    ) : tel ? (
-                      <BrandButton href={tel} variant="primary">
-                        {primaryLabel}
-                      </BrandButton>
-                    ) : (
-                      <BrandButton href="/stores" variant="primary">
-                        Find a store
-                      </BrandButton>
-                    )}
-                    {tel ? (
-                      <BrandButton href={tel} variant="secondary">
-                        Call
-                      </BrandButton>
-                    ) : null}
-                    <Link href="/stores" className="self-center text-brand-sm font-medium text-brand-accent-hover underline">
-                      Store locator
-                    </Link>
-                  </div>
-                </div>
-              </li>
-            )
-          })}
-        </ul>
-      )}
-    </section>
+      <section className="container mb-24">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-display font-semibold text-brand-ink mb-4">Core Services</h2>
+          <p className="text-brand-muted-foreground text-brand-sm max-w-2xl mx-auto">
+            Comprehensive eye care solutions delivered by certified professionals using state-of-the-art technology.
+          </p>
+        </div>
+        
+        {coreServices.length === 0 ? (
+          <p className="text-center text-brand-muted-foreground">No core services available.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {coreServices.map((s) => {
+              const icon = resolveBrandImage(s.icon, 'card')
+              return (
+                <ServiceCard
+                  key={s.id}
+                  title={s.name}
+                  description={s.description || undefined}
+                  iconUrl={icon?.src}
+                  slug={s.slug || ''}
+                />
+              )
+            })}
+          </div>
+        )}
+      </section>
+
+      <section className="container bg-brand-surface/30 rounded-3xl py-16 md:py-24 px-6 md:px-12 border border-brand-border/50">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-display font-semibold text-brand-ink mb-4">Eyesoul Privileges</h2>
+          <p className="text-brand-muted-foreground text-brand-sm max-w-2xl mx-auto">
+            Enjoy exclusive benefits and peace of mind with our premium customer programs.
+          </p>
+        </div>
+
+        {premiumBenefits.length === 0 ? (
+          <p className="text-center text-brand-muted-foreground">Premium benefits coming soon.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {premiumBenefits.map((s) => {
+              const icon = resolveBrandImage(s.icon, 'card')
+              return (
+                <ServiceCard
+                  key={s.id}
+                  title={s.name}
+                  description={s.description || undefined}
+                  iconUrl={icon?.src}
+                  slug={s.slug || ''}
+                  isBenefit
+                />
+              )
+            })}
+          </div>
+        )}
+      </section>
+    </div>
   )
 }

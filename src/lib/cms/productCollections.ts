@@ -25,7 +25,7 @@ export async function getCollectionBySlug(
   const collection = res.docs[0] ?? null
   if (!collection) return { collection: null, products: [] }
 
-  const productsWhere = await mergePublishedWhere({ collection: { equals: collection.id } })
+  const productsWhere = await mergePublishedWhere({ collections: { equals: collection.id } })
   const productsRes = await cmsFind<Product>('products', {
     where: productsWhere,
     limit: options.productLimit ?? 200,

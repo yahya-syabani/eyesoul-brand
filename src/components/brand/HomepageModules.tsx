@@ -1,5 +1,6 @@
 import type { CmsPost } from '@/lib/cms/posts'
 import SectionCollectionSlider from '@/components/SectionCollectionSlider'
+import SectionBentoGrid from '@/components/SectionBentoGrid'
 import SectionMagazine5 from '@/components/blog/SectionMagazine5'
 import SectionSliderProductCard from '@/components/SectionSliderProductCard'
 import { toTCollections, toTProductItems } from '@/lib/cms/adapters'
@@ -47,8 +48,8 @@ function HomepageModule({ module }: { module: Module }) {
     if (!raw.length) return null
     const collections = toTCollections(raw)
     return (
-      <div className="container">
-        <SectionCollectionSlider
+      <div className="mt-16 lg:mt-24">
+        <SectionBentoGrid
           collections={collections}
           heading={module.heading}
           headingDim={module.subHeading ?? 'Explore by style and material'}

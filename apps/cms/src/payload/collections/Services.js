@@ -52,6 +52,19 @@ export const Services = {
       defaultValue: 0,
     },
     {
+      name: 'category',
+      type: 'select',
+      required: true,
+      defaultValue: 'core_service',
+      options: [
+        { label: 'Core Service', value: 'core_service' },
+        { label: 'Premium Benefit', value: 'premium_benefit' },
+      ],
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'serviceType',
       type: 'select',
       required: true,
@@ -60,8 +73,14 @@ export const Services = {
         { label: 'Exam', value: 'exam' },
         { label: 'Fitting', value: 'fitting' },
         { label: 'Adjustments', value: 'adjustments' },
+        { label: 'Guarantee', value: 'guarantee' },
+        { label: 'Trade-In', value: 'trade-in' },
+        { label: 'Benefit', value: 'benefit' },
         { label: 'Other', value: 'other' },
       ],
+      admin: {
+        position: 'sidebar',
+      },
     },
     {
       name: 'bookingUrl',
@@ -81,6 +100,78 @@ export const Services = {
       name: 'primaryCtaLabel',
       type: 'text',
       defaultValue: 'Book appointment',
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Page Content',
+          fields: [
+            {
+              name: 'heroImage',
+              type: 'upload',
+              relationTo: 'media',
+              admin: {
+                description: 'Large background image for the detail page hero section.',
+              },
+            },
+            {
+              name: 'content',
+              type: 'richText',
+              admin: {
+                description: 'Main body content for the service detail page.',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Process',
+          fields: [
+            {
+              name: 'processSteps',
+              type: 'array',
+              label: 'How It Works',
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  required: true,
+                },
+                {
+                  name: 'description',
+                  type: 'textarea',
+                  required: true,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'FAQs',
+          fields: [
+            {
+              name: 'faqs',
+              type: 'array',
+              label: 'Frequently Asked Questions',
+              fields: [
+                {
+                  name: 'question',
+                  type: 'text',
+                  required: true,
+                },
+                {
+                  name: 'answer',
+                  type: 'textarea',
+                  required: true,
+                },
+              ],
+            },
+          ],
+        },
+      ],
     },
   ],
 }

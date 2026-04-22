@@ -1,11 +1,12 @@
 import { CatalogFilterChips } from '@/components/brand/CatalogFilterChips'
+import { CatalogFiltersDrawer } from '@/components/brand/CatalogFiltersDrawer'
+import { CatalogFiltersSidebar } from '@/components/brand/CatalogFiltersSidebar'
 import ProductCard from '@/components/ProductCard'
-import SectionPromo1 from '@/components/SectionPromo1'
 import {
   buildCatalogQueryString,
+  type CatalogSearchParams,
   getCatalogFilterChips,
   parseCatalogSearchParams,
-  type CatalogSearchParams,
 } from '@/lib/catalog/searchParams'
 import { toTProductItems } from '@/lib/cms/adapters'
 import { getCatalogProducts } from '@/lib/cms/products'
@@ -20,22 +21,12 @@ import {
 } from '@/shared/Pagination/Pagination'
 import { Search01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
-import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Catalog',
   description: 'Browse our exclusive collection of premium eyewear and designer frames.',
 }
-
-const SORT_OPTIONS: Array<{ label: string; value: CatalogSearchParams['sort'] }> = [
-  { label: 'Newest', value: 'newest' },
-  { label: 'Oldest', value: 'oldest' },
-  { label: 'Price: low to high', value: 'price-low-to-high' },
-  { label: 'Price: high to low', value: 'price-high-to-low' },
-  { label: 'Name: A to Z', value: 'name-a-z' },
-  { label: 'Name: Z to A', value: 'name-z-a' },
-]
 
 function parsePositiveNumber(value: string | undefined): number | undefined {
   if (!value) return undefined
@@ -63,6 +54,19 @@ function buildPaginationModel(currentPage: number, totalPages: number) {
   return model
 }
 
+function withPricePreset(
+  params: CatalogSearchParams,
+  minPrice?: string,
+  maxPrice?: string,
+): CatalogSearchParams {
+  const next: CatalogSearchParams = { ...params, page: '1' }
+  if (minPrice) next.minPrice = minPrice
+  else delete next.minPrice
+  if (maxPrice) next.maxPrice = maxPrice
+  else delete next.maxPrice
+  return next
+}
+
 export default async function CatalogPage({
   searchParams,
 }: {
@@ -80,9 +84,15 @@ export default async function CatalogPage({
   const result = await getCatalogProducts({
     q: queryParams.q,
     collectionId: selectedCollectionId,
+    productType: queryParams.type ?? 'all',
     status: queryParams.status ?? 'all',
     minPrice: parsePositiveNumber(queryParams.minPrice),
     maxPrice: parsePositiveNumber(queryParams.maxPrice),
+    frameShape: queryParams.frameShape,
+    rimType: queryParams.rimType,
+    polarized: queryParams.polarized ? queryParams.polarized === 'true' : undefined,
+    replacementSchedule: queryParams.replacementSchedule,
+    accessoryType: queryParams.accessoryType,
     sort: queryParams.sort ?? 'newest',
     page,
     limit: 12,
@@ -91,6 +101,7 @@ export default async function CatalogPage({
 
   const products = toTProductItems(result.docs)
   const filterChips = getCatalogFilterChips(queryParams, collectionTitleBySlug)
+  const activeFilterCount = filterChips.filter((chip) => chip.key !== 'page').length
 
   return (
     <div className="nc-PageSearch relative">
@@ -118,153 +129,111 @@ export default async function CatalogPage({
               className="block w-full rounded-full border bg-white py-4 pr-5 pl-12 placeholder:text-zinc-500 focus:border-primary-300 focus:ring-3 focus:ring-primary-200/50 sm:text-sm dark:bg-neutral-800 dark:placeholder:text-zinc-400 dark:focus:ring-primary-600/25"
             />
             <input type="hidden" name="collection" value={queryParams.collection ?? ''} />
+            <input type="hidden" name="type" value={queryParams.type ?? ''} />
             <input type="hidden" name="status" value={queryParams.status ?? 'all'} />
             <input type="hidden" name="minPrice" value={queryParams.minPrice ?? ''} />
             <input type="hidden" name="maxPrice" value={queryParams.maxPrice ?? ''} />
+            <input type="hidden" name="frameShape" value={queryParams.frameShape ?? ''} />
+            <input type="hidden" name="rimType" value={queryParams.rimType ?? ''} />
+            <input type="hidden" name="polarized" value={queryParams.polarized ?? ''} />
+            <input type="hidden" name="replacementSchedule" value={queryParams.replacementSchedule ?? ''} />
+            <input type="hidden" name="accessoryType" value={queryParams.accessoryType ?? ''} />
             <input type="hidden" name="sort" value={queryParams.sort ?? 'newest'} />
           </form>
         </header>
       </div>
 
-      <div className="container flex flex-col gap-y-16 py-16 lg:gap-y-28 lg:pt-20 lg:pb-28">
-        <main>
-          <form method="get" className="rounded-2xl border border-neutral-200 p-4 dark:border-neutral-800">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-              <input type="hidden" name="q" value={queryParams.q ?? ''} />
-              <label className="text-sm">
-                <span className="mb-1 block text-neutral-600 dark:text-neutral-300">Collection</span>
-                <select
-                  name="collection"
-                  defaultValue={queryParams.collection ?? ''}
-                  className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 dark:border-neutral-700 dark:bg-neutral-900"
-                >
-                  <option value="">All collections</option>
-                  {collections.map((collection) => (
-                    <option key={collection.id} value={collection.slug}>
-                      {collection.title}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="text-sm">
-                <span className="mb-1 block text-neutral-600 dark:text-neutral-300">Availability</span>
-                <select
-                  name="status"
-                  defaultValue={queryParams.status ?? 'all'}
-                  className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 dark:border-neutral-700 dark:bg-neutral-900"
-                >
-                  <option value="all">All</option>
-                  <option value="in-stock">In stock</option>
-                  <option value="available">Available</option>
-                </select>
-              </label>
-              <label className="text-sm">
-                <span className="mb-1 block text-neutral-600 dark:text-neutral-300">Min price</span>
-                <input
-                  type="number"
-                  min={0}
-                  name="minPrice"
-                  defaultValue={queryParams.minPrice ?? ''}
-                  className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 dark:border-neutral-700 dark:bg-neutral-900"
-                />
-              </label>
-              <label className="text-sm">
-                <span className="mb-1 block text-neutral-600 dark:text-neutral-300">Max price</span>
-                <input
-                  type="number"
-                  min={0}
-                  name="maxPrice"
-                  defaultValue={queryParams.maxPrice ?? ''}
-                  className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 dark:border-neutral-700 dark:bg-neutral-900"
-                />
-              </label>
-              <label className="text-sm">
-                <span className="mb-1 block text-neutral-600 dark:text-neutral-300">Sort by</span>
-                <select
-                  name="sort"
-                  defaultValue={queryParams.sort ?? 'newest'}
-                  className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 dark:border-neutral-700 dark:bg-neutral-900"
-                >
-                  {SORT_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+      <div className="container py-16 lg:pt-20 lg:pb-28">
+        <main className="grid items-start gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
+          <CatalogFiltersSidebar queryParams={queryParams} collections={collections} />
+
+          <section>
+            <div className="mb-4 flex items-center justify-between gap-3 lg:mb-5">
+              <CatalogFiltersDrawer
+                queryParams={queryParams}
+                collections={collections}
+                activeFilterCount={activeFilterCount}
+              />
+              <p className="text-sm text-neutral-500">
+                Showing {products.length} of {result.totalDocs} products
+              </p>
             </div>
-            <div className="mt-4 flex gap-2">
-              <button
-                type="submit"
-                className="rounded-full bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-500"
+
+            <div className="mb-4 flex flex-wrap items-center gap-2">
+              <span className="text-xs font-medium tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+                Quick price
+              </span>
+              <a
+                href={`/catalog${buildCatalogQueryString(withPricePreset(queryParams, undefined, '500000'))}`}
+                className="rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-sm transition hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
               >
-                Apply filters
-              </button>
-              <Link
-                href="/catalog"
-                className="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+                Under 500k
+              </a>
+              <a
+                href={`/catalog${buildCatalogQueryString(withPricePreset(queryParams, '500000', '1500000'))}`}
+                className="rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-sm transition hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
               >
-                Reset
-              </Link>
+                500k - 1.5m
+              </a>
+              <a
+                href={`/catalog${buildCatalogQueryString(withPricePreset(queryParams, '1500000', undefined))}`}
+                className="rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-sm transition hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+              >
+                Over 1.5m
+              </a>
             </div>
-          </form>
 
-          <CatalogFilterChips params={queryParams} chips={filterChips} />
+            <CatalogFilterChips params={queryParams} chips={filterChips} />
 
-          <p className="mt-6 text-sm text-neutral-500">
-            Showing {products.length} of {result.totalDocs} products
-          </p>
-
-          <div className="mt-8 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:mt-10 lg:grid-cols-3 xl:grid-cols-4">
-            {products.map((item) => (
-              <ProductCard data={item} key={item.id} />
-            ))}
-          </div>
-
-          {products.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-20 text-center">
-              <h2 className="text-2xl font-semibold">No matching products</h2>
-              <p className="mt-2 text-neutral-500">Try a broader keyword or clear some filters.</p>
+            <div className="mt-8 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:mt-10 lg:grid-cols-3 xl:grid-cols-4">
+              {products.map((item) => (
+                <ProductCard data={item} key={item.id} />
+              ))}
             </div>
-          )}
 
-          {result.totalPages > 1 && (
-            <div className="mt-14 flex justify-center">
-              <Pagination className="mx-auto">
-                <PaginationPrevious
-                  href={
-                    result.hasPrevPage
-                      ? `/catalog${buildCatalogQueryString({ ...queryParams, page: String(result.page - 1) })}`
-                      : null
-                  }
-                />
-                <PaginationList>
-                  {buildPaginationModel(result.page, result.totalPages).map((item, index) => {
-                    if (item === 'gap') return <PaginationGap key={`gap-${index}`} />
-                    return (
-                      <PaginationPage
-                        key={item}
-                        href={`/catalog${buildCatalogQueryString({ ...queryParams, page: String(item) })}`}
-                        current={item === result.page}
-                      >
-                        {item}
-                      </PaginationPage>
-                    )
-                  })}
-                </PaginationList>
-                <PaginationNext
-                  href={
-                    result.hasNextPage
-                      ? `/catalog${buildCatalogQueryString({ ...queryParams, page: String(result.page + 1) })}`
-                      : null
-                  }
-                />
-              </Pagination>
-            </div>
-          )}
+            {products.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <h2 className="text-2xl font-semibold">No matching products</h2>
+                <p className="mt-2 text-neutral-500">Try a broader keyword or clear some filters.</p>
+              </div>
+            )}
+
+            {result.totalPages > 1 && (
+              <div className="mt-14 flex justify-center">
+                <Pagination className="mx-auto">
+                  <PaginationPrevious
+                    href={
+                      result.hasPrevPage
+                        ? `/catalog${buildCatalogQueryString({ ...queryParams, page: String(result.page - 1) })}`
+                        : null
+                    }
+                  />
+                  <PaginationList>
+                    {buildPaginationModel(result.page, result.totalPages).map((item, index) => {
+                      if (item === 'gap') return <PaginationGap key={`gap-${index}`} />
+                      return (
+                        <PaginationPage
+                          key={item}
+                          href={`/catalog${buildCatalogQueryString({ ...queryParams, page: String(item) })}`}
+                          current={item === result.page}
+                        >
+                          {item}
+                        </PaginationPage>
+                      )
+                    })}
+                  </PaginationList>
+                  <PaginationNext
+                    href={
+                      result.hasNextPage
+                        ? `/catalog${buildCatalogQueryString({ ...queryParams, page: String(result.page + 1) })}`
+                        : null
+                    }
+                  />
+                </Pagination>
+              </div>
+            )}
+          </section>
         </main>
-
-        <SectionPromo1 />
       </div>
     </div>
   )

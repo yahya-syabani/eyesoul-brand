@@ -1,4 +1,3 @@
-import backgroundLineSvg from '@/images/BackgroundLine.svg'
 import heroImage from '@/images/hero-right-4.png'
 import ButtonPrimary from '@/shared/Button/ButtonPrimary'
 import { Search01Icon } from '@hugeicons/core-free-icons'
@@ -12,47 +11,37 @@ interface Props {
 
 const SectionHero3: FC<Props> = ({ className = '' }) => {
   return (
-    <div className={`relative overflow-hidden rounded-2xl bg-[#F7F0EA] ${className}`}>
-      <div className="relative inset-x-0 top-1/10 z-1 px-8 pt-8 sm:top-1/5 lg:absolute lg:pt-0">
-        <div className="flex max-w-lg flex-col items-start gap-y-5 xl:max-w-2xl xl:gap-y-8">
-          <span className="font-semibold text-neutral-600 sm:text-lg md:text-xl">In this season, find the best 🔥</span>
-          <h2 className="text-3xl leading-[1.15] font-bold text-neutral-950 sm:text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl">
-            Sports equipment collection.
-          </h2>
-          <div className="sm:pt-5">
-            <ButtonPrimary>
-              <span className="me-1">Start your search</span>
-              <HugeiconsIcon icon={Search01Icon} size={24} />
-            </ButtonPrimary>
-          </div>
-        </div>
-      </div>
+    <div className={`relative w-[100vw] h-[85vh] min-h-[600px] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden flex items-center justify-center bg-neutral-900 group ${className}`}>
+      
+      {/* Background Image with Parallax & Hover Zoom */}
+      <Image
+        src={heroImage}
+        alt="Sports equipment collection"
+        fill
+        className="object-cover transition-transform duration-[10000ms] ease-out group-hover:scale-110 opacity-60 mix-blend-overlay"
+        sizes="100vw"
+        priority
+      />
 
-      <div className="relative lg:aspect-w-16 lg:aspect-h-8 2xl:aspect-h-7">
-        <div>
-          <div className="end-0 top-0 bottom-0 mt-5 ml-auto w-full max-w-md sm:max-w-xl lg:absolute lg:mt-0 lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl">
-            <Image
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="inset-0 w-full object-contain object-bottom-right sm:h-full lg:absolute"
-              src={heroImage}
-              width={heroImage.width}
-              height={heroImage.height}
-              alt="hero"
-              priority
-            />
-          </div>
-        </div>
-      </div>
+      {/* Cinematic Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
 
-      {/* BG */}
-      <div className="absolute inset-10">
-        <Image
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-contain"
-          src={backgroundLineSvg}
-          alt="hero"
-        />
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-5xl px-6 lg:px-8 mt-20 text-center flex flex-col items-center">
+        <span className="font-medium tracking-widest uppercase text-white/90 text-sm md:text-base fade--animation__subheading mb-4">
+          In this season, find the best 🔥
+        </span>
+        
+        <h2 className="text-4xl leading-[1.1] font-display font-medium text-white sm:text-5xl md:text-6xl lg:text-7xl fade--animation__heading mb-8 max-w-4xl">
+          Sports equipment collection.
+        </h2>
+        
+        <div className="fade--animation__button">
+          <ButtonPrimary className="bg-white text-black hover:bg-neutral-200 border-none px-8 py-4 text-base font-medium rounded-full shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] hover:scale-[1.02]">
+            <span className="me-2">Start your search</span>
+            <HugeiconsIcon icon={Search01Icon} size={24} />
+          </ButtonPrimary>
+        </div>
       </div>
     </div>
   )

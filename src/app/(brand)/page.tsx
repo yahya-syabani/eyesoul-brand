@@ -1,4 +1,4 @@
-import SectionCollectionSlider from '@/components/SectionCollectionSlider'
+import SectionBentoGrid from '@/components/SectionBentoGrid'
 import SectionGridFeatureItems from '@/components/SectionGridFeatureItems'
 import SectionHero3 from '@/components/SectionHero/SectionHero3'
 import SectionSliderProductCard from '@/components/SectionSliderProductCard'
@@ -51,7 +51,7 @@ export default async function HomePage() {
           subHeading="Discover our latest eyewear collections"
         />
 
-        <SectionCollectionSlider
+        <SectionBentoGrid
           collections={collections}
           heading="Product Collections"
           headingDim="Explore by style and material"

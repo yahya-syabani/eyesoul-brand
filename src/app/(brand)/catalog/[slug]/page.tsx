@@ -63,8 +63,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const [cmsReviews, relatedRaw] = await Promise.all([
     getReviewsForProduct(productRaw.id, { depth: 2 }),
     (async () => {
-      const collectionId =
-        productRaw.collection != null && typeof productRaw.collection === 'object' ? productRaw.collection.id : null
+      const firstCollection =
+        Array.isArray(productRaw.collections) && productRaw.collections.length > 0 ? productRaw.collections[0] : null
+      const collectionId = firstCollection != null && typeof firstCollection === 'object' ? firstCollection.id : null
       if (collectionId == null) return []
       return getRelatedProducts({
         productId: productRaw.id,
@@ -132,6 +133,50 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     }))
   }
 
+  const productType = productRaw.productType || 'optical-frame'
+
+  const detailRows: Array<{ label: string; value: string }> = []
+  if (productRaw.brand) detailRows.push({ label: 'Brand', value: productRaw.brand })
+  if (productRaw.gtin) detailRows.push({ label: 'GTIN', value: productRaw.gtin })
+
+  if (productType === 'sunglasses') {
+    if (productRaw.frame?.polarized != null) detailRows.push({ label: 'Polarized', value: productRaw.frame.polarized ? 'Yes' : 'No' })
+    if (productRaw.frame?.uv400 != null) detailRows.push({ label: 'UV400', value: productRaw.frame.uv400 ? 'Yes' : 'No' })
+    if (productRaw.frame?.lensCategory != null) detailRows.push({ label: 'Lens category', value: String(productRaw.frame.lensCategory) })
+    if (productRaw.frame?.lensColor) detailRows.push({ label: 'Lens color', value: productRaw.frame.lensColor })
+  }
+
+  if (productType === 'contact-soft') {
+    const cl = productRaw.contactLens
+    if (cl?.replacementSchedule) detailRows.push({ label: 'Replacement schedule', value: cl.replacementSchedule })
+    if (cl?.unitsPerBox != null) detailRows.push({ label: 'Units per box', value: String(cl.unitsPerBox) })
+    if (Array.isArray(cl?.baseCurveOptionsMm) && cl.baseCurveOptionsMm.length > 0) {
+      detailRows.push({ label: 'Base curve (mm)', value: cl.baseCurveOptionsMm.map(String).join(', ') })
+    }
+    if (Array.isArray(cl?.diameterOptionsMm) && cl.diameterOptionsMm.length > 0) {
+      detailRows.push({ label: 'Diameter (mm)', value: cl.diameterOptionsMm.map(String).join(', ') })
+    }
+    if (cl?.materialType) detailRows.push({ label: 'Material type', value: cl.materialType })
+    if (cl?.waterContentPercent != null) detailRows.push({ label: 'Water content', value: `${cl.waterContentPercent}%` })
+    if (cl?.dkT != null) detailRows.push({ label: 'Dk/t', value: String(cl.dkT) })
+    if (cl?.wearingModality) detailRows.push({ label: 'Wearing modality', value: cl.wearingModality })
+  }
+
+  if (productType === 'contact-care') {
+    const care = productRaw.careProduct
+    if (care?.unitOfMeasure) detailRows.push({ label: 'Unit', value: care.unitOfMeasure })
+    if (care?.unitVolumeMl != null) detailRows.push({ label: 'Volume', value: `${care.unitVolumeMl} ml` })
+    if (care?.unitsPerPack != null) detailRows.push({ label: 'Units per pack', value: String(care.unitsPerPack) })
+    if (care?.compatibility) detailRows.push({ label: 'Compatibility', value: care.compatibility })
+  }
+
+  if (productType === 'accessory') {
+    const acc = productRaw.accessory
+    if (acc?.accessoryType) detailRows.push({ label: 'Accessory type', value: acc.accessoryType })
+    if (acc?.unitsPerPack != null) detailRows.push({ label: 'Units per pack', value: String(acc.unitsPerPack) })
+    if (acc?.compatibilityNotes) detailRows.push({ label: 'Compatibility', value: acc.compatibilityNotes })
+  }
+
   return (
     <main className="container mt-5 mb-20 lg:mt-11">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -175,7 +220,23 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               <BrandRichText data={productRaw.description} />
             </div>
 
-            <ProductSpecs product={productRaw} />
+            {productType === 'optical-frame' || productType === 'sunglasses' ? <ProductSpecs product={productRaw} /> : null}
+
+            {detailRows.length > 0 ? (
+              <section className="rounded-2xl border border-neutral-200 p-6 dark:border-neutral-700" aria-labelledby="product-details-heading">
+                <h2 id="product-details-heading" className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                  Product details
+                </h2>
+                <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {detailRows.map((row) => (
+                    <div key={row.label} className="flex flex-col gap-0.5 rounded-lg bg-neutral-50 px-3 py-2 dark:bg-neutral-800/50">
+                      <dt className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{row.label}</dt>
+                      <dd className="text-sm text-neutral-900 dark:text-neutral-100">{row.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            ) : null}
 
             <ProductStoreCta />
 

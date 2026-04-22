@@ -50,10 +50,10 @@ const ProductCard: FC<Props> = ({ className = '', data, isLiked }) => {
 
   const renderGroupButtons = () => {
     return (
-      <div className="invisible absolute inset-x-1 bottom-0 flex justify-center gap-1.5 opacity-0 transition-all group-hover:visible group-hover:bottom-4 group-hover:opacity-100">
+      <div className="invisible absolute inset-x-1 bottom-0 flex justify-center gap-1.5 opacity-0 transition-all duration-300 ease-out group-hover:visible group-hover:bottom-4 group-hover:opacity-100 z-20">
         <AddToCardButton
           as={'button'}
-          className="flex cursor-pointer items-center justify-center gap-2 rounded-full bg-neutral-900 px-4 py-2 text-xs/normal text-white shadow-lg hover:bg-neutral-800"
+          className="flex cursor-pointer items-center justify-center gap-2 rounded-full bg-neutral-900/80 backdrop-blur-md px-4 py-2 text-xs/normal text-white shadow-[0_4px_20px_rgba(0,0,0,0.15)] transition-colors hover:bg-neutral-900 border border-white/5"
           title={title || ''}
           imageUrl={featuredImage?.src || ''}
           price={price || 0}
@@ -66,7 +66,7 @@ const ProductCard: FC<Props> = ({ className = '', data, isLiked }) => {
         </AddToCardButton>
 
         <button
-          className="flex cursor-pointer items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-xs/normal text-neutral-950 shadow-lg hover:bg-neutral-50"
+          className="flex cursor-pointer items-center justify-center gap-2 rounded-full bg-white/80 backdrop-blur-md border border-white/40 px-4 py-2 text-xs/normal text-neutral-950 shadow-[0_4px_20px_rgba(0,0,0,0.1)] transition-colors hover:bg-white"
           type="button"
           onClick={() => {
             setProductQuickViewHandle(handle || '')
@@ -86,16 +86,29 @@ const ProductCard: FC<Props> = ({ className = '', data, isLiked }) => {
         <Link href={'/products/' + handle} className="absolute inset-0"></Link>
 
         <div className="group relative z-1 shrink-0 overflow-hidden rounded-3xl bg-neutral-50 dark:bg-neutral-300">
-          <Link href={'/products/' + handle} className="block">
+          <Link href={'/products/' + handle} className="block aspect-w-11 aspect-h-12 w-full h-0">
             {featuredImage?.src && (
-              <NcImage
-                containerClassName="flex aspect-w-11 aspect-h-12 w-full h-0"
-                src={featuredImage}
-                className="h-full w-full object-cover"
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 40vw"
-                alt={handle}
-              />
+              <>
+                <NcImage
+                  containerClassName="absolute inset-0 z-10 transition-opacity duration-700 ease-in-out group-hover:opacity-0 flex w-full h-full bg-neutral-50 dark:bg-neutral-300"
+                  src={featuredImage}
+                  className="h-full w-full object-cover"
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 40vw"
+                  alt={handle || ''}
+                />
+                
+                {images && images.length > 1 && (
+                  <NcImage
+                    containerClassName="absolute inset-0 z-0 flex w-full h-full"
+                    src={images[1]}
+                    className="h-full w-full object-cover transform scale-105 transition-transform duration-1000 ease-out group-hover:scale-100"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 40vw"
+                    alt={handle || ''}
+                  />
+                )}
+              </>
             )}
           </Link>
           <ProductStatus status={status} />

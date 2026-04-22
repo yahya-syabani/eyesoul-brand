@@ -16,3 +16,13 @@ export async function getServices(
   return res.docs
 }
 
+export async function getServiceBySlug(slug: string, options: { depth?: number } = {}): Promise<Service | null> {
+  const where = await mergePublishedWhere({ slug: { equals: slug } })
+  const res = await cmsFind<Service>('services', {
+    where,
+    limit: 1,
+    depth: options.depth ?? 2,
+  })
+  return res.docs[0] || null
+}
+

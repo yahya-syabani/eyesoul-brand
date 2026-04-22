@@ -28,7 +28,7 @@ export default function CategoriesDropdown({ className, categories }: Props) {
             {categories.map((item, index) => (
               <Link
                 key={index}
-                href={'/collections/' + item.handle}
+                href={item.href}
                 className="flex items-center focus:outline-hidden focus-visible:ring-0"
               >
                 <div
@@ -44,7 +44,7 @@ export default function CategoriesDropdown({ className, categories }: Props) {
           </div>
           {/* FOOTER */}
           <div className="bg-neutral-50 p-6 dark:bg-neutral-700">
-            <Link href="/collections/all">
+            <Link href="/catalog">
               <span className="block text-sm font-medium">Go to our shop </span>
               <span className="mt-0.5 block text-sm text-neutral-500 dark:text-neutral-400">
                 Look for what you need and love.

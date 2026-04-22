@@ -21,32 +21,49 @@ export function BrandHomeHero({ eyebrow, heading, subheading, image, ctaLabel, c
   const href = ctaHref ? normalizeExternalUrl(ctaHref) || ctaHref : ''
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-[#F7F0EA] dark:bg-neutral-800/60">
-      <div className="relative z-[1] px-8 pt-8 lg:grid lg:grid-cols-2 lg:items-center lg:gap-10 lg:pt-12 lg:pb-10">
-        <div className="flex max-w-lg flex-col items-start gap-y-5 xl:max-w-2xl xl:gap-y-6">
-          {eyebrow ? (
-            <span className="font-semibold text-neutral-600 dark:text-neutral-300 sm:text-lg md:text-xl">{eyebrow}</span>
-          ) : null}
-          <h2 className="text-3xl leading-[1.15] font-bold text-neutral-950 dark:text-neutral-50 sm:text-4xl md:text-5xl">{heading}</h2>
-          {subheading ? <p className="text-neutral-600 dark:text-neutral-400 sm:text-lg">{subheading}</p> : null}
-          {href && ctaLabel ? (
-            <div className="pt-2">
-              <BrandButton href={href} variant="primary">
-                {ctaLabel}
-              </BrandButton>
-            </div>
-          ) : null}
-        </div>
-        {img ? (
-          <div className="relative mt-8 aspect-[4/3] w-full max-w-xl lg:mt-0 lg:max-w-none">
-            <Image
-              src={img.src}
-              alt={img.alt || heading}
-              fill
-              className="object-contain object-bottom"
-              sizes="(min-width: 1024px) 45vw, 100vw"
-              priority
-            />
+    <div className="relative w-[100vw] h-[85vh] min-h-[600px] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden flex items-center justify-center bg-neutral-900 group">
+      {img ? (
+        <Image
+          src={img.src}
+          alt={img.alt || heading}
+          fill
+          className="object-cover transition-transform duration-[10000ms] ease-out group-hover:scale-110 opacity-70 mix-blend-overlay"
+          sizes="100vw"
+          priority
+        />
+      ) : (
+        <div className="absolute inset-0 bg-neutral-900" />
+      )}
+      
+      {/* Cinematic Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
+      
+      <div className="relative z-10 w-full max-w-5xl px-6 lg:px-8 mt-20 text-center flex flex-col items-center">
+        {eyebrow ? (
+          <span className="font-medium tracking-widest uppercase text-white/90 text-sm md:text-base fade--animation__subheading mb-4">
+            {eyebrow}
+          </span>
+        ) : null}
+        
+        <h2 className="text-4xl leading-[1.1] font-display font-medium text-white sm:text-5xl md:text-6xl lg:text-7xl fade--animation__heading mb-6 max-w-4xl">
+          {heading}
+        </h2>
+        
+        {subheading ? (
+          <p className="text-white/80 sm:text-lg max-w-2xl fade--animation__image mb-10">
+            {subheading}
+          </p>
+        ) : null}
+        
+        {href && ctaLabel ? (
+          <div className="fade--animation__button">
+            <BrandButton 
+              href={href} 
+              variant="primary" 
+              className="bg-white text-black hover:bg-neutral-200 border-none px-8 py-4 text-base font-medium rounded-full shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] hover:scale-[1.02]"
+            >
+              {ctaLabel}
+            </BrandButton>
           </div>
         ) : null}
       </div>
